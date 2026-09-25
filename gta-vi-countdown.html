@@ -47,10 +47,38 @@
   .sub {
     font-size: 0.85rem;
     color: #e0b0ff;
-    margin-bottom: 36px;
+    margin-bottom: 20px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+  .platforms {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .platform-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(20, 10, 40, 0.65);
+    border: 1px solid rgba(255, 140, 200, 0.35);
+    padding: 8px 18px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #fff;
+  }
+  .platform-icon {
+    height: 18px;
+    width: auto;
+    filter: brightness(0) invert(1);
   }
   .countdown {
     display: flex;
@@ -89,13 +117,27 @@
   }
   @media (max-width: 480px) {
     .unit { min-width: 70px; padding: 14px 10px; }
+    .platforms { gap: 10px; }
   }
 </style>
 </head>
 <body>
   <div class="content">
     <div class="logo"><img src="logo.png" alt="Grand Theft Auto VI"></div>
-    <p class="sub">PlayStation Store · November 19, 2026</p>
+    <p class="sub">Releasing November 19, 2026</p>
+    
+    <!-- Platform Badges with Web SVG Logos -->
+    <div class="platforms">
+      <div class="platform-badge">
+        <img class="platform-icon" src="https://upload.wikimedia.org/wikipedia/commons/0/00/PlayStation_logo.svg" alt="PlayStation Logo">
+        <span>PlayStation 5</span>
+      </div>
+      <div class="platform-badge">
+        <img class="platform-icon" src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Xbox_one_logo.svg" alt="Xbox Logo">
+        <span>Xbox Series X|S</span>
+      </div>
+    </div>
+
     <div class="countdown" id="cd">
       <div class="unit"><div class="num" id="d">--</div><div class="label">Days</div></div>
       <div class="unit"><div class="num" id="h">--</div><div class="label">Hours</div></div>
