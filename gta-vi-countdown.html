@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GTA VI Countdown</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #1a0a2e 0%, #2d1b4e 30%, #0f0c29 70%, #0a0a0a 100%);
+    color: #fff;
+    font-family: system-ui, -apple-system, sans-serif;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 80%, rgba(255,20,147,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255,105,180,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .logo {
+    font-family: Impact, Haettenschweiler, 'Arial Black', sans-serif;
+    font-size: clamp(2.8rem, 12vw, 5.5rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    background: linear-gradient(180deg, #ff6b9d 0%, #c44dff 40%, #7b2ff7 70%, #00d4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 40px rgba(255,105,180,0.4);
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 1;
+  }
+  .logo span {
+    display: block;
+    font-size: 0.35em;
+    letter-spacing: 0.35em;
+    margin-bottom: 0.15em;
+    background: linear-gradient(90deg, #fff, #ffb6c1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .sub {
+    font-size: 0.9rem;
+    color: #a78bfa;
+    margin-bottom: 40px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+  .countdown {
+    display: flex;
+    gap: clamp(16px, 5vw, 40px);
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+  .unit {
+    min-width: 90px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,105,180,0.25);
+    border-radius: 12px;
+    padding: 16px 12px;
+    backdrop-filter: blur(8px);
+  }
+  .num {
+    font-size: clamp(2.2rem, 9vw, 3.8rem);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(0,212,255,0.5);
+  }
+  .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #c4b5fd;
+    margin-top: 10px;
+  }
+  .done {
+    font-size: 1.6rem;
+    color: #4ade80;
+    text-shadow: 0 0 20px rgba(74,222,128,0.5);
+  }
+</style>
+</head>
+<body>
+  <div class="logo"><span>GRAND THEFT AUTO</span>VI</div>
+  <p class="sub">PlayStation Store · Nov 19 2026</p>
+  <div class="countdown" id="cd">
+    <div class="unit"><div class="num" id="d">--</div><div class="label">Days</div></div>
+    <div class="unit"><div class="num" id="h">--</div><div class="label">Hours</div></div>
+    <div class="unit"><div class="num" id="m">--</div><div class="label">Mins</div></div>
+    <div class="unit"><div class="num" id="s">--</div><div class="label">Secs</div></div>
+  </div>
+<script>
+  const target = new Date('2026-11-19T05:00:00Z').getTime();
+  function tick() {
+    const now = Date.now();
+    const diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('cd').innerHTML = '<p class="done">Available now</p>';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('d').textContent = d;
+    document.getElementById('h').textContent = String(h).padStart(2,'0');
+    document.getElementById('m').textContent = String(m).padStart(2,'0');
+    document.getElementById('s').textContent = String(s).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
