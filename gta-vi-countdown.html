@@ -47,10 +47,37 @@
   .sub {
     font-size: 0.85rem;
     color: #e0b0ff;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+  .region-selector {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .region-selector label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #d8b4fe;
+  }
+  .region-selector select {
+    background: rgba(20, 10, 40, 0.75);
+    color: #fff;
+    border: 1px solid rgba(255, 140, 200, 0.35);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    outline: none;
+  }
+  .region-selector select option {
+    background: #1a0a2e;
+    color: #fff;
   }
   .platforms {
     display: flex;
@@ -124,8 +151,13 @@
 <body>
   <div class="content">
     <div class="logo"><img src="logo.png" alt="Grand Theft Auto VI"></div>
-    <p class="sub">Releasing November 19, 2026</p>
+    <p class="sub" id="subText">Releasing November 19, 2026</p>
     
+    <div class="region-selector">
+      <label for="regionSelect">Region:</label>
+      <select id="regionSelect" onchange="location.href='/' + this.value"></select>
+    </div>
+
     <!-- Platform Badges with Web SVG Logos -->
     <div class="platforms">
       <div class="platform-badge">
@@ -145,12 +177,50 @@
       <div class="unit"><div class="num" id="s">--</div><div class="label">Secs</div></div>
     </div>
   </div>
+
 <script>
-  // United States | Canada launch target: Midnight EST (05:00 UTC on Nov 19, 2026)
-  const target = new Date('2026-11-19T05:00:00Z').getTime();
+  // All Timezone Data fetched from vicountdown.com
+  const regions = {
+    'europe': { name: 'Europe (CET / Central)', target: '2026-11-18T23:00:00Z' },
+    'uk': { name: 'United Kingdom & Ireland', target: '2026-11-19T00:00:00Z' },
+    'us-canada': { name: 'United States & Canada', target: '2026-11-19T05:00:00Z' },
+    'new-zealand': { name: 'New Zealand', target: '2026-11-18T11:00:00Z' },
+    'australia': { name: 'Australia', target: '2026-11-18T13:00:00Z' },
+    'japan-korea': { name: 'Japan & South Korea', target: '2026-11-18T15:00:00Z' },
+    'asia-pacific': { name: 'Hong Kong, Taiwan, SG, MY', target: '2026-11-18T16:00:00Z' },
+    'indonesia-thailand': { name: 'Indonesia & Thailand', target: '2026-11-18T17:00:00Z' },
+    'india': { name: 'India', target: '2026-11-18T18:30:00Z' },
+    'uae': { name: 'United Arab Emirates', target: '2026-11-18T20:00:00Z' },
+    'saudi-turkey': { name: 'Saudi Arabia & Turkey', target: '2026-11-18T21:00:00Z' },
+    'eastern-europe': { name: 'Eastern Europe (Greece, Romania, Finland, etc.)', target: '2026-11-18T22:00:00Z' },
+    'south-america': { name: 'Brazil, Argentina, Chile', target: '2026-11-19T03:00:00Z' },
+    'mexico': { name: 'Mexico & Central America', target: '2026-11-19T06:00:00Z' }
+  };
+
+  // Determine current region slug from URL path
+  const pathSlug = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+  const activeSlug = regions[pathSlug] ? pathSlug : 'europe';
+  const currentRegion = regions[activeSlug];
+
+  // Populate Dropdown
+  const selectEl = document.getElementById('regionSelect');
+  Object.keys(regions).forEach(slug => {
+    const opt = document.createElement('option');
+    opt.value = slug;
+    opt.textContent = regions[slug].name;
+    if (slug === activeSlug) opt.selected = true;
+    selectEl.appendChild(opt);
+  });
+
+  // Update Page Title and Subtitle
+  document.title = `GTA VI Countdown - ${currentRegion.name}`;
+  document.getElementById('subText').textContent = `Releasing Nov 19, 2026 · ${currentRegion.name}`;
+
+  // Countdown Logic
+  const targetTime = new Date(currentRegion.target).getTime();
   function tick() {
     const now = Date.now();
-    const diff = target - now;
+    const diff = targetTime - now;
     if (diff <= 0) {
       document.getElementById('cd').innerHTML = '<p class="done">Available now</p>';
       return;
