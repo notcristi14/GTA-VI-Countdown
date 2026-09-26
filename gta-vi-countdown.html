@@ -5,11 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GTA VI Countdown</title>
 
-<!-- Favicons & Meta Tags -->
-<link rel="icon" type="image/png" sizes="16x16" href="/logo.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
-<link rel="shortcut icon" type="image/png" href="/logo.png">
+<!-- Universal SVG Favicon & Device Fallbacks -->
+<link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/a/a5/Grand_Theft_Auto_VI_logo.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="/logo.png">
+<link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/a/a5/Grand_Theft_Auto_VI_logo.svg">
+
+<!-- Microsoft Edge & Windows Start Menu Tiles -->
+<meta name="msapplication-TileColor" content="#1a0a2e">
+<meta name="msapplication-TileImage" content="https://upload.wikimedia.org/wikipedia/commons/a/a5/Grand_Theft_Auto_VI_logo.svg">
+
+<!-- Open Graph & Social Preview Tags -->
+<meta property="og:title" content="GTA VI Countdown">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/a/a5/Grand_Theft_Auto_VI_logo.svg">
+<meta property="og:image:type" content="image/svg+xml">
+<meta property="twitter:card" content="summary">
+<meta property="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/a/a5/Grand_Theft_Auto_VI_logo.svg">
+
+<!-- Web App Manifest -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22GTA%20VI%20Countdown%22%2C%22short_name%22%3A%22GTA%20VI%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fa%2Fa5%2FGrand_Theft_Auto_VI_logo.svg%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22theme_color%22%3A%22%231a0a2e%22%2C%22background_color%22%3A%22%231a0a2e%22%7D">
+
+<!-- Mobile Web App & Theme Color Meta Tags -->
 <meta name="theme-color" content="#1a0a2e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GTA VI Countdown">
 
 <style>
   * { 
@@ -71,13 +92,16 @@
     max-width: min(420px, 85vw);
     width: 100%;
     margin-bottom: 12px;
-    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.6));
+    background: transparent !important;
+    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.65));
   }
 
   .logo img {
     width: 100%;
     height: auto;
     display: block;
+    background: transparent !important;
+    object-fit: contain;
   }
 
   .sub {
@@ -279,7 +303,7 @@
 <body>
   <div class="content">
     <div class="logo">
-      <img src="/logo.png" alt="Grand Theft Auto VI Logo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/a/a5/Grand_Theft_Auto_VI_logo.svg'">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Grand_Theft_Auto_VI_logo.svg" alt="Grand Theft Auto VI Logo" onerror="this.src='/logo.png'">
     </div>
 
     <p class="sub" id="subText">Releasing November 19, 2026</p>
@@ -323,7 +347,6 @@
       <a class="social-link" href="https://www.youtube.com/rockstargames" target="_blank" rel="noopener" title="Rockstar Games on YouTube">
         <img src="https://cdn.simpleicons.org/youtube/ffffff" alt="YouTube">
       </a>
-      <!-- Netflix Link & Icon -->
       <a class="social-link" href="https://www.netflix.com/ro/title/83035795" target="_blank" rel="noopener" title="Netflix">
         <img src="https://cdn.simpleicons.org/netflix/ffffff" alt="Netflix">
       </a>
