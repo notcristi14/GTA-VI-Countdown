@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const https = require('https');
-const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,12 +8,6 @@ const NEWS_CACHE_MS = 10 * 60 * 1000;
 const NEWSWIRE_URL = 'https://www.rockstargames.com/newswire';
 const NEWS_FEED =
   'https://news.google.com/rss/search?q=site:rockstargames.com/newswire&hl=en-US&gl=US&ceid=US:en';
-
-// Frontend polls every 30s; 10 minutes keeps GA4 Data API usage low
-// while staying fresher than a multi-hour cache.
-const GA_CACHE_MS = 10 * 60 * 1000;
-const GA_UNAVAILABLE = { source: 'unavailable' };
-const GA_PERIOD = '7days';
 
 function fetchText(url) {
   return new Promise((resolve, reject) => {
@@ -71,6 +64,10 @@ function parseRss(xml) {
 
 let newsCache = { at: 0, items: [] };
 
+const crypto = require('crypto');
+const GA_CACHE_MS = 3 * 60 * 60 * 1000;
+const GA_UNAVAILABLE = { source: 'unavailable' };
+
 function b64url(value) {
   const buf = Buffer.isBuffer(value)
     ? value
@@ -81,13 +78,15 @@ function b64url(value) {
 function gaPropertyId() {
   return String(process.env.GA_PROPERTY_ID || '')
     .trim()
-    .replace(/^properties\//i, '');
+    .replace(/^properties\//, '')
+    .replace(/^G-/i, '');
 }
 
 function gaConfigured() {
+  const propertyId = gaPropertyId();
   return Boolean(
-    /^\d{6,12}$/.test(gaPropertyId()) &&
-    String(process.env.GA_CLIENT_EMAIL || '').includes('@') &&
+    /^\d{6,12}$/.test(propertyId) &&
+    process.env.GA_CLIENT_EMAIL &&
     process.env.GA_PRIVATE_KEY
   );
 }
@@ -97,24 +96,26 @@ function normalizeKey(key) {
   if ((k.startsWith('"') && k.endsWith('"')) || (k.startsWith("'") && k.endsWith("'"))) {
     k = k.slice(1, -1);
   }
-  return k.replace(/\r/g, '').replace(/\\n/g, '\n').trim();
+  k = k.replace(/\r/g, '').replace(/\\n/g, '\n').trim();
+  if (k && !k.includes('BEGIN PRIVATE KEY')) {
+    k = '-----BEGIN PRIVATE KEY-----\n' + k + '\n-----END PRIVATE KEY-----\n';
+  }
+  return k;
 }
 
-function postGoogle(url, body, headers) {
+function postJson(url, body, headers) {
   const payload = typeof body === 'string' ? body : JSON.stringify(body);
-  const extra = headers || {};
   return new Promise((resolve, reject) => {
     const req = https.request(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': extra['Content-Type'] || 'application/json',
-        'Content-Length': Buffer.byteLength(payload),
-        Authorization: extra.Authorization || undefined
-      }
+      headers: Object.assign({
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload)
+      }, headers || {})
     }, (res) => {
       let data = '';
       res.on('data', (c) => { data += c; });
-      res.on('end', () => resolve({ status: res.statusCode || 0, data }));
+      res.on('end', () => resolve({ status: res.statusCode, data }));
     });
     req.on('error', reject);
     req.setTimeout(15000, () => req.destroy(new Error('timeout')));
@@ -124,11 +125,8 @@ function postGoogle(url, body, headers) {
 }
 
 let gaToken = { access: '', exp: 0 };
-
-async function getGaToken(force) {
-  if (!force && gaToken.access && Date.now() < gaToken.exp - 30000) {
-    return gaToken.access;
-  }
+async function getGaToken() {
+  if (gaToken.access && Date.now() < gaToken.exp - 30000) return gaToken.access;
   const email = String(process.env.GA_CLIENT_EMAIL || '').trim();
   const key = normalizeKey(process.env.GA_PRIVATE_KEY);
   const now = Math.floor(Date.now() / 1000);
@@ -145,102 +143,45 @@ async function getGaToken(force) {
   const jwt = header + '.' + claim + '.' + b64url(sign.sign(key));
   const body = 'grant_type=' + encodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer') +
     '&assertion=' + encodeURIComponent(jwt);
-  const res = await postGoogle('https://oauth2.googleapis.com/token', body, {
+  const res = await postJson('https://oauth2.googleapis.com/token', body, {
     'Content-Type': 'application/x-www-form-urlencoded'
   });
-  let json = {};
-  try { json = JSON.parse(res.data || '{}'); } catch (_) {}
-  if (!json.access_token) {
-    throw new Error('token ' + (res.status || json.error || 'failed'));
-  }
-  gaToken = {
-    access: json.access_token,
-    exp: Date.now() + (Number(json.expires_in) || 3600) * 1000
-  };
-  console.log('  📊  GA4 token obtained');
+  const json = JSON.parse(res.data || '{}');
+  if (!json.access_token) throw new Error(json.error || 'no token');
+  gaToken = { access: json.access_token, exp: Date.now() + (json.expires_in || 3600) * 1000 };
   return gaToken.access;
 }
 
-function safeMetric(cell) {
-  const n = Number(cell && cell.value);
-  if (!Number.isFinite(n) || n < 0) return 0;
-  return Math.floor(n);
-}
+let gaStatsCache = { at: 0, data: null };
 
-async function runGaReport(token) {
-  // Last 7 days including today. Totals are used because this report has no dimensions.
+async function fetchGaStats() {
+  const propertyId = gaPropertyId();
+  const token = await getGaToken();
   const payload = {
     dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-    metrics: [
-      { name: 'activeUsers' },
-      { name: 'sessions' },
-      { name: 'eventCount' }
-    ],
+    metrics: [{ name: 'activeUsers' }, { name: 'sessions' }, { name: 'eventCount' }],
     metricAggregations: ['TOTAL']
   };
-  const res = await postGoogle(
-    'https://analyticsdata.googleapis.com/v1beta/properties/' + gaPropertyId() + ':runReport',
+  const res = await postJson(
+    'https://analyticsdata.googleapis.com/v1beta/properties/' + propertyId + ':runReport',
     payload,
     { Authorization: 'Bearer ' + token }
   );
-  let json = {};
-  try { json = JSON.parse(res.data || '{}'); } catch (_) {
-    throw new Error('ga4 invalid json');
-  }
-  return { status: res.status, json };
-}
-
-async function fetchGaStats() {
-  let token = await getGaToken(false);
-  let result = await runGaReport(token);
-
-  if (result.status === 401) {
-    gaToken = { access: '', exp: 0 };
-    token = await getGaToken(true);
-    result = await runGaReport(token);
-  }
-
-  if (result.status === 429 || result.status >= 500) {
-    throw new Error('ga4 ' + result.status);
-  }
-  if (result.status !== 200 || result.json.error) {
-    const code = result.status || (result.json.error && result.json.error.status) || 'error';
-    throw new Error('ga4 ' + code);
-  }
-
-  const row = (result.json.totals && result.json.totals[0] && result.json.totals[0].metricValues)
-    || (result.json.rows && result.json.rows[0] && result.json.rows[0].metricValues)
+  const json = JSON.parse(res.data || '{}');
+  if (json.error) throw new Error(json.error.message || json.error.status || 'ga4 error');
+  const row = (json.totals && json.totals[0] && json.totals[0].metricValues)
+    || (json.rows && json.rows[0] && json.rows[0].metricValues)
     || [];
-
+  const num = (cell) => {
+    const n = Number(cell && cell.value);
+    return Number.isFinite(n) ? n : 0;
+  };
   return {
     source: 'ga4',
-    visitors: safeMetric(row[0]),
-    visits: safeMetric(row[1]),
-    events: safeMetric(row[2]),
-    period: GA_PERIOD
+    visitors: num(row[0]),
+    visits: num(row[1]),
+    events: num(row[2])
   };
-}
-
-let gaStatsCache = { at: 0, data: null };
-let gaInFlight = null;
-
-function cacheFresh() {
-  return gaStatsCache.data && Date.now() - gaStatsCache.at < GA_CACHE_MS;
-}
-
-async function loadGaStats() {
-  if (cacheFresh()) return gaStatsCache.data;
-  if (gaInFlight) return gaInFlight;
-  gaInFlight = fetchGaStats()
-    .then((data) => {
-      gaStatsCache = { at: Date.now(), data };
-      console.log('  📊  GA4 stats request succeeded');
-      return data;
-    })
-    .finally(() => {
-      gaInFlight = null;
-    });
-  return gaInFlight;
 }
 
 app.get('/api/stats', async (_req, res) => {
@@ -249,14 +190,14 @@ app.get('/api/stats', async (_req, res) => {
     return res.status(200).json(GA_UNAVAILABLE);
   }
   try {
-    const data = await loadGaStats();
-    return res.status(200).json(data);
-  } catch (err) {
-    const msg = err && err.message ? String(err.message) : 'failed';
-    console.log('  📊  GA4 stats request failed:', msg.slice(0, 80));
-    if (gaStatsCache.data && gaStatsCache.data.source === 'ga4') {
+    if (gaStatsCache.data && Date.now() - gaStatsCache.at < GA_CACHE_MS) {
       return res.status(200).json(gaStatsCache.data);
     }
+    const data = await fetchGaStats();
+    gaStatsCache = { at: Date.now(), data };
+    return res.status(200).json(data);
+  } catch (err) {
+    console.log('  📊  GA stats unavailable:', err && err.message ? err.message : err);
     return res.status(200).json(GA_UNAVAILABLE);
   }
 });
@@ -292,9 +233,10 @@ app.listen(PORT, () => {
   console.log(`  🚗  Running at http://localhost:${PORT}`);
   console.log('  🎮  Regions, Newswire & Vice City backgrounds ready');
   if (gaConfigured()) {
-    console.log('  📊  Google Analytics stats: configured');
+    console.log('  📊  Google Analytics stats: env vars present');
   } else {
     console.log('  📊  Google Analytics stats: env vars not set — /api/stats stays hidden');
+    console.log('      Set GA_PROPERTY_ID, GA_CLIENT_EMAIL, GA_PRIVATE_KEY to use GA4');
   }
   console.log('');
 });
