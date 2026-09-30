@@ -4,7 +4,7 @@ const https = require('https');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const NEWS_CACHE_MS = 10 * 60 * 1000;
+const NEWS_CACHE_MS = 30 * 1000;
 const NEWSWIRE_URL = 'https://www.rockstargames.com/newswire';
 const NEWS_FEED =
   'https://news.google.com/rss/search?q=site:rockstargames.com/newswire&hl=en-US&gl=US&ceid=US:en';
