@@ -45,8 +45,8 @@
                             <TextBlock Style="{StaticResource GtaLogoMark}" FontSize="18"/>
                         </Border>
                         <TextBlock Text="GTA VI COUNTDOWN" Foreground="#E0B0FF" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
-                        <Border Background="#33FF69B4" CornerRadius="6" Padding="8,2" Margin="12,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="EASTERN EUROPE" Foreground="#FF69B4" FontSize="10" FontWeight="SemiBold"/>
+                        <Border x:Name="RegionBadge" Background="#33FF69B4" CornerRadius="6" Padding="8,2" Margin="12,0,0,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="RegionBadgeText" Text="EASTERN EUROPE" Foreground="#FF69B4" FontSize="10" FontWeight="SemiBold"/>
                         </Border>
                     </StackPanel>
 
@@ -54,10 +54,21 @@
                         <Button x:Name="BtnBack" Style="{StaticResource ChromeBtn}" Content="←" ToolTip="Back (Alt+Left)" Click="Back_Click" Width="36" Height="36" FontSize="16" IsEnabled="False"/>
                         <Button x:Name="BtnForward" Style="{StaticResource ChromeBtn}" Content="→" ToolTip="Forward (Alt+Right)" Click="Forward_Click" Width="36" Height="36" FontSize="16" IsEnabled="False"/>
                         <Button Style="{StaticResource ChromeBtn}" Content="↻" ToolTip="Refresh (F5)" Click="Refresh_Click" Width="36" Height="36" FontSize="14"/>
-                        <Button Style="{StaticResource ChromeBtn}" Content="⌂" ToolTip="Home — Eastern Europe" Click="Home_Click" Width="36" Height="36" FontSize="14"/>
+                        <Button Style="{StaticResource ChromeBtn}" Content="⌂" ToolTip="Home" Click="Home_Click" Width="36" Height="36" FontSize="14"/>
                     </StackPanel>
 
-                    <Border Grid.Column="2" Background="Transparent"/>
+                    <Grid Grid.Column="2" VerticalAlignment="Center" Margin="14,0,14,0">
+                        <ComboBox x:Name="RegionComboBox"
+                                  Width="210"
+                                  Height="30"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Background="#221529"
+                                  Foreground="#F5D7FF"
+                                  BorderBrush="#66FF8CC8"
+                                  BorderThickness="1"
+                                  SelectionChanged="RegionComboBox_SelectionChanged"/>
+                    </Grid>
 
                     <StackPanel Grid.Column="3" Orientation="Horizontal" WindowChrome.IsHitTestVisibleInChrome="True">
                         <Button Style="{StaticResource ChromeBtn}" Content="─" Click="Minimize_Click" Width="44" Height="48" FontSize="12"/>
@@ -75,7 +86,7 @@
                             <TextBlock Style="{StaticResource GtaLogoMark}" FontSize="64"/>
                         </Border>
                         <TextBlock Text="Loading countdown…" Foreground="#E0B0FF" FontSize="14" HorizontalAlignment="Center" Margin="0,18,0,0"/>
-                        <TextBlock Text="gta-vi-countdown.onrender.com/eastern-europe" Foreground="#88D8B4FE" FontSize="11" HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                        <TextBlock x:Name="LoadingRegionText" Text="gta-vi-countdown.onrender.com/eastern-europe" Foreground="#88D8B4FE" FontSize="11" HorizontalAlignment="Center" Margin="0,6,0,0"/>
                     </StackPanel>
                 </Border>
             </Grid>
