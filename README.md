@@ -1,31 +1,29 @@
 # 🌴 Grand Theft Auto VI Countdown
 
-Real-time, responsive countdown for Grand Theft Auto VI with regional PlayStation Store and Xbox Store unlock times.
+Real-time GTA VI countdown experience with the live project site embedded in a custom Windows desktop shell.
 
-🚀 Live Demo: https://gta-vi-countdown.onrender.com/
+🚀 Live site: https://gta-vi-countdown.onrender.com/
 
-💻 Windows desktop app: see `desktop/` — a WPF + WebView2 wrapper for the live GTA VI countdown site, styled with a neon Vice City-inspired aesthetic and a custom GTA VI app icon.
+💻 Windows desktop app: a WPF + WebView2 wrapper for the live countdown, styled in a GTA VI neon theme with a custom icon and smooth window animations.
 
 ---
 
 ## ✨ Features
 
-- Live GTA VI countdown experience from the official project site
-- Desktop shell powered by WPF + WebView2
-- Clean, neon GTA VI-inspired visual theme
-- Custom executable icon for the Windows app
+- Live countdown experience from the project site
+- Embedded WebView2 desktop shell for Windows
+- GTA VI-inspired pink/purple neon UI styling
+- Custom executable icon and polished chrome
 - Smooth minimize, maximize, and close transitions
-- Browser navigation controls for the embedded countdown site
+- Simple desktop wrapper focused on the root site without region switching UI
 
 ---
 
 ## 🌐 Site
 
-The desktop app loads the live countdown site directly from:
+The desktop app opens the live site directly at:
 
 https://gta-vi-countdown.onrender.com/
-
-The app is intentionally simplified to open the main experience without a region switcher UI.
 
 ---
 
@@ -61,10 +59,11 @@ Requirements:
 │   └── GtaViCountdownWpf/
 │       ├── App.xaml
 │       ├── MainWindow.xaml
+│       ├── MainWindow.xaml.cs
 │       ├── GtaViCountdownWpf.csproj
 │       ├── Assets/
 │       └── README.md
-├���─ README.md               # Root project overview
+├── README.md               # Root project overview
 └── LICENSE                 # License / disclaimer info
 ```
 
