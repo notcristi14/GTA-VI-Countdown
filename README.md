@@ -1,49 +1,37 @@
 # 🌴 Grand Theft Auto VI Countdown
 
-Real-time, responsive countdown for Grand Theft Auto VI with regional PlayStation Store / Xbox Store unlock times.
+Real-time, responsive countdown for Grand Theft Auto VI with regional PlayStation Store and Xbox Store unlock times.
 
 🚀 Live Demo: https://gta-vi-countdown.onrender.com/
 
-💻 Windows desktop app: see `desktop/` — a WPF + WebView2 wrapper for the Eastern Europe countdown route (`/eastern-europe`), styled in a neon Vice City-inspired theme and packaged with a custom GTA VI application icon.
+💻 Windows desktop app: see `desktop/` — a WPF + WebView2 wrapper for the live GTA VI countdown site, styled with a neon Vice City-inspired aesthetic and a custom GTA VI app icon.
 
 ---
 
 ## ✨ Features
 
-- Real-time regional countdowns for all supported GTA VI unlock windows
-- Route-based region handling, including the Eastern Europe default
-- Custom desktop shell with GTA VI neon styling and glows
-- Custom executable icon support for the Windows app
-- WebView2-hosted live countdown experience with browser navigation controls
-- Smooth desktop wrapper for the live web app experience
+- Live GTA VI countdown experience from the official project site
+- Desktop shell powered by WPF + WebView2
+- Clean, neon GTA VI-inspired visual theme
+- Custom executable icon for the Windows app
+- Smooth minimize, maximize, and close transitions
+- Browser navigation controls for the embedded countdown site
 
 ---
 
-## 🌐 Supported Regions
+## 🌐 Site
 
-The project supports all official PlayStation Store unlock windows, including:
+The desktop app loads the live countdown site directly from:
 
-- `/new-zealand`
-- `/australia`
-- `/japan-korea`
-- `/asia-pacific`
-- `/indonesia-thailand`
-- `/india`
-- `/uae`
-- `/saudi-turkey`
-- `/eastern-europe`
-- `/europe`
-- `/uk`
-- `/south-america`
-- `/bolivia`
-- `/us-canada`
-- `/mexico`
+https://gta-vi-countdown.onrender.com/
+
+The app is intentionally simplified to open the main experience without a region switcher UI.
 
 ---
 
 ## 💻 Windows desktop app (`desktop/`)
 
-The desktop app is a WPF + WebView2 host for the Eastern Europe countdown route.
+The project includes a WPF desktop wrapper for the live countdown site.
 
 ```bash
 cd desktop/GtaViCountdownWpf
@@ -65,19 +53,19 @@ Requirements:
 ├── bgs/                    # Background artwork set
 ├── logo.png                # GTA VI branding asset
 ├── bg.jpeg                 # Default cover image
-├── gta-vi-countdown.html   # Main web experience
-├── app.js                  # Web server / API logic
+├── gta-vi-countdown.html   # Main countdown experience
+├── app.js                  # Node server / API logic
 ├── stats.json              # Optional stats state file
 ├── package.json            # Node project config
-├── desktop/                # WPF desktop project
+├── desktop/                # WPF desktop wrapper
 │   └── GtaViCountdownWpf/
 │       ├── App.xaml
 │       ├── MainWindow.xaml
 │       ├── GtaViCountdownWpf.csproj
 │       ├── Assets/
 │       └── README.md
-├── README.md               # Root project overview
-└── LICENSE                 # License / disclaimer info (if present)
+├���─ README.md               # Root project overview
+└── LICENSE                 # License / disclaimer info
 ```
 
 ---
