@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Web.WebView2.Core;
 
@@ -14,6 +15,18 @@ namespace GtaViCountdownWpf
         public MainWindow()
         {
             InitializeComponent();
+
+            RegionComboBox.ItemsSource = new[]
+            {
+                "Eastern Europe",
+                "Western Europe",
+                "North America",
+                "South America",
+                "Asia",
+                "Oceania"
+            };
+
+            RegionComboBox.SelectedIndex = 0;
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -104,6 +117,30 @@ namespace GtaViCountdownWpf
                 BtnForward.IsEnabled = WebView.CoreWebView2.CanGoForward;
             }
             catch { }
+        }
+
+        private void RegionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (WebView?.CoreWebView2 == null || RegionComboBox.SelectedItem == null)
+                return;
+
+            var regionName = RegionComboBox.SelectedItem.ToString();
+            if (string.IsNullOrWhiteSpace(regionName))
+                return;
+
+            var selectedUrl = regionName switch
+            {
+                "Eastern Europe" => "https://gta-vi-countdown.onrender.com/eastern-europe",
+                "Western Europe" => "https://gta-vi-countdown.onrender.com/western-europe",
+                "North America" => "https://gta-vi-countdown.onrender.com/north-america",
+                "South America" => "https://gta-vi-countdown.onrender.com/south-america",
+                "Asia" => "https://gta-vi-countdown.onrender.com/asia",
+                "Oceania" => "https://gta-vi-countdown.onrender.com/oceania",
+                _ => HomeUrl
+            };
+
+            RegionBadgeText.Text = regionName.ToUpperInvariant();
+            WebView.CoreWebView2.Navigate(selectedUrl);
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
