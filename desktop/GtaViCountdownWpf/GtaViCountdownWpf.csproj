@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2849.39" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
   </ItemGroup>
 
@@ -28,7 +28,7 @@
 
   <!-- Decode raster logo from base64 if PNG is missing (Windows) -->
   <Target Name="DecodeGtaLogo" BeforeTargets="BeforeBuild" Condition="Exists('Assets\GtaLogo.png.b64') And !Exists('Assets\GtaLogo.png')">
-    <Exec Command="powershell -NoProfile -Command &quot;[IO.File]::WriteAllBytes('$(MSBuildProjectDirectory)\Assets\GtaLogo.png', [Convert]::FromBase64String([IO.File]::ReadAllText('$(MSBuildProjectDirectory)\Assets\GtaLogo.png.b64')))&quot;" />
+    <Exec Command="powershell -NoProfile -Command "[IO.File]::WriteAllBytes('$(MSBuildProjectDirectory)\Assets\GtaLogo.png', [Convert]::FromBase64String([IO.File]::ReadAllText('$(MSBuildProjectDirectory)\Assets\GtaLogo.png.b64')))"" />
   </Target>
 
 </Project>
