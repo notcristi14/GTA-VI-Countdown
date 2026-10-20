@@ -67,7 +67,8 @@
             </Border>
 
             <Grid Grid.Row="1" Background="#1A0A2E">
-                <wv2:WebView2 x:Name="WebView" Focusable="True" IsTabStop="True"/>
+                <!-- WebView2 inherits HwndHost (not Control), so no IsTabStop; Focusable is valid -->
+                <wv2:WebView2 x:Name="WebView" Focusable="True"/>
                 <Border x:Name="LoadingOverlay" Background="#CC1A0A2E" Visibility="Visible" IsHitTestVisible="True">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Image Source="pack://application:,,,/Assets/GtaLogo.png" Width="120" Height="120" Stretch="Uniform" Opacity="0.9"/>
