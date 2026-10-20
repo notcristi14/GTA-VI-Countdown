@@ -22,9 +22,12 @@ dotnet run -c Release
 
 Or open `GtaViCountdownWpf.csproj` in Visual Studio 2022 and press F5.
 
-On first build the project copies `logo.png` from the repo root into `Assets/` when needed.
+## Assets
 
-Optional: place a multi-size `Assets/app.ico` (from `logo.png`) for the executable icon.
+- **`Assets/GtaLogo.png`** / **`Assets/GtaLogo.svg`** — GTA VI wordmark for the desktop app (separate from the web project’s `logo.png`).
+- **`Assets/app.ico`** — Application icon derived from the same wordmark.
+
+Source of the wordmark: [Wikimedia Commons — Grand Theft Auto VI logo](https://commons.wikimedia.org/wiki/File:Grand_Theft_Auto_VI_logo.svg) (text logo; trademarks belong to Rockstar / Take-Two).
 
 ## Features
 
