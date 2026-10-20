@@ -59,7 +59,7 @@
 
                     <Grid Grid.Column="2" VerticalAlignment="Center" Margin="14,0,14,0">
                         <ComboBox x:Name="RegionComboBox"
-                                  Width="210"
+                                  Width="220"
                                   Height="30"
                                   HorizontalAlignment="Right"
                                   VerticalAlignment="Center"
