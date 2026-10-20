@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon Condition="Exists('Assets\app.ico')">Assets\app.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\GtaLogo.ico</ApplicationIcon>
     <AssemblyName>GtaViCountdown</AssemblyName>
     <RootNamespace>GtaViCountdownWpf</RootNamespace>
     <Version>1.0.0</Version>
@@ -24,7 +24,7 @@
   <ItemGroup>
     <Resource Include="Assets\GtaLogo.png" Condition="Exists('Assets\GtaLogo.png')" />
     <Resource Include="Assets\GtaLogo.svg" Condition="Exists('Assets\GtaLogo.svg')" />
-    <Resource Include="Assets\app.ico" Condition="Exists('Assets\app.ico')" />
+    <Resource Include="Assets\GtaLogo.ico" Condition="Exists('Assets\GtaLogo.ico')" />
   </ItemGroup>
 
 </Project>
