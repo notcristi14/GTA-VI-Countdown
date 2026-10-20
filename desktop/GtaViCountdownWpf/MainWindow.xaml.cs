@@ -1,6 +1,5 @@
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Web.WebView2.Core;
 
@@ -8,25 +7,13 @@ namespace GtaViCountdownWpf
 {
     public partial class MainWindow : Window
     {
-        private const string HomeUrl = "https://gta-vi-countdown.onrender.com/eastern-europe";
+        private const string HomeUrl = "https://gta-vi-countdown.onrender.com/";
         private const string SiteHost = "gta-vi-countdown.onrender.com";
         private bool _firstLoad = true;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            RegionComboBox.ItemsSource = new[]
-            {
-                "Eastern Europe",
-                "Western Europe",
-                "North America",
-                "South America",
-                "Asia",
-                "Oceania"
-            };
-
-            RegionComboBox.SelectedIndex = 0;
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -119,30 +106,6 @@ namespace GtaViCountdownWpf
             catch { }
         }
 
-        private void RegionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (WebView?.CoreWebView2 == null || RegionComboBox.SelectedItem == null)
-                return;
-
-            var regionName = RegionComboBox.SelectedItem.ToString();
-            if (string.IsNullOrWhiteSpace(regionName))
-                return;
-
-            var selectedUrl = regionName switch
-            {
-                "Eastern Europe" => "https://gta-vi-countdown.onrender.com/eastern-europe",
-                "Western Europe" => "https://gta-vi-countdown.onrender.com/western-europe",
-                "North America" => "https://gta-vi-countdown.onrender.com/north-america",
-                "South America" => "https://gta-vi-countdown.onrender.com/south-america",
-                "Asia" => "https://gta-vi-countdown.onrender.com/asia",
-                "Oceania" => "https://gta-vi-countdown.onrender.com/oceania",
-                _ => HomeUrl
-            };
-
-            RegionBadgeText.Text = regionName.ToUpperInvariant();
-            WebView.CoreWebView2.Navigate(selectedUrl);
-        }
-
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (WebView.CoreWebView2?.CanGoBack == true)
@@ -171,10 +134,15 @@ namespace GtaViCountdownWpf
             { WebView.CoreWebView2.Navigate(HomeUrl); e.Handled = true; }
         }
 
-        private void Minimize_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
-            => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
 
         private void Close_Click(object sender, RoutedEventArgs e) => Close();
     }
