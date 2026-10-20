@@ -12,7 +12,7 @@
         WindowStyle="None"
         AllowsTransparency="False"
         ResizeMode="CanResizeWithGrip"
-        Icon="pack://application:,,,/Assets/logo.png"
+        Icon="pack://application:,,,/Assets/GtaLogo.png"
         Loaded="Window_Loaded"
         KeyDown="Window_KeyDown">
 
@@ -44,7 +44,7 @@
 
                     <!-- Branding -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,8,0">
-                        <Image Source="pack://application:,,,/Assets/logo.png" Width="28" Height="28" Stretch="Uniform" Margin="0,0,10,0"/>
+                        <Image Source="pack://application:,,,/Assets/GtaLogo.png" Width="28" Height="28" Stretch="Uniform" Margin="0,0,10,0"/>
                         <TextBlock Text="GTA VI COUNTDOWN"
                                    Foreground="#E0B0FF"
                                    FontWeight="Bold"
@@ -95,7 +95,7 @@
                         Visibility="Visible"
                         IsHitTestVisible="True">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Image Source="pack://application:,,,/Assets/logo.png" Width="120" Height="120" Stretch="Uniform" Opacity="0.9"/>
+                        <Image Source="pack://application:,,,/Assets/GtaLogo.png" Width="120" Height="120" Stretch="Uniform" Opacity="0.9"/>
                         <TextBlock Text="Loading countdown…"
                                    Foreground="#E0B0FF"
                                    FontSize="14"
