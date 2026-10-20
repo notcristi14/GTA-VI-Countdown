@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using Microsoft.Web.WebView2.Core;
 
 namespace GtaViCountdownWpf
@@ -136,14 +137,58 @@ namespace GtaViCountdownWpf
 
         private void Minimize_Click(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState.Minimized;
+            AnimateWindowAction(() => WindowState = WindowState.Minimized, 1.0, 0.94, 0.85, 120);
         }
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            AnimateWindowAction(() => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized, 1.0, 1.08, 0.96, 120);
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e) => Close();
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            AnimateWindowAction(() => Close(), 1.0, 0.88, 0.82, 140);
+        }
+
+        private void AnimateWindowAction(Action action, double fromScale, double toScale, double opacityEnd, double durationMs)
+        {
+            var scaleX = new DoubleAnimation
+            {
+                From = fromScale,
+                To = toScale,
+                Duration = TimeSpan.FromMilliseconds(durationMs),
+                AutoReverse = true
+            };
+            Storyboard.SetTarget(scaleX, WindowScale);
+            Storyboard.SetTargetProperty(scaleX, new PropertyPath("ScaleX"));
+
+            var scaleY = new DoubleAnimation
+            {
+                From = fromScale,
+                To = toScale,
+                Duration = TimeSpan.FromMilliseconds(durationMs),
+                AutoReverse = true
+            };
+            Storyboard.SetTarget(scaleY, WindowScale);
+            Storyboard.SetTargetProperty(scaleY, new PropertyPath("ScaleY"));
+
+            var opacity = new DoubleAnimation
+            {
+                From = 1.0,
+                To = opacityEnd,
+                Duration = TimeSpan.FromMilliseconds(durationMs),
+                AutoReverse = true
+            };
+            Storyboard.SetTarget(opacity, this);
+            Storyboard.SetTargetProperty(opacity, new PropertyPath("Opacity"));
+
+            var sb = new Storyboard();
+            sb.Children.Add(scaleX);
+            sb.Children.Add(scaleY);
+            sb.Children.Add(opacity);
+            sb.Begin();
+
+            action();
+        }
     }
 }
