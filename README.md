@@ -5,6 +5,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional PlaySt
 
 🚀 **Live Demo:** [gta-vi-countdown.onrender.com](https://gta-vi-countdown.onrender.com/)
 
+💻 **Windows desktop app:** see [`desktop/`](desktop/) — WPF + WebView2 wrapper for the Eastern Europe countdown (`/eastern-europe`), with Vice City chrome and full site interactivity.
+
 ---
 
 ## ✨ Features
@@ -67,6 +69,20 @@ All 15 official PlayStation Store unlock windows:
 | `/bolivia` | Bolivia | Nov 19, 2026 · 04:00 |
 | `/us-canada` | US, Canada + Colombia, Ecuador, Panama, Peru | Nov 19, 2026 · 05:00 |
 | `/mexico` | Mexico & Central America | Nov 19, 2026 · 06:00 |
+
+---
+
+## 💻 Windows desktop app (`desktop/`)
+
+WPF (.NET 8) + WebView2 host for [Eastern Europe](https://gta-vi-countdown.onrender.com/eastern-europe).
+
+```bash
+cd desktop
+dotnet restore
+dotnet run -c Release
+```
+
+Requires Windows, .NET 8 SDK, and WebView2 Runtime. See [`desktop/README.md`](desktop/README.md).
 
 ---
 
@@ -154,6 +170,7 @@ To pick up this change on an existing deploy, replace `app.js` and restart the N
 - **Frontend:** HTML5, CSS3 (Flexbox, Clamp, Glassmorphism), Vanilla JS
 - **Backend:** Node.js + Express (`/api/news` + catch-all region routes)
 - **Hosting:** Render
+- **Desktop:** WPF (.NET 8) + WebView2 (`desktop/`)
 
 ---
 
@@ -167,6 +184,7 @@ To pick up this change on an existing deploy, replace `app.js` and restart the N
 ├── app.js                  # Express server, Rockstar Newswire /api/news, /api/stats, static files
 ├── stats.json              # Optional local counter file
 ├── package.json            # npm config; start script runs node app.js
+├── desktop/                # WPF desktop app (WebView2 + Eastern Europe)
 └── README.md               # Features, setup, regions, GA env vars, license
 ```
 
