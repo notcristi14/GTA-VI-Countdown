@@ -12,7 +12,6 @@
         WindowStyle="None"
         AllowsTransparency="False"
         ResizeMode="CanResizeWithGrip"
-        Icon="pack://application:,,,/Assets/GtaLogo.png"
         Loaded="Window_Loaded"
         KeyDown="Window_KeyDown">
 
@@ -42,7 +41,9 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,8,0">
-                        <Image Source="pack://application:,,,/Assets/GtaLogo.png" Width="28" Height="28" Stretch="Uniform" Margin="0,0,10,0"/>
+                        <Border Width="32" Height="32" CornerRadius="6" Background="#331A0A2E" Margin="0,0,10,0">
+                            <TextBlock Style="{StaticResource GtaLogoMark}" FontSize="18"/>
+                        </Border>
                         <TextBlock Text="GTA VI COUNTDOWN" Foreground="#E0B0FF" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
                         <Border Background="#33FF69B4" CornerRadius="6" Padding="8,2" Margin="12,0,0,0" VerticalAlignment="Center">
                             <TextBlock Text="EASTERN EUROPE" Foreground="#FF69B4" FontSize="10" FontWeight="SemiBold"/>
@@ -67,11 +68,12 @@
             </Border>
 
             <Grid Grid.Row="1" Background="#1A0A2E">
-                <!-- WebView2 inherits HwndHost (not Control), so no IsTabStop; Focusable is valid -->
                 <wv2:WebView2 x:Name="WebView" Focusable="True"/>
                 <Border x:Name="LoadingOverlay" Background="#CC1A0A2E" Visibility="Visible" IsHitTestVisible="True">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Image Source="pack://application:,,,/Assets/GtaLogo.png" Width="120" Height="120" Stretch="Uniform" Opacity="0.9"/>
+                        <Border Width="120" Height="120" CornerRadius="16" Background="#331A0A2E">
+                            <TextBlock Style="{StaticResource GtaLogoMark}" FontSize="64"/>
+                        </Border>
                         <TextBlock Text="Loading countdown…" Foreground="#E0B0FF" FontSize="14" HorizontalAlignment="Center" Margin="0,18,0,0"/>
                         <TextBlock Text="gta-vi-countdown.onrender.com/eastern-europe" Foreground="#88D8B4FE" FontSize="11" HorizontalAlignment="Center" Margin="0,6,0,0"/>
                     </StackPanel>
