@@ -13,53 +13,14 @@ const wchar_t AppWindow::kAppTitle[]  = L"GTA VI Countdown";
 const wchar_t AppWindow::kHomeUrl[]   =
     L"https://gta-vi-countdown.onrender.com/eastern-europe";
 
-const COLORREF AppWindow::kBgDeep    = RGB(0x1A, 0x0A, 0x2E);
-const COLORREF AppWindow::kTitleBar  = RGB(0x14, 0x0A, 0x28);
-const COLORREF AppWindow::kStatusBar = RGB(0x10, 0x08, 0x20);
-const COLORREF AppWindow::kBorder    = RGB(0xFF, 0x8C, 0xC8);
-const COLORREF AppWindow::kText      = RGB(0xE0, 0xB0, 0xFF);
-const COLORREF AppWindow::kMuted     = RGB(0xA0, 0x90, 0xB0);
-
-const int AppWindow::kTitleH  = 48;
-const int AppWindow::kStatusH = 28;
-
-namespace {
-
-void DrawRect(HDC hdc, const RECT& r, COLORREF fill, COLORREF border) {
-  HBRUSH br = CreateSolidBrush(fill);
-  HPEN pen = CreatePen(PS_SOLID, 1, border);
-  HGDIOBJ oldBr = SelectObject(hdc, br);
-  HGDIOBJ oldPen = SelectObject(hdc, pen);
-  Rectangle(hdc, r.left, r.top, r.right, r.bottom);
-  SelectObject(hdc, oldBr);
-  SelectObject(hdc, oldPen);
-  DeleteObject(br);
-  DeleteObject(pen);
-}
-
-void DrawTextLine(HDC hdc, HFONT font, COLORREF color, int x, int y, const wchar_t* text) {
-  SetBkMode(hdc, TRANSPARENT);
-  SetTextColor(hdc, color);
-  HGDIOBJ old = SelectObject(hdc, font);
-  TextOutW(hdc, x, y, text, (int)wcslen(text));
-  SelectObject(hdc, old);
-}
-
-}  // namespace
+const COLORREF AppWindow::kBgDeep   = RGB(0x1A, 0x0A, 0x2E);
+const COLORREF AppWindow::kBorder   = RGB(0xFF, 0x8C, 0xC8);
+const COLORREF AppWindow::kTitleBar = RGB(0x14, 0x0A, 0x28);
 
 AppWindow::AppWindow(HINSTANCE instance)
-    : instance_(instance),
-      hwnd_(nullptr),
-      fontTitle_(nullptr),
-      fontStatus_(nullptr),
-      status_(L"Connecting...") {}
+    : instance_(instance), hwnd_(nullptr) {}
 
-AppWindow::~AppWindow() {
-  if (fontTitle_)
-    DeleteObject(fontTitle_);
-  if (fontStatus_)
-    DeleteObject(fontStatus_);
-}
+AppWindow::~AppWindow() {}
 
 bool AppWindow::Create() {
   WNDCLASSEXW wc;
@@ -75,7 +36,6 @@ bool AppWindow::Create() {
   wc.lpszMenuName  = nullptr;
   wc.lpszClassName = kClassName;
 
-  // GTA VI logo from IDI_APPICON in app.rc (assets/GtaLogo.ico)
   wc.hIcon = ::LoadIconW(instance_, MAKEINTRESOURCEW(IDI_APPICON));
   if (wc.hIcon == nullptr)
     wc.hIcon = ::LoadIconW(nullptr, IDI_APPLICATION);
@@ -85,15 +45,6 @@ bool AppWindow::Create() {
 
   if (!RegisterClassExW(&wc))
     return false;
-
-  fontTitle_ = CreateFontW(
-      16, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
-      DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-      CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
-  fontStatus_ = CreateFontW(
-      12, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
-      DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-      CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
 
   hwnd_ = CreateWindowExW(
       WS_EX_APPWINDOW,
@@ -157,12 +108,11 @@ LRESULT CALLBACK AppWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 
 LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
   switch (msg) {
-    case WM_PAINT:
-      OnPaint();
-      return 0;
     case WM_SIZE:
       OnSize();
       return 0;
+    case WM_ERASEBKGND:
+      return 1;
     case WM_KEYDOWN:
       if (webview_) {
         if (wParam == VK_F5) {
@@ -196,70 +146,21 @@ LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
   return DefWindowProcW(hwnd_, msg, wParam, lParam);
 }
 
-RECT AppWindow::TitleBarRect() const {
+RECT AppWindow::ClientArea() const {
   RECT rc;
   GetClientRect(hwnd_, &rc);
-  rc.bottom = kTitleH;
   return rc;
-}
-
-RECT AppWindow::StatusBarRect() const {
-  RECT rc;
-  GetClientRect(hwnd_, &rc);
-  rc.top = rc.bottom - kStatusH;
-  return rc;
-}
-
-RECT AppWindow::ContentRect() const {
-  RECT rc;
-  GetClientRect(hwnd_, &rc);
-  rc.top = kTitleH;
-  rc.bottom -= kStatusH;
-  if (rc.bottom < rc.top)
-    rc.bottom = rc.top;
-  return rc;
-}
-
-void AppWindow::OnPaint() {
-  PAINTSTRUCT ps;
-  ZeroMemory(&ps, sizeof(ps));
-  HDC hdc = BeginPaint(hwnd_, &ps);
-
-  RECT client;
-  GetClientRect(hwnd_, &client);
-  DrawRect(hdc, client, kBgDeep, kBorder);
-
-  RECT title = TitleBarRect();
-  DrawRect(hdc, title, kTitleBar, kBorder);
-  DrawTextLine(hdc, fontTitle_, kText, 16, 14, L"GTA VI COUNTDOWN");
-  DrawTextLine(hdc, fontStatus_, kMuted, 200, 16, L"Eastern Europe  |  Live");
-  DrawTextLine(hdc, fontStatus_, kText, client.right - 220, 16, L"F5 Refresh   Alt+Home");
-
-  RECT status = StatusBarRect();
-  DrawRect(hdc, status, kStatusBar, kBorder);
-  DrawTextLine(hdc, fontStatus_, kMuted, 12, status.top + 7, status_.c_str());
-  DrawTextLine(hdc, fontStatus_, RGB(0x70, 0x60, 0x80), client.right - 360, status.top + 7,
-               L"Fan-made - Not affiliated with Rockstar");
-
-  EndPaint(hwnd_, &ps);
 }
 
 void AppWindow::OnSize() {
   LayoutWebView();
-  InvalidateRect(hwnd_, nullptr, FALSE);
 }
 
 void AppWindow::LayoutWebView() {
   if (!controller_)
     return;
-  RECT rc = ContentRect();
+  RECT rc = ClientArea();
   controller_->put_Bounds(rc);
-}
-
-void AppWindow::SetStatus(const std::wstring& text) {
-  status_ = text;
-  RECT status = StatusBarRect();
-  InvalidateRect(hwnd_, &status, FALSE);
 }
 
 void AppWindow::NavigateHome() {
@@ -268,7 +169,6 @@ void AppWindow::NavigateHome() {
 }
 
 void AppWindow::InitWebView() {
-  SetStatus(L"Initializing WebView2...");
   HWND hwnd = hwnd_;
 
   CreateCoreWebView2EnvironmentWithOptions(
@@ -278,7 +178,6 @@ void AppWindow::InitWebView() {
       Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
           [this, hwnd](HRESULT result, ICoreWebView2Environment* env) -> HRESULT {
             if (FAILED(result) || !env) {
-              SetStatus(L"WebView2 failed - install the WebView2 Runtime");
               MessageBoxW(
                   hwnd,
                   L"WebView2 failed to start.\n\nInstall:\n"
@@ -293,7 +192,11 @@ void AppWindow::InitWebView() {
                 Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [this](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
                       if (FAILED(result) || !controller) {
-                        SetStatus(L"WebView2 controller failed");
+                        MessageBoxW(
+                            hwnd_,
+                            L"WebView2 controller failed to start.",
+                            kAppTitle,
+                            MB_OK | MB_ICONWARNING);
                         return result;
                       }
 
@@ -308,6 +211,7 @@ void AppWindow::InitWebView() {
                         settings->put_IsStatusBarEnabled(FALSE);
                         settings->put_AreDevToolsEnabled(TRUE);
                         settings->put_IsZoomControlEnabled(TRUE);
+                        settings->put_AreDefaultScriptDialogsEnabled(TRUE);
                       }
 
                       ComPtr<ICoreWebView2Controller2> c2;
@@ -320,40 +224,28 @@ void AppWindow::InitWebView() {
                         c2->put_DefaultBackgroundColor(bg);
                       }
 
-                      webview_->add_NavigationStarting(
-                          Callback<ICoreWebView2NavigationStartingEventHandler>(
-                              [this](ICoreWebView2*, ICoreWebView2NavigationStartingEventArgs* args) -> HRESULT {
+                      // Keep target=_blank / window.open inside this app
+                      webview_->add_NewWindowRequested(
+                          Callback<ICoreWebView2NewWindowRequestedEventHandler>(
+                              [this](ICoreWebView2*, ICoreWebView2NewWindowRequestedEventArgs* args) -> HRESULT {
+                                args->put_Handled(TRUE);
                                 LPWSTR uri = nullptr;
                                 args->get_Uri(&uri);
-                                std::wstring s = L"Loading ";
-                                if (uri) {
-                                  s += uri;
+                                if (uri && webview_) {
+                                  webview_->Navigate(uri);
+                                  CoTaskMemFree(uri);
+                                } else if (uri) {
                                   CoTaskMemFree(uri);
                                 }
-                                s += L"...";
-                                SetStatus(s);
                                 return S_OK;
                               })
                               .Get(),
                           nullptr);
 
-                      webview_->add_NavigationCompleted(
-                          Callback<ICoreWebView2NavigationCompletedEventHandler>(
-                              [this](ICoreWebView2*, ICoreWebView2NavigationCompletedEventArgs* args) -> HRESULT {
-                                BOOL ok = FALSE;
-                                args->get_IsSuccess(&ok);
-                                if (ok) {
-                                  LPWSTR src = nullptr;
-                                  webview_->get_Source(&src);
-                                  if (src) {
-                                    SetStatus(src);
-                                    CoTaskMemFree(src);
-                                  } else {
-                                    SetStatus(kHomeUrl);
-                                  }
-                                } else {
-                                  SetStatus(L"Failed to load - check connection, then press F5");
-                                }
+                      // All navigations stay in this WebView (no external browser)
+                      webview_->add_NavigationStarting(
+                          Callback<ICoreWebView2NavigationStartingEventHandler>(
+                              [](ICoreWebView2*, ICoreWebView2NavigationStartingEventArgs*) -> HRESULT {
                                 return S_OK;
                               })
                               .Get(),
@@ -364,11 +256,10 @@ void AppWindow::InitWebView() {
                               [this](ICoreWebView2* sender, IUnknown*) -> HRESULT {
                                 LPWSTR title = nullptr;
                                 sender->get_DocumentTitle(&title);
-                                if (title && title[0] != 0) {
-                                  std::wstring t = title;
-                                  t += L" - Desktop";
-                                  SetWindowTextW(hwnd_, t.c_str());
-                                }
+                                if (title && title[0] != 0)
+                                  SetWindowTextW(hwnd_, title);
+                                else
+                                  SetWindowTextW(hwnd_, kAppTitle);
                                 if (title)
                                   CoTaskMemFree(title);
                                 return S_OK;
