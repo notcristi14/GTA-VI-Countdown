@@ -56,9 +56,8 @@ See [launcher/README.md](launcher/README.md).
 │   ├── GtaViCountdown.sln      # Open this in Visual Studio
 │   ├── GtaViCountdown.vcxproj
 │   ├── packages.config         # WebView2 NuGet
-│   ├── assets/GtaLogo.ico
-│   ├── src/
-│   └── CMakeLists.txt          # Optional
+│   ├── assets/GtaLogo.ico      # GTA VI logo (exe icon)
+│   └── src/
 ├── package.json
 └── README.md
 ```
@@ -74,7 +73,7 @@ npm start
 
 - Frontend: HTML, CSS, JavaScript
 - Backend: Node.js + Express
-- Desktop: C++ (Win32 + WebView2)
+- Desktop: C++ (Win32 + WebView2) via Visual Studio
 
 ---
 
