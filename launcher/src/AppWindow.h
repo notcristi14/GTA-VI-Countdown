@@ -15,8 +15,13 @@ public:
   static const wchar_t kHomeUrl[];
 
   static const COLORREF kBgDeep;
+  static const COLORREF kToolbar;
   static const COLORREF kBorder;
   static const COLORREF kTitleBar;
+  static const COLORREF kBtnFace;
+  static const COLORREF kBtnText;
+
+  static const int kToolbarH;
 
   explicit AppWindow(HINSTANCE instance);
   ~AppWindow();
@@ -28,14 +33,25 @@ private:
   static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
   LRESULT HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam);
 
+  void CreateToolbar();
+  void LayoutControls();
   void OnSize();
   void LayoutWebView();
   void InitWebView();
   void NavigateHome();
-  RECT ClientArea() const;
+  void GoBack();
+  void GoForward();
+  void Refresh();
+  void UpdateNavButtons();
+  RECT WebViewRect() const;
 
   HINSTANCE instance_;
   HWND hwnd_;
+  HWND btnBack_;
+  HWND btnForward_;
+  HWND btnHome_;
+  HWND btnRefresh_;
+  HFONT fontBtn_;
 
   Microsoft::WRL::ComPtr<ICoreWebView2Controller> controller_;
   Microsoft::WRL::ComPtr<ICoreWebView2> webview_;

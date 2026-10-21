@@ -14,13 +14,27 @@ const wchar_t AppWindow::kHomeUrl[]   =
     L"https://gta-vi-countdown.onrender.com/eastern-europe";
 
 const COLORREF AppWindow::kBgDeep   = RGB(0x1A, 0x0A, 0x2E);
+const COLORREF AppWindow::kToolbar  = RGB(0x14, 0x0A, 0x28);
 const COLORREF AppWindow::kBorder   = RGB(0xFF, 0x8C, 0xC8);
 const COLORREF AppWindow::kTitleBar = RGB(0x14, 0x0A, 0x28);
+const COLORREF AppWindow::kBtnFace  = RGB(0x2A, 0x14, 0x3E);
+const COLORREF AppWindow::kBtnText  = RGB(0xE0, 0xB0, 0xFF);
+
+const int AppWindow::kToolbarH = 40;
 
 AppWindow::AppWindow(HINSTANCE instance)
-    : instance_(instance), hwnd_(nullptr) {}
+    : instance_(instance),
+      hwnd_(nullptr),
+      btnBack_(nullptr),
+      btnForward_(nullptr),
+      btnHome_(nullptr),
+      btnRefresh_(nullptr),
+      fontBtn_(nullptr) {}
 
-AppWindow::~AppWindow() {}
+AppWindow::~AppWindow() {
+  if (fontBtn_)
+    DeleteObject(fontBtn_);
+}
 
 bool AppWindow::Create() {
   WNDCLASSEXW wc;
@@ -28,12 +42,9 @@ bool AppWindow::Create() {
   wc.cbSize        = sizeof(WNDCLASSEXW);
   wc.style         = CS_HREDRAW | CS_VREDRAW;
   wc.lpfnWndProc   = AppWindow::WndProc;
-  wc.cbClsExtra    = 0;
-  wc.cbWndExtra    = 0;
   wc.hInstance     = instance_;
   wc.hCursor       = LoadCursorW(nullptr, IDC_ARROW);
   wc.hbrBackground = CreateSolidBrush(kBgDeep);
-  wc.lpszMenuName  = nullptr;
   wc.lpszClassName = kClassName;
 
   wc.hIcon = ::LoadIconW(instance_, MAKEINTRESOURCEW(IDI_APPICON));
@@ -75,10 +86,69 @@ bool AppWindow::Create() {
   COLORREF caption = kTitleBar;
   DwmSetWindowAttribute(hwnd_, 35, &caption, sizeof(caption));
 
+  fontBtn_ = CreateFontW(
+      15, 0, 0, 0, FW_SEMIBOLD, FALSE, FALSE, FALSE,
+      DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+      CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
+
+  CreateToolbar();
+
   ShowWindow(hwnd_, SW_SHOW);
   UpdateWindow(hwnd_);
   InitWebView();
   return true;
+}
+
+void AppWindow::CreateToolbar() {
+  const DWORD style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
+
+  btnBack_ = CreateWindowW(
+      L"BUTTON", L"<  Back",
+      style, 0, 0, 0, 0, hwnd_, (HMENU)(INT_PTR)IDC_BTN_BACK, instance_, nullptr);
+  btnForward_ = CreateWindowW(
+      L"BUTTON", L"Forward  >",
+      style, 0, 0, 0, 0, hwnd_, (HMENU)(INT_PTR)IDC_BTN_FORWARD, instance_, nullptr);
+  btnHome_ = CreateWindowW(
+      L"BUTTON", L"Home",
+      style, 0, 0, 0, 0, hwnd_, (HMENU)(INT_PTR)IDC_BTN_HOME, instance_, nullptr);
+  btnRefresh_ = CreateWindowW(
+      L"BUTTON", L"Refresh",
+      style, 0, 0, 0, 0, hwnd_, (HMENU)(INT_PTR)IDC_BTN_REFRESH, instance_, nullptr);
+
+  HWND buttons[] = {btnBack_, btnForward_, btnHome_, btnRefresh_};
+  for (HWND b : buttons) {
+    if (b && fontBtn_)
+      SendMessageW(b, WM_SETFONT, (WPARAM)fontBtn_, TRUE);
+  }
+
+  LayoutControls();
+  EnableWindow(btnBack_, FALSE);
+  EnableWindow(btnForward_, FALSE);
+}
+
+void AppWindow::LayoutControls() {
+  const int pad = 6;
+  const int gap = 6;
+  const int btnH = kToolbarH - pad * 2;
+  const int btnW = 100;
+  int x = pad;
+  int y = pad;
+
+  if (btnBack_) {
+    MoveWindow(btnBack_, x, y, btnW, btnH, TRUE);
+    x += btnW + gap;
+  }
+  if (btnForward_) {
+    MoveWindow(btnForward_, x, y, btnW, btnH, TRUE);
+    x += btnW + gap;
+  }
+  if (btnHome_) {
+    MoveWindow(btnHome_, x, y, 80, btnH, TRUE);
+    x += 80 + gap;
+  }
+  if (btnRefresh_) {
+    MoveWindow(btnRefresh_, x, y, 90, btnH, TRUE);
+  }
 }
 
 int AppWindow::MessageLoop() {
@@ -108,29 +178,60 @@ LRESULT CALLBACK AppWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 
 LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
   switch (msg) {
+    case WM_COMMAND:
+      if (HIWORD(wParam) == BN_CLICKED || HIWORD(wParam) == 0) {
+        switch (LOWORD(wParam)) {
+          case IDC_BTN_BACK:
+            GoBack();
+            return 0;
+          case IDC_BTN_FORWARD:
+            GoForward();
+            return 0;
+          case IDC_BTN_HOME:
+            NavigateHome();
+            return 0;
+          case IDC_BTN_REFRESH:
+            Refresh();
+            return 0;
+        }
+      }
+      break;
+    case WM_CTLCOLORBTN: {
+      HDC hdc = (HDC)wParam;
+      SetTextColor(hdc, kBtnText);
+      SetBkColor(hdc, kBtnFace);
+      static HBRUSH brush = CreateSolidBrush(kBtnFace);
+      return (LRESULT)brush;
+    }
+    case WM_ERASEBKGND: {
+      HDC hdc = (HDC)wParam;
+      RECT rc;
+      GetClientRect(hwnd_, &rc);
+      HBRUSH bg = CreateSolidBrush(kBgDeep);
+      FillRect(hdc, &rc, bg);
+      DeleteObject(bg);
+      RECT tb = rc;
+      tb.bottom = kToolbarH;
+      HBRUSH tbBrush = CreateSolidBrush(kToolbar);
+      FillRect(hdc, &tb, tbBrush);
+      DeleteObject(tbBrush);
+      return 1;
+    }
     case WM_SIZE:
       OnSize();
       return 0;
-    case WM_ERASEBKGND:
-      return 1;
     case WM_KEYDOWN:
       if (webview_) {
         if (wParam == VK_F5) {
-          webview_->Reload();
+          Refresh();
           return 0;
         }
         if (wParam == VK_LEFT && (GetKeyState(VK_MENU) & 0x8000)) {
-          BOOL can = FALSE;
-          webview_->get_CanGoBack(&can);
-          if (can)
-            webview_->GoBack();
+          GoBack();
           return 0;
         }
         if (wParam == VK_RIGHT && (GetKeyState(VK_MENU) & 0x8000)) {
-          BOOL can = FALSE;
-          webview_->get_CanGoForward(&can);
-          if (can)
-            webview_->GoForward();
+          GoForward();
           return 0;
         }
         if (wParam == VK_HOME && (GetKeyState(VK_MENU) & 0x8000)) {
@@ -146,26 +247,66 @@ LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
   return DefWindowProcW(hwnd_, msg, wParam, lParam);
 }
 
-RECT AppWindow::ClientArea() const {
+RECT AppWindow::WebViewRect() const {
   RECT rc;
   GetClientRect(hwnd_, &rc);
+  rc.top = kToolbarH;
+  if (rc.bottom < rc.top)
+    rc.bottom = rc.top;
   return rc;
 }
 
 void AppWindow::OnSize() {
+  LayoutControls();
   LayoutWebView();
 }
 
 void AppWindow::LayoutWebView() {
   if (!controller_)
     return;
-  RECT rc = ClientArea();
+  RECT rc = WebViewRect();
   controller_->put_Bounds(rc);
 }
 
 void AppWindow::NavigateHome() {
   if (webview_)
     webview_->Navigate(kHomeUrl);
+}
+
+void AppWindow::GoBack() {
+  if (!webview_)
+    return;
+  BOOL can = FALSE;
+  webview_->get_CanGoBack(&can);
+  if (can)
+    webview_->GoBack();
+}
+
+void AppWindow::GoForward() {
+  if (!webview_)
+    return;
+  BOOL can = FALSE;
+  webview_->get_CanGoForward(&can);
+  if (can)
+    webview_->GoForward();
+}
+
+void AppWindow::Refresh() {
+  if (webview_)
+    webview_->Reload();
+}
+
+void AppWindow::UpdateNavButtons() {
+  if (!webview_)
+    return;
+  BOOL canBack = FALSE;
+  BOOL canFwd = FALSE;
+  webview_->get_CanGoBack(&canBack);
+  webview_->get_CanGoForward(&canFwd);
+  if (btnBack_)
+    EnableWindow(btnBack_, canBack ? TRUE : FALSE);
+  if (btnForward_)
+    EnableWindow(btnForward_, canFwd ? TRUE : FALSE);
 }
 
 void AppWindow::InitWebView() {
@@ -224,7 +365,6 @@ void AppWindow::InitWebView() {
                         c2->put_DefaultBackgroundColor(bg);
                       }
 
-                      // Keep target=_blank / window.open inside this app
                       webview_->add_NewWindowRequested(
                           Callback<ICoreWebView2NewWindowRequestedEventHandler>(
                               [this](ICoreWebView2*, ICoreWebView2NewWindowRequestedEventArgs* args) -> HRESULT {
@@ -242,10 +382,19 @@ void AppWindow::InitWebView() {
                               .Get(),
                           nullptr);
 
-                      // All navigations stay in this WebView (no external browser)
-                      webview_->add_NavigationStarting(
-                          Callback<ICoreWebView2NavigationStartingEventHandler>(
-                              [](ICoreWebView2*, ICoreWebView2NavigationStartingEventArgs*) -> HRESULT {
+                      webview_->add_HistoryChanged(
+                          Callback<ICoreWebView2HistoryChangedEventHandler>(
+                              [this](ICoreWebView2*, IUnknown*) -> HRESULT {
+                                UpdateNavButtons();
+                                return S_OK;
+                              })
+                              .Get(),
+                          nullptr);
+
+                      webview_->add_NavigationCompleted(
+                          Callback<ICoreWebView2NavigationCompletedEventHandler>(
+                              [this](ICoreWebView2*, ICoreWebView2NavigationCompletedEventArgs*) -> HRESULT {
+                                UpdateNavButtons();
                                 return S_OK;
                               })
                               .Get(),
