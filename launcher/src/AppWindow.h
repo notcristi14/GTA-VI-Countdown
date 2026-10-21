@@ -2,7 +2,6 @@
 
 #include <windows.h>
 #include <wrl.h>
-#include <wil/com.h>
 #include <WebView2.h>
 #include <string>
 
@@ -13,7 +12,6 @@ public:
   static constexpr wchar_t kHomeUrl[]   =
       L"https://gta-vi-countdown.onrender.com/eastern-europe";
 
-  // Site theme
   static constexpr COLORREF kBgDeep   = RGB(0x1A, 0x0A, 0x2E);
   static constexpr COLORREF kTitleBar = RGB(0x14, 0x0A, 0x28);
   static constexpr COLORREF kStatusBar= RGB(0x10, 0x08, 0x20);
@@ -23,7 +21,6 @@ public:
 
   static constexpr int kTitleH  = 48;
   static constexpr int kStatusH = 28;
-  static constexpr int kBtnW    = 40;
 
   explicit AppWindow(HINSTANCE instance);
   ~AppWindow();
@@ -37,12 +34,10 @@ private:
 
   void OnPaint();
   void OnSize();
-  void OnCommand(int id);
   void LayoutWebView();
   void InitWebView();
   void NavigateHome();
   void SetStatus(const std::wstring& text);
-  void UpdateNavButtons();
   RECT ContentRect() const;
   RECT TitleBarRect() const;
   RECT StatusBarRect() const;
@@ -51,8 +46,7 @@ private:
   HWND hwnd_ = nullptr;
   HFONT fontTitle_ = nullptr;
   HFONT fontStatus_ = nullptr;
-  std::wstring status_ = L"Connecting\u2026";
-  bool firstLoad_ = true;
+  std::wstring status_ = L"Connecting...";
 
   Microsoft::WRL::ComPtr<ICoreWebView2Controller> controller_;
   Microsoft::WRL::ComPtr<ICoreWebView2> webview_;

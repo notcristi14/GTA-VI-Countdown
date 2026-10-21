@@ -2,12 +2,12 @@
 #include "resource.h"
 
 #include <dwmapi.h>
-#include <shellapi.h>
+#include <memory>
 
 #pragma comment(lib, "dwmapi.lib")
-#pragma comment(lib, "shell32.lib")
 
 using Microsoft::WRL::Callback;
+using Microsoft::WRL::ComPtr;
 
 namespace {
 
@@ -62,25 +62,22 @@ bool AppWindow::Create() {
                             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                             CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
 
-  const int width = 1280;
-  const int height = 900;
   hwnd_ = CreateWindowExW(
       WS_EX_APPWINDOW,
       kClassName,
       kAppTitle,
       WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, CW_USEDEFAULT, width, height,
+      CW_USEDEFAULT, CW_USEDEFAULT, 1280, 900,
       nullptr, nullptr, instance_, this);
 
   if (!hwnd_) return false;
 
-  // Subtle dark title theming where supported
   BOOL dark = TRUE;
-  DwmSetWindowAttribute(hwnd_, 20 /* DWMWA_USE_IMMERSIVE_DARK_MODE */, &dark, sizeof(dark));
+  DwmSetWindowAttribute(hwnd_, 20, &dark, sizeof(dark));
   COLORREF border = kBorder;
-  DwmSetWindowAttribute(hwnd_, 34 /* DWMWA_BORDER_COLOR */, &border, sizeof(border));
+  DwmSetWindowAttribute(hwnd_, 34, &border, sizeof(border));
   COLORREF caption = kTitleBar;
-  DwmSetWindowAttribute(hwnd_, 35 /* DWMWA_CAPTION_COLOR */, &caption, sizeof(caption));
+  DwmSetWindowAttribute(hwnd_, 35, &caption, sizeof(caption));
 
   ShowWindow(hwnd_, SW_SHOW);
   UpdateWindow(hwnd_);
@@ -143,9 +140,6 @@ LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
         }
       }
       break;
-    case WM_COMMAND:
-      OnCommand(LOWORD(wParam));
-      return 0;
     case WM_DESTROY:
       PostQuitMessage(0);
       return 0;
@@ -188,8 +182,6 @@ void AppWindow::OnPaint() {
   DrawRect(hdc, title, kTitleBar, kBorder);
   DrawTextLine(hdc, fontTitle_, kText, 16, 14, L"GTA VI COUNTDOWN");
   DrawTextLine(hdc, fontStatus_, kMuted, 200, 16, L"Eastern Europe  ·  Live");
-
-  // Simple chrome labels (click via keyboard / future buttons)
   DrawTextLine(hdc, fontStatus_, kText, client.right - 220, 16, L"F5 Refresh   Alt+Home");
 
   RECT status = StatusBarRect();
@@ -204,40 +196,6 @@ void AppWindow::OnPaint() {
 void AppWindow::OnSize() {
   LayoutWebView();
   InvalidateRect(hwnd_, nullptr, FALSE);
-}
-
-void AppWindow::OnCommand(int id) {
-  if (!webview_) return;
-  switch (id) {
-    case IDC_BTN_BACK: {
-      BOOL can = FALSE;
-      webview_->get_CanGoBack(&can);
-      if (can) webview_->GoBack();
-      break;
-    }
-    case IDC_BTN_FORWARD: {
-      BOOL can = FALSE;
-      webview_->get_CanGoForward(&can);
-      if (can) webview_->GoForward();
-      break;
-    }
-    case IDC_BTN_REFRESH:
-      webview_->Reload();
-      break;
-    case IDC_BTN_HOME:
-      NavigateHome();
-      break;
-    case IDC_BTN_MIN:
-      ShowWindow(hwnd_, SW_MINIMIZE);
-      break;
-    case IDC_BTN_MAX:
-      if (IsZoomed(hwnd_)) ShowWindow(hwnd_, SW_RESTORE);
-      else ShowWindow(hwnd_, SW_MAXIMIZE);
-      break;
-    case IDC_BTN_CLOSE:
-      DestroyWindow(hwnd_);
-      break;
-  }
 }
 
 void AppWindow::LayoutWebView() {
@@ -256,14 +214,10 @@ void AppWindow::NavigateHome() {
   if (webview_) webview_->Navigate(kHomeUrl);
 }
 
-void AppWindow::UpdateNavButtons() {
-  // Reserved for custom owner-draw buttons
-}
-
 void AppWindow::InitWebView() {
-  SetStatus(L"Initializing WebView2…");
-
+  SetStatus(L"Initializing WebView2...");
   HWND hwnd = hwnd_;
+
   CreateCoreWebView2EnvironmentWithOptions(
       nullptr, nullptr, nullptr,
       Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
@@ -289,7 +243,7 @@ void AppWindow::InitWebView() {
                       controller_ = controller;
                       controller_->get_CoreWebView2(&webview_);
 
-                      wil::com_ptr<ICoreWebView2Settings> settings;
+                      ComPtr<ICoreWebView2Settings> settings;
                       webview_->get_Settings(&settings);
                       if (settings) {
                         settings->put_IsScriptEnabled(TRUE);
@@ -299,9 +253,8 @@ void AppWindow::InitWebView() {
                         settings->put_IsZoomControlEnabled(TRUE);
                       }
 
-                      COREWEBVIEW2_COLOR bg{255, 0x1A, 0x0A, 0x2E};  // A,R,G,B
-                      // DefaultBackgroundColor via ICoreWebView2Controller2 when available
-                      Microsoft::WRL::ComPtr<ICoreWebView2Controller2> c2;
+                      COREWEBVIEW2_COLOR bg{255, 0x1A, 0x0A, 0x2E};
+                      ComPtr<ICoreWebView2Controller2> c2;
                       if (SUCCEEDED(controller_->QueryInterface(IID_PPV_ARGS(&c2))) && c2) {
                         c2->put_DefaultBackgroundColor(bg);
                       }
@@ -309,11 +262,14 @@ void AppWindow::InitWebView() {
                       webview_->add_NavigationStarting(
                           Callback<ICoreWebView2NavigationStartingEventHandler>(
                               [this](ICoreWebView2*, ICoreWebView2NavigationStartingEventArgs* args) -> HRESULT {
-                                wil::unique_cotaskmem_string uri;
+                                LPWSTR uri = nullptr;
                                 args->get_Uri(&uri);
                                 std::wstring s = L"Loading ";
-                                if (uri) s += uri.get();
-                                s += L"…";
+                                if (uri) {
+                                  s += uri;
+                                  CoTaskMemFree(uri);
+                                }
+                                s += L"...";
                                 SetStatus(s);
                                 return S_OK;
                               })
@@ -325,15 +281,18 @@ void AppWindow::InitWebView() {
                               [this](ICoreWebView2*, ICoreWebView2NavigationCompletedEventArgs* args) -> HRESULT {
                                 BOOL ok = FALSE;
                                 args->get_IsSuccess(&ok);
-                                firstLoad_ = false;
                                 if (ok) {
-                                  wil::unique_cotaskmem_string src;
+                                  LPWSTR src = nullptr;
                                   webview_->get_Source(&src);
-                                  SetStatus(src ? src.get() : kHomeUrl);
+                                  if (src) {
+                                    SetStatus(src);
+                                    CoTaskMemFree(src);
+                                  } else {
+                                    SetStatus(kHomeUrl);
+                                  }
                                 } else {
                                   SetStatus(L"Failed to load — check connection, then press F5");
                                 }
-                                UpdateNavButtons();
                                 return S_OK;
                               })
                               .Get(),
@@ -342,13 +301,14 @@ void AppWindow::InitWebView() {
                       webview_->add_DocumentTitleChanged(
                           Callback<ICoreWebView2DocumentTitleChangedEventHandler>(
                               [this](ICoreWebView2* sender, IUnknown*) -> HRESULT {
-                                wil::unique_cotaskmem_string title;
+                                LPWSTR title = nullptr;
                                 sender->get_DocumentTitle(&title);
-                                if (title && title.get()[0]) {
-                                  std::wstring t = title.get();
+                                if (title && title[0]) {
+                                  std::wstring t = title;
                                   t += L" — Desktop";
                                   SetWindowTextW(hwnd_, t.c_str());
                                 }
+                                if (title) CoTaskMemFree(title);
                                 return S_OK;
                               })
                               .Get(),
