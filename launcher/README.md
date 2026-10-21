@@ -1,6 +1,6 @@
 # GTA VI Countdown — C++ Desktop Launcher
 
-Native **Windows C++** shell for the live countdown site. Full-window **WebView2** with a compact navigation toolbar. Links open inside the app.
+Native **Windows C++** shell for the live countdown site. **WebView2** with a compact navigation toolbar. Links open inside the app.
 
 **App name:** `GTA VI Countdown`  
 **Home URL:** https://gta-vi-countdown.onrender.com/eastern-europe  
@@ -9,6 +9,7 @@ Native **Windows C++** shell for the live countdown site. Full-window **WebView2
 ## Features
 
 - Toolbar: **Back** · **Forward** · **Home** · **Refresh**
+- Flat owner-drawn buttons (purple/pink, **no white system border**)
 - Back/Forward enable only when history allows
 - All links stay **in the app** (`target=_blank` / `window.open`)
 - Keyboard: F5 refresh · Alt+Left/Right · Alt+Home

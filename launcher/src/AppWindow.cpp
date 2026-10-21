@@ -13,12 +13,15 @@ const wchar_t AppWindow::kAppTitle[]  = L"GTA VI Countdown";
 const wchar_t AppWindow::kHomeUrl[]   =
     L"https://gta-vi-countdown.onrender.com/eastern-europe";
 
-const COLORREF AppWindow::kBgDeep   = RGB(0x1A, 0x0A, 0x2E);
-const COLORREF AppWindow::kToolbar  = RGB(0x14, 0x0A, 0x28);
-const COLORREF AppWindow::kBorder   = RGB(0xFF, 0x8C, 0xC8);
-const COLORREF AppWindow::kTitleBar = RGB(0x14, 0x0A, 0x28);
-const COLORREF AppWindow::kBtnFace  = RGB(0x2A, 0x14, 0x3E);
-const COLORREF AppWindow::kBtnText  = RGB(0xE0, 0xB0, 0xFF);
+const COLORREF AppWindow::kBgDeep         = RGB(0x1A, 0x0A, 0x2E);
+const COLORREF AppWindow::kToolbar        = RGB(0x14, 0x0A, 0x28);
+const COLORREF AppWindow::kBorder         = RGB(0xFF, 0x8C, 0xC8);
+const COLORREF AppWindow::kTitleBar       = RGB(0x14, 0x0A, 0x28);
+const COLORREF AppWindow::kBtnFace        = RGB(0x2A, 0x14, 0x3E);
+const COLORREF AppWindow::kBtnFaceHot     = RGB(0x3A, 0x1E, 0x52);
+const COLORREF AppWindow::kBtnFaceDisabled= RGB(0x1E, 0x10, 0x2E);
+const COLORREF AppWindow::kBtnText        = RGB(0xE0, 0xB0, 0xFF);
+const COLORREF AppWindow::kBtnTextDisabled= RGB(0x70, 0x58, 0x88);
 
 const int AppWindow::kToolbarH = 40;
 
@@ -100,7 +103,8 @@ bool AppWindow::Create() {
 }
 
 void AppWindow::CreateToolbar() {
-  const DWORD style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
+  /* BS_OWNERDRAW = flat custom paint, no system white border */
+  const DWORD style = WS_CHILD | WS_VISIBLE | BS_OWNERDRAW;
 
   btnBack_ = CreateWindowW(
       L"BUTTON", L"<  Back",
@@ -115,15 +119,67 @@ void AppWindow::CreateToolbar() {
       L"BUTTON", L"Refresh",
       style, 0, 0, 0, 0, hwnd_, (HMENU)(INT_PTR)IDC_BTN_REFRESH, instance_, nullptr);
 
-  HWND buttons[] = {btnBack_, btnForward_, btnHome_, btnRefresh_};
-  for (HWND b : buttons) {
-    if (b && fontBtn_)
-      SendMessageW(b, WM_SETFONT, (WPARAM)fontBtn_, TRUE);
-  }
-
   LayoutControls();
   EnableWindow(btnBack_, FALSE);
   EnableWindow(btnForward_, FALSE);
+}
+
+void AppWindow::DrawToolbarButton(const DRAWITEMSTRUCT* dis) {
+  if (!dis)
+    return;
+
+  const bool disabled = (dis->itemState & ODS_DISABLED) != 0;
+  const bool pressed  = (dis->itemState & ODS_SELECTED) != 0;
+  const bool focused  = (dis->itemState & ODS_FOCUS) != 0;
+
+  COLORREF face = kBtnFace;
+  COLORREF text = kBtnText;
+  if (disabled) {
+    face = kBtnFaceDisabled;
+    text = kBtnTextDisabled;
+  } else if (pressed) {
+    face = kBtnFaceHot;
+  }
+
+  HBRUSH br = CreateSolidBrush(face);
+  FillRect(dis->hDC, &dis->rcItem, br);
+  DeleteObject(br);
+
+  /* Soft pink edge only — no white system border */
+  if (!disabled) {
+    HPEN pen = CreatePen(PS_SOLID, 1, kBorder);
+    HGDIOBJ oldPen = SelectObject(dis->hDC, pen);
+    HGDIOBJ oldBr = SelectObject(dis->hDC, GetStockObject(NULL_BRUSH));
+    Rectangle(dis->hDC, dis->rcItem.left, dis->rcItem.top,
+              dis->rcItem.right, dis->rcItem.bottom);
+    SelectObject(dis->hDC, oldBr);
+    SelectObject(dis->hDC, oldPen);
+    DeleteObject(pen);
+  }
+
+  wchar_t label[64];
+  GetWindowTextW(dis->hwndItem, label, 64);
+
+  SetBkMode(dis->hDC, TRANSPARENT);
+  SetTextColor(dis->hDC, text);
+  HFONT oldFont = nullptr;
+  if (fontBtn_)
+    oldFont = (HFONT)SelectObject(dis->hDC, fontBtn_);
+
+  RECT tr = dis->rcItem;
+  if (pressed) {
+    OffsetRect(&tr, 1, 1);
+  }
+  DrawTextW(dis->hDC, label, -1, &tr, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+  if (oldFont)
+    SelectObject(dis->hDC, oldFont);
+
+  if (focused && !disabled) {
+    RECT fr = dis->rcItem;
+    InflateRect(&fr, -3, -3);
+    DrawFocusRect(dis->hDC, &fr);
+  }
 }
 
 void AppWindow::LayoutControls() {
@@ -178,6 +234,14 @@ LRESULT CALLBACK AppWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 
 LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
   switch (msg) {
+    case WM_DRAWITEM: {
+      DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)lParam;
+      if (dis && dis->CtlType == ODT_BUTTON) {
+        DrawToolbarButton(dis);
+        return TRUE;
+      }
+      break;
+    }
     case WM_COMMAND:
       if (HIWORD(wParam) == BN_CLICKED || HIWORD(wParam) == 0) {
         switch (LOWORD(wParam)) {
@@ -196,13 +260,6 @@ LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
         }
       }
       break;
-    case WM_CTLCOLORBTN: {
-      HDC hdc = (HDC)wParam;
-      SetTextColor(hdc, kBtnText);
-      SetBkColor(hdc, kBtnFace);
-      static HBRUSH brush = CreateSolidBrush(kBtnFace);
-      return (LRESULT)brush;
-    }
     case WM_ERASEBKGND: {
       HDC hdc = (HDC)wParam;
       RECT rc;

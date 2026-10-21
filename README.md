@@ -18,6 +18,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 | **Icon** | [`launcher/assets/GtaLogo.ico`](launcher/assets/GtaLogo.ico) |
 | **Home URL** | https://gta-vi-countdown.onrender.com/eastern-europe |
 | **Open in VS** | [`launcher/GtaViCountdown.sln`](launcher/GtaViCountdown.sln) |
+| **Toolbar** | Back · Forward · Home · Refresh (flat, no white border) |
+| **Links** | Open inside the app |
 
 ### Visual Studio 2022
 

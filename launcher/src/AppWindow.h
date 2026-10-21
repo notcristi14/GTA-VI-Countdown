@@ -19,7 +19,10 @@ public:
   static const COLORREF kBorder;
   static const COLORREF kTitleBar;
   static const COLORREF kBtnFace;
+  static const COLORREF kBtnFaceHot;
+  static const COLORREF kBtnFaceDisabled;
   static const COLORREF kBtnText;
+  static const COLORREF kBtnTextDisabled;
 
   static const int kToolbarH;
 
@@ -43,6 +46,7 @@ private:
   void GoForward();
   void Refresh();
   void UpdateNavButtons();
+  void DrawToolbarButton(const DRAWITEMSTRUCT* dis);
   RECT WebViewRect() const;
 
   HINSTANCE instance_;
