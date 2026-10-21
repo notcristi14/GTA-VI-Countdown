@@ -1,3 +1,3 @@
 #include "resource.h"
 
-IDI_APPICON ICON "GtaLogo.ico"
+IDI_APPICON ICON DISCARDABLE "GtaLogo.ico"

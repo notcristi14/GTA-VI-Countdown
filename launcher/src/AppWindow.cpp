@@ -45,19 +45,6 @@ void DrawTextLine(HDC hdc, HFONT font, COLORREF color, int x, int y, const wchar
   SelectObject(hdc, old);
 }
 
-HICON LoadEmbeddedIcon(HINSTANCE instance, int cx, int cy) {
-  HICON icon = (HICON)LoadImageW(
-      instance,
-      MAKEINTRESOURCEW(IDI_APPICON),
-      IMAGE_ICON,
-      cx,
-      cy,
-      0);
-  if (icon)
-    return icon;
-  return LoadIconW(nullptr, IDI_APPLICATION);
-}
-
 }  // namespace
 
 AppWindow::AppWindow(HINSTANCE instance)
@@ -83,13 +70,18 @@ bool AppWindow::Create() {
   wc.cbClsExtra    = 0;
   wc.cbWndExtra    = 0;
   wc.hInstance     = instance_;
-  wc.hIcon         = LoadEmbeddedIcon(instance_, 32, 32);
   wc.hCursor       = LoadCursorW(nullptr, IDC_ARROW);
   wc.hbrBackground = CreateSolidBrush(kBgDeep);
   wc.lpszMenuName  = nullptr;
   wc.lpszClassName = kClassName;
-  wc.hIconSm       = LoadEmbeddedIcon(
-      instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+
+  // GTA VI logo from IDI_APPICON in app.rc (assets/GtaLogo.ico)
+  wc.hIcon = ::LoadIconW(instance_, MAKEINTRESOURCEW(IDI_APPICON));
+  if (wc.hIcon == nullptr)
+    wc.hIcon = ::LoadIconW(nullptr, IDI_APPLICATION);
+  wc.hIconSm = ::LoadIconW(instance_, MAKEINTRESOURCEW(IDI_APPICON));
+  if (wc.hIconSm == nullptr)
+    wc.hIconSm = wc.hIcon;
 
   if (!RegisterClassExW(&wc))
     return false;
@@ -120,13 +112,10 @@ bool AppWindow::Create() {
   if (!hwnd_)
     return false;
 
-  HICON big = LoadEmbeddedIcon(instance_, 32, 32);
-  HICON small = LoadEmbeddedIcon(
-      instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
-  if (big)
-    SendMessageW(hwnd_, WM_SETICON, ICON_BIG, (LPARAM)big);
-  if (small)
-    SendMessageW(hwnd_, WM_SETICON, ICON_SMALL, (LPARAM)small);
+  if (wc.hIcon)
+    SendMessageW(hwnd_, WM_SETICON, ICON_BIG, (LPARAM)wc.hIcon);
+  if (wc.hIconSm)
+    SendMessageW(hwnd_, WM_SETICON, ICON_SMALL, (LPARAM)wc.hIconSm);
 
   BOOL dark = TRUE;
   DwmSetWindowAttribute(hwnd_, 20, &dark, sizeof(dark));
