@@ -1,3 +1,6 @@
-#pragma once
+#ifndef GTA_VI_COUNTDOWN_RESOURCE_H_
+#define GTA_VI_COUNTDOWN_RESOURCE_H_
 
 #define IDI_APPICON 101
+
+#endif

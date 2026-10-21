@@ -2,10 +2,18 @@
 
 #include <windows.h>
 
-int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR, int) {
-  // STA required for WebView2 / COM
+int APIENTRY wWinMain(
+    _In_ HINSTANCE hInstance,
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPWSTR lpCmdLine,
+    _In_ int nCmdShow) {
+  (void)hPrevInstance;
+  (void)lpCmdLine;
+  (void)nCmdShow;
+
   HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-  if (FAILED(hr)) return 1;
+  if (FAILED(hr))
+    return 1;
 
   AppWindow app(hInstance);
   if (!app.Create()) {
@@ -14,7 +22,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR, int) {
     return 1;
   }
 
-  const int code = app.MessageLoop();
+  int code = app.MessageLoop();
   CoUninitialize();
   return code;
 }

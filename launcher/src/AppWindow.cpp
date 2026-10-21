@@ -3,12 +3,25 @@
 
 #include <dwmapi.h>
 
-#include <cstring>
-
 #pragma comment(lib, "dwmapi.lib")
 
 using Microsoft::WRL::Callback;
 using Microsoft::WRL::ComPtr;
+
+const wchar_t AppWindow::kClassName[] = L"GtaViCountdownWindow";
+const wchar_t AppWindow::kAppTitle[]  = L"GTA VI Countdown";
+const wchar_t AppWindow::kHomeUrl[]   =
+    L"https://gta-vi-countdown.onrender.com/eastern-europe";
+
+const COLORREF AppWindow::kBgDeep    = RGB(0x1A, 0x0A, 0x2E);
+const COLORREF AppWindow::kTitleBar  = RGB(0x14, 0x0A, 0x28);
+const COLORREF AppWindow::kStatusBar = RGB(0x10, 0x08, 0x20);
+const COLORREF AppWindow::kBorder    = RGB(0xFF, 0x8C, 0xC8);
+const COLORREF AppWindow::kText      = RGB(0xE0, 0xB0, 0xFF);
+const COLORREF AppWindow::kMuted     = RGB(0xA0, 0x90, 0xB0);
+
+const int AppWindow::kTitleH  = 48;
+const int AppWindow::kStatusH = 28;
 
 namespace {
 
@@ -28,65 +41,56 @@ void DrawTextLine(HDC hdc, HFONT font, COLORREF color, int x, int y, const wchar
   SetBkMode(hdc, TRANSPARENT);
   SetTextColor(hdc, color);
   HGDIOBJ old = SelectObject(hdc, font);
-  TextOutW(hdc, x, y, text, static_cast<int>(wcslen(text)));
+  TextOutW(hdc, x, y, text, (int)wcslen(text));
   SelectObject(hdc, old);
+}
+
+/* Load embedded IDI_APPICON; falls back to default application icon. */
+HICON LoadEmbeddedIcon(HINSTANCE instance, int cx, int cy) {
+  HICON icon = (HICON)LoadImageW(
+      instance,
+      MAKEINTRESOURCEW(IDI_APPICON),
+      IMAGE_ICON,
+      cx,
+      cy,
+      0);
+  if (icon)
+    return icon;
+  return LoadIconW(nullptr, IDI_APPLICATION);
 }
 
 }  // namespace
 
-AppWindow::AppWindow(HINSTANCE instance) : instance_(instance) {}
+AppWindow::AppWindow(HINSTANCE instance)
+    : instance_(instance),
+      hwnd_(nullptr),
+      fontTitle_(nullptr),
+      fontStatus_(nullptr),
+      status_(L"Connecting...") {}
 
 AppWindow::~AppWindow() {
-  if (fontTitle_) DeleteObject(fontTitle_);
-  if (fontStatus_) DeleteObject(fontStatus_);
-}
-
-HICON AppWindow::LoadAppIcon(HINSTANCE instance, int cx, int cy) {
-  HANDLE handle = LoadImageW(
-      instance,
-      MAKEINTRESOURCEW(IDI_APPICON),
-      IMAGE_ICON,
-      cx,
-      cy,
-      LR_DEFAULTCOLOR);
-  if (handle)
-    return static_cast<HICON>(handle);
-
-  handle = LoadImageW(
-      instance,
-      MAKEINTRESOURCEW(IDI_APPICON),
-      IMAGE_ICON,
-      0,
-      0,
-      LR_DEFAULTCOLOR | LR_DEFAULTSIZE);
-  if (handle)
-    return static_cast<HICON>(handle);
-
-  return static_cast<HICON>(LoadImageW(
-      nullptr,
-      IDI_APPLICATION,
-      IMAGE_ICON,
-      cx,
-      cy,
-      LR_SHARED));
+  if (fontTitle_)
+    DeleteObject(fontTitle_);
+  if (fontStatus_)
+    DeleteObject(fontStatus_);
 }
 
 bool AppWindow::Create() {
   WNDCLASSEXW wc;
   ZeroMemory(&wc, sizeof(wc));
-  wc.cbSize = sizeof(wc);
-  wc.style = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc = AppWindow::WndProc;
-  wc.hInstance = instance_;
-  wc.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+  wc.cbSize        = sizeof(WNDCLASSEXW);
+  wc.style         = CS_HREDRAW | CS_VREDRAW;
+  wc.lpfnWndProc   = AppWindow::WndProc;
+  wc.cbClsExtra    = 0;
+  wc.cbWndExtra    = 0;
+  wc.hInstance     = instance_;
+  wc.hIcon         = LoadEmbeddedIcon(instance_, 32, 32);
+  wc.hCursor       = LoadCursorW(nullptr, IDC_ARROW);
   wc.hbrBackground = CreateSolidBrush(kBgDeep);
+  wc.lpszMenuName  = nullptr;
   wc.lpszClassName = kClassName;
-
-  // GTA VI logo from embedded resource IDI_APPICON
-  wc.hIcon = LoadAppIcon(instance_, 32, 32);
-  wc.hIconSm = LoadAppIcon(instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
-  if (!wc.hIconSm)
-    wc.hIconSm = wc.hIcon;
+  wc.hIconSm       = LoadEmbeddedIcon(
+      instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 
   if (!RegisterClassExW(&wc))
     return false;
@@ -105,26 +109,36 @@ bool AppWindow::Create() {
       kClassName,
       kAppTitle,
       WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, CW_USEDEFAULT, 1280, 900,
-      nullptr, nullptr, instance_, this);
+      CW_USEDEFAULT,
+      CW_USEDEFAULT,
+      1280,
+      900,
+      nullptr,
+      nullptr,
+      instance_,
+      this);
 
   if (!hwnd_)
     return false;
 
-  // Taskbar / Alt+Tab icon
-  HICON big = LoadAppIcon(instance_, 32, 32);
-  HICON small = LoadAppIcon(instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
-  if (big)
-    SendMessageW(hwnd_, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(big));
-  if (small)
-    SendMessageW(hwnd_, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(small));
+  {
+    HICON big = LoadEmbeddedIcon(instance_, 32, 32);
+    HICON small = LoadEmbeddedIcon(
+        instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+    if (big)
+      SendMessageW(hwnd_, WM_SETICON, ICON_BIG, (LPARAM)big);
+    if (small)
+      SendMessageW(hwnd_, WM_SETICON, ICON_SMALL, (LPARAM)small);
+  }
 
-  BOOL dark = TRUE;
-  DwmSetWindowAttribute(hwnd_, 20 /* DWMWA_USE_IMMERSIVE_DARK_MODE */, &dark, sizeof(dark));
-  COLORREF border = kBorder;
-  DwmSetWindowAttribute(hwnd_, 34 /* DWMWA_BORDER_COLOR */, &border, sizeof(border));
-  COLORREF caption = kTitleBar;
-  DwmSetWindowAttribute(hwnd_, 35 /* DWMWA_CAPTION_COLOR */, &caption, sizeof(caption));
+  {
+    BOOL dark = TRUE;
+    DwmSetWindowAttribute(hwnd_, 20, &dark, sizeof(dark));
+    COLORREF border = kBorder;
+    DwmSetWindowAttribute(hwnd_, 34, &border, sizeof(border));
+    COLORREF caption = kTitleBar;
+    DwmSetWindowAttribute(hwnd_, 35, &caption, sizeof(caption));
+  }
 
   ShowWindow(hwnd_, SW_SHOW);
   UpdateWindow(hwnd_);
@@ -135,22 +149,22 @@ bool AppWindow::Create() {
 int AppWindow::MessageLoop() {
   MSG msg;
   ZeroMemory(&msg, sizeof(msg));
-  while (GetMessageW(&msg, nullptr, 0, 0)) {
+  while (GetMessageW(&msg, nullptr, 0, 0) > 0) {
     TranslateMessage(&msg);
     DispatchMessageW(&msg);
   }
-  return static_cast<int>(msg.wParam);
+  return (int)msg.wParam;
 }
 
 LRESULT CALLBACK AppWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
   AppWindow* self = nullptr;
   if (msg == WM_NCCREATE) {
-    CREATESTRUCTW* cs = reinterpret_cast<CREATESTRUCTW*>(lParam);
-    self = static_cast<AppWindow*>(cs->lpCreateParams);
+    CREATESTRUCTW* cs = (CREATESTRUCTW*)lParam;
+    self = (AppWindow*)cs->lpCreateParams;
     self->hwnd_ = hwnd;
-    SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(self));
+    SetWindowLongPtrW(hwnd, GWLP_USERDATA, (LONG_PTR)self);
   } else {
-    self = reinterpret_cast<AppWindow*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+    self = (AppWindow*)GetWindowLongPtrW(hwnd, GWLP_USERDATA);
   }
   if (self)
     return self->HandleMessage(msg, wParam, lParam);
@@ -273,8 +287,10 @@ void AppWindow::InitWebView() {
   SetStatus(L"Initializing WebView2...");
   HWND hwnd = hwnd_;
 
-  CreateCoreWebView2EnvironmentWithOptions(
-      nullptr, nullptr, nullptr,
+  HRESULT hr = CreateCoreWebView2EnvironmentWithOptions(
+      nullptr,
+      nullptr,
+      nullptr,
       Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
           [this, hwnd](HRESULT result, ICoreWebView2Environment* env) -> HRESULT {
             if (FAILED(result) || !env) {
@@ -288,7 +304,7 @@ void AppWindow::InitWebView() {
               return result;
             }
 
-            env->CreateCoreWebView2Controller(
+            return env->CreateCoreWebView2Controller(
                 hwnd,
                 Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [this](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
@@ -310,13 +326,13 @@ void AppWindow::InitWebView() {
                         settings->put_IsZoomControlEnabled(TRUE);
                       }
 
-                      COREWEBVIEW2_COLOR bg;
-                      bg.A = 255;
-                      bg.R = 0x1A;
-                      bg.G = 0x0A;
-                      bg.B = 0x2E;
                       ComPtr<ICoreWebView2Controller2> c2;
                       if (SUCCEEDED(controller_->QueryInterface(IID_PPV_ARGS(&c2))) && c2) {
+                        COREWEBVIEW2_COLOR bg;
+                        bg.A = 255;
+                        bg.R = 0x1A;
+                        bg.G = 0x0A;
+                        bg.B = 0x2E;
                         c2->put_DefaultBackgroundColor(bg);
                       }
 
@@ -364,7 +380,7 @@ void AppWindow::InitWebView() {
                               [this](ICoreWebView2* sender, IUnknown*) -> HRESULT {
                                 LPWSTR title = nullptr;
                                 sender->get_DocumentTitle(&title);
-                                if (title && title[0]) {
+                                if (title && title[0] != 0) {
                                   std::wstring t = title;
                                   t += L" - Desktop";
                                   SetWindowTextW(hwnd_, t.c_str());
@@ -381,7 +397,8 @@ void AppWindow::InitWebView() {
                       return S_OK;
                     })
                     .Get());
-            return S_OK;
           })
           .Get());
+
+  (void)hr;
 }
