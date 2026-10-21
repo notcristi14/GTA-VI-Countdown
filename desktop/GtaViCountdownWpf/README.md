@@ -1,15 +1,19 @@
-# GtaViCountdownWpf
+# GTA VI Countdown (WPF)
 
-Windows WPF (.NET 8) + WebView2 desktop app for the live GTA VI Countdown experience, centered on the Eastern Europe region and styled with a neon Vice City-inspired aesthetic.
+Windows **WPF (.NET 8) + WebView2** desktop shell for the live countdown site.
+
+**App name:** GTA VI Countdown  
+**Default route:** https://gta-vi-countdown.onrender.com/eastern-europe  
+**Icon:** `Assets/GtaLogo.ico`
 
 ## Features
 
-- Embedded WebView2 browser for the live countdown site
-- Eastern Europe default route and region awareness
-- GTA VI-inspired neon UI styling with pink/cyan glow accents
-- Custom executable icon support via `Assets/GtaLogo.ico`
-- Window chrome with custom minimize, maximize, and close controls
-- Smooth, lightweight desktop wrapper for the live countdown site
+- Embeds the **live site** (full UI inside the window — not a thin launcher that only opens a browser)
+- **Eastern Europe** as the home URL
+- Vice City neon chrome: deep purple `#1A0A2E`, pink borders, cyan/pink logo gradient
+- Custom title bar (back / forward / refresh / home, minimize / maximize / close)
+- Smooth window transitions on chrome actions
+- Loading overlay with VI mark until first navigation completes
 
 ## Build
 
@@ -19,23 +23,29 @@ dotnet restore
 dotnet run -c Release
 ```
 
-## Assets
+Publish:
 
-| File | Purpose |
-|------|---------|
-| `Assets/GtaLogo.ico` | Executable icon for the generated Windows app |
-| `Assets/GtaLogo.png` | Desktop logo / marketing asset |
-| `Assets/GtaLogo.svg` | Vector source for the GTA VI wordmark |
-| `Assets/GtaLogo.png.b64` | Base64 backup of the PNG asset |
-
-`GtaLogo` is a dedicated desktop asset tailored for the WPF wrapper and is used to keep the app visually aligned with the GTA VI brand while staying independent from the web project’s `logo.png`.
+```bash
+dotnet publish -c Release -r win-x64 --self-contained false
+```
 
 ## Requirements
 
 - Windows 10/11
 - .NET 8 SDK
-- Microsoft Edge WebView2 Runtime
+- [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/)
 
-## Notes
+## Assets
+
+| File | Purpose |
+|------|---------|
+| `Assets/GtaLogo.ico` | Executable / window icon |
+| `Assets/GtaLogo.png` | Optional marketing / splash asset |
+
+## Related
+
+Native **C++** WebView2 shell (same URL + theme): see [`../../launcher/`](../../launcher/).
+
+## Disclaimer
 
 Fan-made. Not affiliated with Rockstar Games / Take-Two.

@@ -1,0 +1,4 @@
+#include "resource.h"
+
+// Place launcher/assets/app.ico (copy from desktop/.../Assets/GtaLogo.ico or convert logo.png)
+IDI_APPICON ICON "../assets/app.ico"

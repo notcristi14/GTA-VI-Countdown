@@ -1,79 +1,82 @@
 # 🌴 Grand Theft Auto VI Countdown
 
-Real-time GTA VI countdown experience with the live project site embedded in a custom Windows desktop shell.
+Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock times — plus **desktop shells** that embed the live site.
 
-🚀 Live site: https://gta-vi-countdown.onrender.com/
-
-💻 Windows desktop app: a WPF + WebView2 wrapper for the live countdown, styled in a GTA VI neon theme with a custom icon and smooth window animations.
-
----
-
-## ✨ Features
-
-- Live countdown experience from the project site
-- Embedded WebView2 desktop shell for Windows
-- GTA VI-inspired pink/purple neon UI styling
-- Custom executable icon and polished chrome
-- Smooth minimize, maximize, and close transitions
-- Simple desktop wrapper focused on the root site without region switching UI
+🚀 **Live Demo:** [gta-vi-countdown.onrender.com](https://gta-vi-countdown.onrender.com/)  
+🌍 **Eastern Europe:** [gta-vi-countdown.onrender.com/eastern-europe](https://gta-vi-countdown.onrender.com/eastern-europe)
 
 ---
 
-## 🌐 Site
+## 💻 Desktop apps
 
-The desktop app opens the live site directly at:
+Both wrappers load the **live site inside the window** (WebView2). Default home route: **Eastern Europe**.
 
-https://gta-vi-countdown.onrender.com/
+| Shell | Stack | Folder |
+|-------|--------|--------|
+| **GTA VI Countdown** (recommended C++) | Win32 + WebView2 | [`launcher/`](launcher/) |
+| **GTA VI Countdown** (WPF) | .NET 8 + WebView2 | [`desktop/GtaViCountdownWpf/`](desktop/GtaViCountdownWpf/) |
 
----
+**App name:** `GTA VI Countdown`  
+**Icon:** GTA VI logo (`logo.png` / `desktop/.../Assets/GtaLogo.ico`)
 
-## 💻 Windows desktop app (`desktop/`)
+### C++ launcher
 
-The project includes a WPF desktop wrapper for the live countdown site.
+```bat
+cd launcher
+cmake -B build -G "Visual Studio 17 2022" -A x64
+cmake --build build --config Release
+```
+
+See [launcher/README.md](launcher/README.md).
+
+### WPF shell
 
 ```bash
 cd desktop/GtaViCountdownWpf
-dotnet restore
-dotnet run -c Release
+dotnet restore && dotnet run -c Release
 ```
 
-Requirements:
-
-- Windows 10/11
-- .NET 8 SDK
-- Microsoft Edge WebView2 Runtime
+See [desktop/GtaViCountdownWpf/README.md](desktop/GtaViCountdownWpf/README.md).
 
 ---
 
-## 📁 Project Structure
+## ✨ Site features
+
+- **Release line** – Subtitle reads “Releasing November 19, 2026”. Page title `GTA VI Countdown - {region}`.
+- **Regional countdowns** – Official store unlock windows with routes (e.g. `/eastern-europe`).
+- **Live countdown** – Digit reels, continuous seconds, progress under Secs.
+- **Platform badges** – PS5 / Xbox pre-order links; static when countdown hits zero.
+- **Watch Trailers** – Official Rockstar embeds; sorted newest → oldest by YouTube `publishDate`; auto-refresh via `/api/trailers`.
+- **Commit history / repo stats** – GitHub panel + stars/forks/watchers/issues.
+- **Welcome lights** – Vice City neon wash (pink / magenta / cyan), CSS only, no audio.
+- **License + vibecoded** – Footer disclaimer and “100% vibecoded — built fully with AI.”
+
+---
+
+## 📁 Structure
 
 ```text
-├── bgs/                    # Background artwork set
-├── logo.png                # GTA VI branding asset
-├── bg.jpeg                 # Default cover image
-├── gta-vi-countdown.html   # Main countdown experience
-├── app.js                  # Node server / API logic
-├── stats.json              # Optional stats state file
-├── package.json            # Node project config
-├── desktop/                # WPF desktop wrapper
-│   └── GtaViCountdownWpf/
-│       ├── App.xaml
-│       ├── MainWindow.xaml
-│       ├── MainWindow.xaml.cs
-│       ├── GtaViCountdownWpf.csproj
-│       ├── Assets/
-│       └── README.md
-├── README.md               # Root project overview
-└── LICENSE                 # License / disclaimer info
+├── gta-vi-countdown.html   # Main web UI
+├── app.js                  # Express APIs
+├── bgs/                    # Background art
+├── logo.png
+├── launcher/               # C++ Win32 + WebView2 desktop app
+├── desktop/GtaViCountdownWpf/  # WPF + WebView2 desktop app
+├── package.json
+└── README.md
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Web stack
 
 - Frontend: HTML, CSS, JavaScript
 - Backend: Node.js + Express
-- Desktop: WPF (.NET 8) + WebView2
+
+```bash
+npm install
+npm start
+```
 
 ---
 

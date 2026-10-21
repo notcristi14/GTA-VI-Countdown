@@ -30,9 +30,9 @@
     </Window.RenderTransform>
 
     <Border x:Name="RootBorder"
-            BorderBrush="#66FF8CC8"
+            BorderBrush="#99FF8CC8"
             BorderThickness="1"
-            Background="#1A0A2E"
+            Background="{StaticResource GtaNeonBackground}"
             RenderTransformOrigin="0.5,0.5">
         <Border.RenderTransform>
             <ScaleTransform x:Name="RootScale" ScaleX="1" ScaleY="1"/>
@@ -45,7 +45,8 @@
                 <RowDefinition Height="28"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Background="#140A28" BorderBrush="#44FF8CC8" BorderThickness="0,0,0,1">
+            <!-- Title bar — site glass / neon -->
+            <Border Grid.Row="0" Background="{StaticResource GtaHeaderGlow}" BorderBrush="#55FF8CC8" BorderThickness="0,0,0,1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -55,17 +56,21 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,8,0">
-                        <Border Width="32" Height="32" CornerRadius="6" Background="#331A0A2E" Margin="0,0,10,0">
-                            <TextBlock Style="{StaticResource GtaLogoMark}" FontSize="18"/>
+                        <Border Width="32" Height="32" CornerRadius="8"
+                                Background="#441A0A2E" BorderBrush="#88FF69B4" BorderThickness="1" Margin="0,0,10,0">
+                            <TextBlock Style="{StaticResource GtaLogoMark}" FontSize="16"/>
                         </Border>
-                        <TextBlock Text="GTA VI COUNTDOWN" Foreground="#E0B0FF" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="GTA VI COUNTDOWN" Foreground="#E0B0FF" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="Eastern Europe · Live" Foreground="#88A090B0" FontSize="10"/>
+                        </StackPanel>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True" Margin="4,0,0,0">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True" Margin="8,0,0,0">
                         <Button x:Name="BtnBack" Style="{StaticResource ChromeBtn}" Content="←" ToolTip="Back (Alt+Left)" Click="Back_Click" Width="36" Height="36" FontSize="16" IsEnabled="False"/>
                         <Button x:Name="BtnForward" Style="{StaticResource ChromeBtn}" Content="→" ToolTip="Forward (Alt+Right)" Click="Forward_Click" Width="36" Height="36" FontSize="16" IsEnabled="False"/>
                         <Button Style="{StaticResource ChromeBtn}" Content="↻" ToolTip="Refresh (F5)" Click="Refresh_Click" Width="36" Height="36" FontSize="14"/>
-                        <Button Style="{StaticResource ChromeBtn}" Content="⌂" ToolTip="Home" Click="Home_Click" Width="36" Height="36" FontSize="14"/>
+                        <Button Style="{StaticResource ChromeBtn}" Content="⌂" ToolTip="Home (Eastern Europe)" Click="Home_Click" Width="36" Height="36" FontSize="14"/>
                     </StackPanel>
 
                     <Border Grid.Column="2" Background="Transparent"/>
@@ -80,19 +85,21 @@
 
             <Grid Grid.Row="1" Background="#1A0A2E">
                 <wv2:WebView2 x:Name="WebView" Focusable="True"/>
-                <Border x:Name="LoadingOverlay" Background="#CC1A0A2E" Visibility="Visible" IsHitTestVisible="True">
+                <Border x:Name="LoadingOverlay" Background="#E01A0A2E" Visibility="Visible" IsHitTestVisible="True">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Border Width="120" Height="120" CornerRadius="16" Background="#331A0A2E">
-                            <TextBlock Style="{StaticResource GtaLogoMark}" FontSize="64"/>
+                        <Border Width="128" Height="128" CornerRadius="18"
+                                Background="#331A0A2E" BorderBrush="#AAFF69B4" BorderThickness="1">
+                            <TextBlock Style="{StaticResource GtaLogoMark}" FontSize="56"/>
                         </Border>
-                        <TextBlock Text="Loading live countdown…" Foreground="#E0B0FF" FontSize="14" HorizontalAlignment="Center" Margin="0,18,0,0"/>
+                        <TextBlock Text="Loading Eastern Europe countdown…" Foreground="#E0B0FF" FontSize="14" HorizontalAlignment="Center" Margin="0,18,0,0"/>
+                        <TextBlock Text="gta-vi-countdown.onrender.com" Foreground="#7080A0" FontSize="11" HorizontalAlignment="Center" Margin="0,6,0,0"/>
                     </StackPanel>
                 </Border>
             </Grid>
 
-            <Border Grid.Row="2" Background="#100820" BorderBrush="#33FF8CC8" BorderThickness="0,1,0,0">
+            <Border Grid.Row="2" Background="#100820" BorderBrush="#44FF8CC8" BorderThickness="0,1,0,0">
                 <Grid Margin="12,0">
-                    <TextBlock x:Name="StatusText" Text="Connecting…" Foreground="#A090B0" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,200,0"/>
+                    <TextBlock x:Name="StatusText" Text="Connecting…" Foreground="#A090B0" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,220,0"/>
                     <TextBlock Text="Interactive · Fan-made · Not affiliated with Rockstar" Foreground="#706080" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 </Grid>
             </Border>

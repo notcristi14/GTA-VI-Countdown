@@ -8,7 +8,8 @@ namespace GtaViCountdownWpf
 {
     public partial class MainWindow : Window
     {
-        private const string HomeUrl = "https://gta-vi-countdown.onrender.com/";
+        // Live site — Eastern Europe region (matches preferred launcher route)
+        private const string HomeUrl = "https://gta-vi-countdown.onrender.com/eastern-europe";
         private const string SiteHost = "gta-vi-countdown.onrender.com";
         private bool _firstLoad = true;
 
