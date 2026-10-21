@@ -9,19 +9,25 @@ if(NOT WIN32)
 endif()
 
 # --- GTA VI logo as executable icon ---
-# Prefer the shared desktop asset already in the repo.
-set(GTA_LOGO_ICO "${CMAKE_CURRENT_SOURCE_DIR}/../desktop/GtaViCountdownWpf/Assets/GtaLogo.ico")
-if(NOT EXISTS "${GTA_LOGO_ICO}")
-  set(GTA_LOGO_ICO "${CMAKE_CURRENT_SOURCE_DIR}/assets/app.ico")
-endif()
-if(NOT EXISTS "${GTA_LOGO_ICO}")
+set(GTA_LOGO_ICO "")
+foreach(_candidate
+    "${CMAKE_CURRENT_SOURCE_DIR}/assets/GtaLogo.ico"
+    "${CMAKE_CURRENT_SOURCE_DIR}/assets/app.ico"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../desktop/GtaViCountdownWpf/Assets/GtaLogo.ico"
+)
+  if(EXISTS "${_candidate}")
+    set(GTA_LOGO_ICO "${_candidate}")
+    break()
+  endif()
+endforeach()
+
+if(NOT GTA_LOGO_ICO)
   message(FATAL_ERROR
     "GTA VI logo icon not found.\n"
-    "Expected: desktop/GtaViCountdownWpf/Assets/GtaLogo.ico\n"
-    "Or place a copy at launcher/assets/app.ico")
+    "Place GtaLogo.ico at launcher/assets/GtaLogo.ico\n"
+    "(or keep desktop/GtaViCountdownWpf/Assets/GtaLogo.ico).")
 endif()
 
-# Resource compiler wants a native path with escaped backslashes
 file(TO_NATIVE_PATH "${GTA_LOGO_ICO}" GTA_LOGO_ICO_NATIVE)
 string(REPLACE "\\" "\\\\" GTA_LOGO_ICO_RC "${GTA_LOGO_ICO_NATIVE}")
 
@@ -66,14 +72,7 @@ endif()
 
 target_link_libraries(GtaViCountdown PRIVATE
   "${WV2_ROOT}/lib/${WV2_ARCH}/WebView2LoaderStatic.lib"
-  ole32
-  oleaut32
-  uuid
-  user32
-  gdi32
-  shell32
-  dwmapi
-  shlwapi
+  ole32 oleaut32 uuid user32 gdi32 shell32 dwmapi shlwapi
 )
 
 set_target_properties(GtaViCountdown PROPERTIES

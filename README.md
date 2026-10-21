@@ -1,25 +1,22 @@
 # 🌴 Grand Theft Auto VI Countdown
 
-Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock times — plus **desktop shells** that embed the live site.
+Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock times — plus a **C++ desktop shell** that embeds the live site.
 
 🚀 **Live Demo:** [gta-vi-countdown.onrender.com](https://gta-vi-countdown.onrender.com/)  
 🌍 **Eastern Europe:** [gta-vi-countdown.onrender.com/eastern-europe](https://gta-vi-countdown.onrender.com/eastern-europe)
 
 ---
 
-## 💻 Desktop apps
+## 💻 Desktop app (C++)
 
-Both wrappers load the **live site inside the window** (WebView2). Default home route: **Eastern Europe**.
+**GTA VI Countdown** — native **Win32 + WebView2** wrapper. Loads the live site inside the window (default: Eastern Europe).
 
-| Shell | Stack | Folder |
-|-------|--------|--------|
-| **GTA VI Countdown** (recommended C++) | Win32 + WebView2 | [`launcher/`](launcher/) |
-| **GTA VI Countdown** (WPF) | .NET 8 + WebView2 | [`desktop/GtaViCountdownWpf/`](desktop/GtaViCountdownWpf/) |
-
-**App name:** `GTA VI Countdown`  
-**Icon:** GTA VI logo (`logo.png` / `desktop/.../Assets/GtaLogo.ico`)
-
-### C++ launcher
+| | |
+|--|--|
+| **App name** | GTA VI Countdown |
+| **Folder** | [`launcher/`](launcher/) |
+| **Icon** | GTA VI logo (`GtaLogo.ico`) embedded in the `.exe` |
+| **Home URL** | https://gta-vi-countdown.onrender.com/eastern-europe |
 
 ```bat
 cd launcher
@@ -27,41 +24,35 @@ cmake -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release
 ```
 
+Requirements: Windows 10/11, MSVC/CMake, [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/).
+
 See [launcher/README.md](launcher/README.md).
-
-### WPF shell
-
-```bash
-cd desktop/GtaViCountdownWpf
-dotnet restore && dotnet run -c Release
-```
-
-See [desktop/GtaViCountdownWpf/README.md](desktop/GtaViCountdownWpf/README.md).
 
 ---
 
 ## ✨ Site features
 
-- **Release line** – Subtitle reads “Releasing November 19, 2026”. Page title `GTA VI Countdown - {region}`.
-- **Regional countdowns** – Official store unlock windows with routes (e.g. `/eastern-europe`).
+- **Release line** – “Releasing November 19, 2026”. Title `GTA VI Countdown - {region}`.
+- **Regional countdowns** – Official store unlock windows (e.g. `/eastern-europe`).
 - **Live countdown** – Digit reels, continuous seconds, progress under Secs.
-- **Platform badges** – PS5 / Xbox pre-order links; static when countdown hits zero.
-- **Watch Trailers** – Official Rockstar embeds; sorted newest → oldest by YouTube `publishDate`; auto-refresh via `/api/trailers`.
+- **Platform badges** – PS5 / Xbox pre-order; static at countdown zero.
+- **Watch Trailers** – Official Rockstar embeds; newest → oldest by YouTube `publishDate`.
 - **Commit history / repo stats** – GitHub panel + stars/forks/watchers/issues.
-- **Welcome lights** – Vice City neon wash (pink / magenta / cyan), CSS only, no audio.
-- **License + vibecoded** – Footer disclaimer and “100% vibecoded — built fully with AI.”
+- **Welcome lights** – Vice City neon (CSS only, no audio).
+- **License + vibecoded** – Footer disclaimer.
 
 ---
 
 ## 📁 Structure
 
 ```text
-├── gta-vi-countdown.html   # Main web UI
-├── app.js                  # Express APIs
-├── bgs/                    # Background art
+├── gta-vi-countdown.html
+├── app.js
+├── bgs/
 ├── logo.png
-├── launcher/               # C++ Win32 + WebView2 desktop app
-├── desktop/GtaViCountdownWpf/  # WPF + WebView2 desktop app
+├── launcher/                 # C++ Win32 + WebView2 desktop app
+├── desktop/.../Assets/
+│   └── GtaLogo.ico           # Shared GTA VI logo (exe icon for the C++ app)
 ├── package.json
 └── README.md
 ```
@@ -70,13 +61,14 @@ See [desktop/GtaViCountdownWpf/README.md](desktop/GtaViCountdownWpf/README.md).
 
 ## 🛠️ Web stack
 
-- Frontend: HTML, CSS, JavaScript
-- Backend: Node.js + Express
-
 ```bash
 npm install
 npm start
 ```
+
+- Frontend: HTML, CSS, JavaScript
+- Backend: Node.js + Express
+- Desktop: C++ (Win32 + WebView2)
 
 ---
 
