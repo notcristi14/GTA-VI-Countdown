@@ -15,13 +15,19 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 |--|--|
 | **App name** | GTA VI Countdown |
 | **Folder** | [`launcher/`](launcher/) |
-| **Icon** | GTA VI logo (`GtaLogo.ico`) embedded in the `.exe` |
+| **Icon** | `launcher/assets/GtaLogo.ico` |
 | **Home URL** | https://gta-vi-countdown.onrender.com/eastern-europe |
 
 ```bat
 cd launcher
 cmake -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release
+```
+
+**Icon:** place `GtaLogo.ico` in `launcher/assets/`. Restore from git if needed:
+
+```bash
+git show d93ba1c9:desktop/GtaViCountdownWpf/Assets/GtaLogo.ico > launcher/assets/GtaLogo.ico
 ```
 
 Requirements: Windows 10/11, MSVC/CMake, [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/).
@@ -51,8 +57,10 @@ See [launcher/README.md](launcher/README.md).
 ├── bgs/
 ├── logo.png
 ├── launcher/                 # C++ Win32 + WebView2 desktop app
-├── desktop/.../Assets/
-│   └── GtaLogo.ico           # Shared GTA VI logo (exe icon for the C++ app)
+│   ├── assets/
+│   │   └── GtaLogo.ico       # GTA VI logo (exe icon)
+│   ├── src/
+│   └── CMakeLists.txt
 ├── package.json
 └── README.md
 ```

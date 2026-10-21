@@ -8,12 +8,11 @@ if(NOT WIN32)
   message(FATAL_ERROR "This launcher targets Windows (Win32 + WebView2).")
 endif()
 
-# --- GTA VI logo as executable icon ---
+# --- GTA VI logo as executable icon (launcher/assets/GtaLogo.ico) ---
 set(GTA_LOGO_ICO "")
 foreach(_candidate
     "${CMAKE_CURRENT_SOURCE_DIR}/assets/GtaLogo.ico"
     "${CMAKE_CURRENT_SOURCE_DIR}/assets/app.ico"
-    "${CMAKE_CURRENT_SOURCE_DIR}/../desktop/GtaViCountdownWpf/Assets/GtaLogo.ico"
 )
   if(EXISTS "${_candidate}")
     set(GTA_LOGO_ICO "${_candidate}")
@@ -21,28 +20,29 @@ foreach(_candidate
   endif()
 endforeach()
 
-if(NOT GTA_LOGO_ICO)
-  message(FATAL_ERROR
-    "GTA VI logo icon not found.\n"
-    "Place GtaLogo.ico at launcher/assets/GtaLogo.ico\n"
-    "(or keep desktop/GtaViCountdownWpf/Assets/GtaLogo.ico).")
-endif()
-
-file(TO_NATIVE_PATH "${GTA_LOGO_ICO}" GTA_LOGO_ICO_NATIVE)
-string(REPLACE "\\" "\\\\" GTA_LOGO_ICO_RC "${GTA_LOGO_ICO_NATIVE}")
-
-set(GENERATED_RC "${CMAKE_CURRENT_BINARY_DIR}/app_icon.rc")
-file(WRITE "${GENERATED_RC}"
-"#include \"${CMAKE_CURRENT_SOURCE_DIR}/src/resource.h\"\n"
-"IDI_APPICON ICON \"${GTA_LOGO_ICO_RC}\"\n"
-)
-message(STATUS "Exe icon: ${GTA_LOGO_ICO}")
-
-add_executable(GtaViCountdown WIN32
+set(LAUNCHER_SOURCES
   src/main.cpp
   src/AppWindow.cpp
-  "${GENERATED_RC}"
 )
+
+if(GTA_LOGO_ICO)
+  file(TO_NATIVE_PATH "${GTA_LOGO_ICO}" GTA_LOGO_ICO_NATIVE)
+  string(REPLACE "\\" "\\\\" GTA_LOGO_ICO_RC "${GTA_LOGO_ICO_NATIVE}")
+  set(GENERATED_RC "${CMAKE_CURRENT_BINARY_DIR}/app_icon.rc")
+  file(WRITE "${GENERATED_RC}"
+  "#include \"${CMAKE_CURRENT_SOURCE_DIR}/src/resource.h\"\n"
+  "IDI_APPICON ICON \"${GTA_LOGO_ICO_RC}\"\n"
+  )
+  list(APPEND LAUNCHER_SOURCES "${GENERATED_RC}")
+  message(STATUS "Exe icon: ${GTA_LOGO_ICO}")
+else()
+  message(WARNING
+    "GtaLogo.ico not found at launcher/assets/GtaLogo.ico — building without custom exe icon.\n"
+    "Restore with:\n"
+    "  git show d93ba1c9:desktop/GtaViCountdownWpf/Assets/GtaLogo.ico > launcher/assets/GtaLogo.ico")
+endif()
+
+add_executable(GtaViCountdown WIN32 ${LAUNCHER_SOURCES})
 
 target_include_directories(GtaViCountdown PRIVATE src "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
