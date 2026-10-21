@@ -1,7 +1,4 @@
 #include "resource.h"
 
-/*
- * Preferred path: CMake generates build/app_icon.rc from assets/GtaLogo.ico.
- * Manual fallback (resource editor):
- *   IDI_APPICON ICON "../assets/GtaLogo.ico"
- */
+/* GTA VI logo — Windows executable / taskbar / Alt+Tab icon */
+IDI_APPICON ICON "../assets/GtaLogo.ico"

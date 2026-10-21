@@ -9,28 +9,39 @@ Native **Windows C++** shell for the live countdown site. Embeds the web app in 
 ## Features
 
 - Full-window WebView2 (the site is the UI)
-- **GTA VI logo** embedded as the `.exe` / taskbar / Alt+Tab icon (`IDI_APPICON`)
+- **GTA VI logo** embedded as the `.exe` / taskbar / Alt+Tab icon
 - Deep purple + pink border chrome matching the site
 - F5 refresh · Alt+Left/Right history · Alt+Home home
 
 ## Requirements
 
 - Windows 10/11
-- Visual Studio 2022 (C++) or MSVC + CMake
-- [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/)
+- **Visual Studio 2022** with workload **Desktop development with C++**
+- [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/) (usually already installed with Edge)
 
-## Build
+## Build with Visual Studio (recommended)
+
+1. Open **`GtaViCountdown.sln`** in Visual Studio 2022.
+2. Restore NuGet packages (VS usually does this automatically on open).  
+   If not: right-click the solution → **Restore NuGet Packages**, or in Package Manager Console:
+   ```
+   nuget restore GtaViCountdown.sln
+   ```
+3. Set configuration to **Release** and platform to **x64** (recommended).
+4. **Build → Build Solution** (or `Ctrl+Shift+B`).
+5. Run with **Debug → Start Without Debugging** (`Ctrl+F5`), or open:
+   ```
+   bin\x64\Release\GtaViCountdown.exe
+   ```
+
+The WebView2 NuGet package is declared in `packages.config` (`Microsoft.Web.WebView2`).
+
+## Build with CMake (optional)
 
 ```bat
 cd launcher
 cmake -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release
-```
-
-CMake picks up `assets/GtaLogo.ico` and links it into `GtaViCountdown.exe`.
-
-```bat
-build\Release\GtaViCountdown.exe
 ```
 
 ## Assets

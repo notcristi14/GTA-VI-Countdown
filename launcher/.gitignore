@@ -1,0 +1,11 @@
+bin/
+obj/
+packages/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+.vs/
+build/

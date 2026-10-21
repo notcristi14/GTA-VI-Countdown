@@ -15,16 +15,18 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 |--|--|
 | **App name** | GTA VI Countdown |
 | **Folder** | [`launcher/`](launcher/) |
-| **Icon** | [`launcher/assets/GtaLogo.ico`](launcher/assets/GtaLogo.ico) (GTA VI logo, embedded in the `.exe`) |
+| **Icon** | [`launcher/assets/GtaLogo.ico`](launcher/assets/GtaLogo.ico) |
 | **Home URL** | https://gta-vi-countdown.onrender.com/eastern-europe |
+| **Open in VS** | [`launcher/GtaViCountdown.sln`](launcher/GtaViCountdown.sln) |
 
-```bat
-cd launcher
-cmake -B build -G "Visual Studio 17 2022" -A x64
-cmake --build build --config Release
-```
+### Visual Studio 2022
 
-Requirements: Windows 10/11, MSVC/CMake, [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/).
+1. Open `launcher/GtaViCountdown.sln`
+2. Restore NuGet packages (automatic or right-click solution → Restore)
+3. **Release | x64** → Build Solution (`Ctrl+Shift+B`)
+4. Run: `launcher/bin/x64/Release/GtaViCountdown.exe`
+
+Requirements: VS 2022 (**Desktop development with C++**), [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/).
 
 See [launcher/README.md](launcher/README.md).
 
@@ -50,11 +52,13 @@ See [launcher/README.md](launcher/README.md).
 ├── app.js
 ├── bgs/
 ├── logo.png
-├── launcher/                 # C++ Win32 + WebView2 desktop app
-│   ├── assets/
-│   │   └── GtaLogo.ico       # GTA VI logo (exe / taskbar icon)
+├── launcher/
+│   ├── GtaViCountdown.sln      # Open this in Visual Studio
+│   ├── GtaViCountdown.vcxproj
+│   ├── packages.config         # WebView2 NuGet
+│   ├── assets/GtaLogo.ico
 │   ├── src/
-│   └── CMakeLists.txt
+│   └── CMakeLists.txt          # Optional
 ├── package.json
 └── README.md
 ```
