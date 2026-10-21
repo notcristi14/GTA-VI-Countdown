@@ -1,4 +1,4 @@
 #include "resource.h"
 
-/* GTA VI logo — Windows executable / taskbar / Alt+Tab icon */
-IDI_APPICON ICON "../assets/GtaLogo.ico"
+/* GTA VI logo - executable / taskbar / Alt+Tab icon */
+IDI_APPICON ICON "GtaLogo.ico"

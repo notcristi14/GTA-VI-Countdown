@@ -3,6 +3,8 @@
 
 #include <dwmapi.h>
 
+#include <cstring>
+
 #pragma comment(lib, "dwmapi.lib")
 
 using Microsoft::WRL::Callback;
@@ -39,38 +41,64 @@ AppWindow::~AppWindow() {
   if (fontStatus_) DeleteObject(fontStatus_);
 }
 
+HICON AppWindow::LoadAppIcon(HINSTANCE instance, int cx, int cy) {
+  HANDLE handle = LoadImageW(
+      instance,
+      MAKEINTRESOURCEW(IDI_APPICON),
+      IMAGE_ICON,
+      cx,
+      cy,
+      LR_DEFAULTCOLOR);
+  if (handle)
+    return static_cast<HICON>(handle);
+
+  handle = LoadImageW(
+      instance,
+      MAKEINTRESOURCEW(IDI_APPICON),
+      IMAGE_ICON,
+      0,
+      0,
+      LR_DEFAULTCOLOR | LR_DEFAULTSIZE);
+  if (handle)
+    return static_cast<HICON>(handle);
+
+  return static_cast<HICON>(LoadImageW(
+      nullptr,
+      IDI_APPLICATION,
+      IMAGE_ICON,
+      cx,
+      cy,
+      LR_SHARED));
+}
+
 bool AppWindow::Create() {
-  WNDCLASSEXW wc{};
+  WNDCLASSEXW wc;
+  ZeroMemory(&wc, sizeof(wc));
   wc.cbSize = sizeof(wc);
   wc.style = CS_HREDRAW | CS_VREDRAW;
   wc.lpfnWndProc = AppWindow::WndProc;
   wc.hInstance = instance_;
-  wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+  wc.hCursor = LoadCursorW(nullptr, IDC_ARROW);
   wc.hbrBackground = CreateSolidBrush(kBgDeep);
   wc.lpszClassName = kClassName;
 
-  // Exe / window-bar icon: GTA VI logo from IDI_APPICON (GtaLogo.ico)
-  wc.hIcon = LoadIconW(instance_, MAKEINTRESOURCEW(IDI_APPICON));
-  if (!wc.hIcon)
-    wc.hIcon = static_cast<HICON>(LoadImageW(
-        instance_, MAKEINTRESOURCEW(IDI_APPICON), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR));
-  if (!wc.hIcon)
-    wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
-
-  wc.hIconSm = static_cast<HICON>(LoadImageW(
-      instance_, MAKEINTRESOURCEW(IDI_APPICON), IMAGE_ICON,
-      GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR));
+  // GTA VI logo from embedded resource IDI_APPICON
+  wc.hIcon = LoadAppIcon(instance_, 32, 32);
+  wc.hIconSm = LoadAppIcon(instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
   if (!wc.hIconSm)
     wc.hIconSm = wc.hIcon;
 
-  if (!RegisterClassExW(&wc)) return false;
+  if (!RegisterClassExW(&wc))
+    return false;
 
-  fontTitle_ = CreateFontW(16, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
-                           DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                           CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
-  fontStatus_ = CreateFontW(12, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
-                            DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                            CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
+  fontTitle_ = CreateFontW(
+      16, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+      DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+      CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
+  fontStatus_ = CreateFontW(
+      12, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+      DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+      CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
 
   hwnd_ = CreateWindowExW(
       WS_EX_APPWINDOW,
@@ -80,22 +108,23 @@ bool AppWindow::Create() {
       CW_USEDEFAULT, CW_USEDEFAULT, 1280, 900,
       nullptr, nullptr, instance_, this);
 
-  if (!hwnd_) return false;
+  if (!hwnd_)
+    return false;
 
-  // Taskbar / alt-tab icon (same GTA VI logo resource)
-  HICON big = LoadIconW(instance_, MAKEINTRESOURCEW(IDI_APPICON));
-  HICON small = static_cast<HICON>(LoadImageW(
-      instance_, MAKEINTRESOURCEW(IDI_APPICON), IMAGE_ICON,
-      GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR));
-  if (big) SendMessageW(hwnd_, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(big));
-  if (small) SendMessageW(hwnd_, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(small));
+  // Taskbar / Alt+Tab icon
+  HICON big = LoadAppIcon(instance_, 32, 32);
+  HICON small = LoadAppIcon(instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+  if (big)
+    SendMessageW(hwnd_, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(big));
+  if (small)
+    SendMessageW(hwnd_, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(small));
 
   BOOL dark = TRUE;
-  DwmSetWindowAttribute(hwnd_, 20, &dark, sizeof(dark));
+  DwmSetWindowAttribute(hwnd_, 20 /* DWMWA_USE_IMMERSIVE_DARK_MODE */, &dark, sizeof(dark));
   COLORREF border = kBorder;
-  DwmSetWindowAttribute(hwnd_, 34, &border, sizeof(border));
+  DwmSetWindowAttribute(hwnd_, 34 /* DWMWA_BORDER_COLOR */, &border, sizeof(border));
   COLORREF caption = kTitleBar;
-  DwmSetWindowAttribute(hwnd_, 35, &caption, sizeof(caption));
+  DwmSetWindowAttribute(hwnd_, 35 /* DWMWA_CAPTION_COLOR */, &caption, sizeof(caption));
 
   ShowWindow(hwnd_, SW_SHOW);
   UpdateWindow(hwnd_);
@@ -104,7 +133,8 @@ bool AppWindow::Create() {
 }
 
 int AppWindow::MessageLoop() {
-  MSG msg{};
+  MSG msg;
+  ZeroMemory(&msg, sizeof(msg));
   while (GetMessageW(&msg, nullptr, 0, 0)) {
     TranslateMessage(&msg);
     DispatchMessageW(&msg);
@@ -115,14 +145,15 @@ int AppWindow::MessageLoop() {
 LRESULT CALLBACK AppWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
   AppWindow* self = nullptr;
   if (msg == WM_NCCREATE) {
-    auto* cs = reinterpret_cast<CREATESTRUCTW*>(lParam);
+    CREATESTRUCTW* cs = reinterpret_cast<CREATESTRUCTW*>(lParam);
     self = static_cast<AppWindow*>(cs->lpCreateParams);
     self->hwnd_ = hwnd;
     SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(self));
   } else {
     self = reinterpret_cast<AppWindow*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
   }
-  if (self) return self->HandleMessage(msg, wParam, lParam);
+  if (self)
+    return self->HandleMessage(msg, wParam, lParam);
   return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
@@ -143,13 +174,15 @@ LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
         if (wParam == VK_LEFT && (GetKeyState(VK_MENU) & 0x8000)) {
           BOOL can = FALSE;
           webview_->get_CanGoBack(&can);
-          if (can) webview_->GoBack();
+          if (can)
+            webview_->GoBack();
           return 0;
         }
         if (wParam == VK_RIGHT && (GetKeyState(VK_MENU) & 0x8000)) {
           BOOL can = FALSE;
           webview_->get_CanGoForward(&can);
-          if (can) webview_->GoForward();
+          if (can)
+            webview_->GoForward();
           return 0;
         }
         if (wParam == VK_HOME && (GetKeyState(VK_MENU) & 0x8000)) {
@@ -166,47 +199,49 @@ LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 RECT AppWindow::TitleBarRect() const {
-  RECT rc{};
+  RECT rc;
   GetClientRect(hwnd_, &rc);
   rc.bottom = kTitleH;
   return rc;
 }
 
 RECT AppWindow::StatusBarRect() const {
-  RECT rc{};
+  RECT rc;
   GetClientRect(hwnd_, &rc);
   rc.top = rc.bottom - kStatusH;
   return rc;
 }
 
 RECT AppWindow::ContentRect() const {
-  RECT rc{};
+  RECT rc;
   GetClientRect(hwnd_, &rc);
   rc.top = kTitleH;
   rc.bottom -= kStatusH;
-  if (rc.bottom < rc.top) rc.bottom = rc.top;
+  if (rc.bottom < rc.top)
+    rc.bottom = rc.top;
   return rc;
 }
 
 void AppWindow::OnPaint() {
-  PAINTSTRUCT ps{};
+  PAINTSTRUCT ps;
+  ZeroMemory(&ps, sizeof(ps));
   HDC hdc = BeginPaint(hwnd_, &ps);
 
-  RECT client{};
+  RECT client;
   GetClientRect(hwnd_, &client);
   DrawRect(hdc, client, kBgDeep, kBorder);
 
   RECT title = TitleBarRect();
   DrawRect(hdc, title, kTitleBar, kBorder);
   DrawTextLine(hdc, fontTitle_, kText, 16, 14, L"GTA VI COUNTDOWN");
-  DrawTextLine(hdc, fontStatus_, kMuted, 200, 16, L"Eastern Europe  ·  Live");
+  DrawTextLine(hdc, fontStatus_, kMuted, 200, 16, L"Eastern Europe  |  Live");
   DrawTextLine(hdc, fontStatus_, kText, client.right - 220, 16, L"F5 Refresh   Alt+Home");
 
   RECT status = StatusBarRect();
   DrawRect(hdc, status, kStatusBar, kBorder);
   DrawTextLine(hdc, fontStatus_, kMuted, 12, status.top + 7, status_.c_str());
   DrawTextLine(hdc, fontStatus_, RGB(0x70, 0x60, 0x80), client.right - 360, status.top + 7,
-               L"Fan-made · Not affiliated with Rockstar");
+               L"Fan-made - Not affiliated with Rockstar");
 
   EndPaint(hwnd_, &ps);
 }
@@ -217,7 +252,8 @@ void AppWindow::OnSize() {
 }
 
 void AppWindow::LayoutWebView() {
-  if (!controller_) return;
+  if (!controller_)
+    return;
   RECT rc = ContentRect();
   controller_->put_Bounds(rc);
 }
@@ -229,7 +265,8 @@ void AppWindow::SetStatus(const std::wstring& text) {
 }
 
 void AppWindow::NavigateHome() {
-  if (webview_) webview_->Navigate(kHomeUrl);
+  if (webview_)
+    webview_->Navigate(kHomeUrl);
 }
 
 void AppWindow::InitWebView() {
@@ -241,11 +278,13 @@ void AppWindow::InitWebView() {
       Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
           [this, hwnd](HRESULT result, ICoreWebView2Environment* env) -> HRESULT {
             if (FAILED(result) || !env) {
-              SetStatus(L"WebView2 failed — install the WebView2 Runtime");
-              MessageBoxW(hwnd,
-                          L"WebView2 failed to start.\n\nInstall:\n"
-                          L"https://developer.microsoft.com/microsoft-edge/webview2/",
-                          kAppTitle, MB_OK | MB_ICONWARNING);
+              SetStatus(L"WebView2 failed - install the WebView2 Runtime");
+              MessageBoxW(
+                  hwnd,
+                  L"WebView2 failed to start.\n\nInstall:\n"
+                  L"https://developer.microsoft.com/microsoft-edge/webview2/",
+                  kAppTitle,
+                  MB_OK | MB_ICONWARNING);
               return result;
             }
 
@@ -271,7 +310,11 @@ void AppWindow::InitWebView() {
                         settings->put_IsZoomControlEnabled(TRUE);
                       }
 
-                      COREWEBVIEW2_COLOR bg{255, 0x1A, 0x0A, 0x2E};
+                      COREWEBVIEW2_COLOR bg;
+                      bg.A = 255;
+                      bg.R = 0x1A;
+                      bg.G = 0x0A;
+                      bg.B = 0x2E;
                       ComPtr<ICoreWebView2Controller2> c2;
                       if (SUCCEEDED(controller_->QueryInterface(IID_PPV_ARGS(&c2))) && c2) {
                         c2->put_DefaultBackgroundColor(bg);
@@ -309,7 +352,7 @@ void AppWindow::InitWebView() {
                                     SetStatus(kHomeUrl);
                                   }
                                 } else {
-                                  SetStatus(L"Failed to load — check connection, then press F5");
+                                  SetStatus(L"Failed to load - check connection, then press F5");
                                 }
                                 return S_OK;
                               })
@@ -323,10 +366,11 @@ void AppWindow::InitWebView() {
                                 sender->get_DocumentTitle(&title);
                                 if (title && title[0]) {
                                   std::wstring t = title;
-                                  t += L" — Desktop";
+                                  t += L" - Desktop";
                                   SetWindowTextW(hwnd_, t.c_str());
                                 }
-                                if (title) CoTaskMemFree(title);
+                                if (title)
+                                  CoTaskMemFree(title);
                                 return S_OK;
                               })
                               .Get(),
