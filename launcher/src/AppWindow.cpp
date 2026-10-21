@@ -45,7 +45,6 @@ void DrawTextLine(HDC hdc, HFONT font, COLORREF color, int x, int y, const wchar
   SelectObject(hdc, old);
 }
 
-/* Load embedded IDI_APPICON; falls back to default application icon. */
 HICON LoadEmbeddedIcon(HINSTANCE instance, int cx, int cy) {
   HICON icon = (HICON)LoadImageW(
       instance,
@@ -121,24 +120,20 @@ bool AppWindow::Create() {
   if (!hwnd_)
     return false;
 
-  {
-    HICON big = LoadEmbeddedIcon(instance_, 32, 32);
-    HICON small = LoadEmbeddedIcon(
-        instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
-    if (big)
-      SendMessageW(hwnd_, WM_SETICON, ICON_BIG, (LPARAM)big);
-    if (small)
-      SendMessageW(hwnd_, WM_SETICON, ICON_SMALL, (LPARAM)small);
-  }
+  HICON big = LoadEmbeddedIcon(instance_, 32, 32);
+  HICON small = LoadEmbeddedIcon(
+      instance_, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+  if (big)
+    SendMessageW(hwnd_, WM_SETICON, ICON_BIG, (LPARAM)big);
+  if (small)
+    SendMessageW(hwnd_, WM_SETICON, ICON_SMALL, (LPARAM)small);
 
-  {
-    BOOL dark = TRUE;
-    DwmSetWindowAttribute(hwnd_, 20, &dark, sizeof(dark));
-    COLORREF border = kBorder;
-    DwmSetWindowAttribute(hwnd_, 34, &border, sizeof(border));
-    COLORREF caption = kTitleBar;
-    DwmSetWindowAttribute(hwnd_, 35, &caption, sizeof(caption));
-  }
+  BOOL dark = TRUE;
+  DwmSetWindowAttribute(hwnd_, 20, &dark, sizeof(dark));
+  COLORREF border = kBorder;
+  DwmSetWindowAttribute(hwnd_, 34, &border, sizeof(border));
+  COLORREF caption = kTitleBar;
+  DwmSetWindowAttribute(hwnd_, 35, &caption, sizeof(caption));
 
   ShowWindow(hwnd_, SW_SHOW);
   UpdateWindow(hwnd_);
@@ -287,7 +282,7 @@ void AppWindow::InitWebView() {
   SetStatus(L"Initializing WebView2...");
   HWND hwnd = hwnd_;
 
-  HRESULT hr = CreateCoreWebView2EnvironmentWithOptions(
+  CreateCoreWebView2EnvironmentWithOptions(
       nullptr,
       nullptr,
       nullptr,
@@ -304,7 +299,7 @@ void AppWindow::InitWebView() {
               return result;
             }
 
-            return env->CreateCoreWebView2Controller(
+            env->CreateCoreWebView2Controller(
                 hwnd,
                 Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
                     [this](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
@@ -397,8 +392,8 @@ void AppWindow::InitWebView() {
                       return S_OK;
                     })
                     .Get());
+
+            return S_OK;
           })
           .Get());
-
-  (void)hr;
 }
