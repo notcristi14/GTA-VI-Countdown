@@ -2,7 +2,6 @@
 #include "resource.h"
 
 #include <dwmapi.h>
-#include <memory>
 
 #pragma comment(lib, "dwmapi.lib")
 
@@ -49,9 +48,20 @@ bool AppWindow::Create() {
   wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
   wc.hbrBackground = CreateSolidBrush(kBgDeep);
   wc.lpszClassName = kClassName;
+
+  // Exe / window-bar icon: GTA VI logo from IDI_APPICON (GtaLogo.ico)
   wc.hIcon = LoadIconW(instance_, MAKEINTRESOURCEW(IDI_APPICON));
-  if (!wc.hIcon) wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
-  wc.hIconSm = wc.hIcon;
+  if (!wc.hIcon)
+    wc.hIcon = static_cast<HICON>(LoadImageW(
+        instance_, MAKEINTRESOURCEW(IDI_APPICON), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR));
+  if (!wc.hIcon)
+    wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+
+  wc.hIconSm = static_cast<HICON>(LoadImageW(
+      instance_, MAKEINTRESOURCEW(IDI_APPICON), IMAGE_ICON,
+      GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR));
+  if (!wc.hIconSm)
+    wc.hIconSm = wc.hIcon;
 
   if (!RegisterClassExW(&wc)) return false;
 
@@ -71,6 +81,14 @@ bool AppWindow::Create() {
       nullptr, nullptr, instance_, this);
 
   if (!hwnd_) return false;
+
+  // Taskbar / alt-tab icon (same GTA VI logo resource)
+  HICON big = LoadIconW(instance_, MAKEINTRESOURCEW(IDI_APPICON));
+  HICON small = static_cast<HICON>(LoadImageW(
+      instance_, MAKEINTRESOURCEW(IDI_APPICON), IMAGE_ICON,
+      GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR));
+  if (big) SendMessageW(hwnd_, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(big));
+  if (small) SendMessageW(hwnd_, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(small));
 
   BOOL dark = TRUE;
   DwmSetWindowAttribute(hwnd_, 20, &dark, sizeof(dark));

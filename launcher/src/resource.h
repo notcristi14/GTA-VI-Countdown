@@ -1,5 +1,6 @@
 #pragma once
 
+/* GTA VI logo — embedded as the .exe icon (IDI_APPICON) */
 #define IDI_APPICON 101
 
 #define IDC_BTN_BACK     1001

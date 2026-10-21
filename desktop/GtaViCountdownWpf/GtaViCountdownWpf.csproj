@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <!-- GTA VI logo as the Windows executable icon -->
     <ApplicationIcon>Assets\GtaLogo.ico</ApplicationIcon>
     <AssemblyName>GtaViCountdown</AssemblyName>
     <RootNamespace>GtaViCountdownWpf</RootNamespace>
@@ -14,6 +15,7 @@
     <Product>GTA VI Countdown</Product>
     <Description>Desktop wrapper for the GTA VI regional countdown — Eastern Europe</Description>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <ApplicationTitle>GTA VI Countdown</ApplicationTitle>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +26,8 @@
   <ItemGroup>
     <Resource Include="Assets\GtaLogo.png" Condition="Exists('Assets\GtaLogo.png')" />
     <Resource Include="Assets\GtaLogo.svg" Condition="Exists('Assets\GtaLogo.svg')" />
-    <Resource Include="Assets\GtaLogo.ico" Condition="Exists('Assets\GtaLogo.ico')" />
+    <!-- Must be present: embeds into .exe as ApplicationIcon -->
+    <None Include="Assets\GtaLogo.ico" Condition="Exists('Assets\GtaLogo.ico')" />
   </ItemGroup>
 
 </Project>
