@@ -8,24 +8,18 @@ if(NOT WIN32)
   message(FATAL_ERROR "This launcher targets Windows (Win32 + WebView2).")
 endif()
 
-# --- GTA VI logo as executable icon (launcher/assets/GtaLogo.ico) ---
-set(GTA_LOGO_ICO "")
-foreach(_candidate
-    "${CMAKE_CURRENT_SOURCE_DIR}/assets/GtaLogo.ico"
-    "${CMAKE_CURRENT_SOURCE_DIR}/assets/app.ico"
-)
-  if(EXISTS "${_candidate}")
-    set(GTA_LOGO_ICO "${_candidate}")
-    break()
-  endif()
-endforeach()
+# --- GTA VI logo as executable icon ---
+set(GTA_LOGO_ICO "${CMAKE_CURRENT_SOURCE_DIR}/assets/GtaLogo.ico")
+if(NOT EXISTS "${GTA_LOGO_ICO}")
+  set(GTA_LOGO_ICO "${CMAKE_CURRENT_SOURCE_DIR}/assets/app.ico")
+endif()
 
 set(LAUNCHER_SOURCES
   src/main.cpp
   src/AppWindow.cpp
 )
 
-if(GTA_LOGO_ICO)
+if(EXISTS "${GTA_LOGO_ICO}")
   file(TO_NATIVE_PATH "${GTA_LOGO_ICO}" GTA_LOGO_ICO_NATIVE)
   string(REPLACE "\\" "\\\\" GTA_LOGO_ICO_RC "${GTA_LOGO_ICO_NATIVE}")
   set(GENERATED_RC "${CMAKE_CURRENT_BINARY_DIR}/app_icon.rc")
@@ -36,10 +30,7 @@ if(GTA_LOGO_ICO)
   list(APPEND LAUNCHER_SOURCES "${GENERATED_RC}")
   message(STATUS "Exe icon: ${GTA_LOGO_ICO}")
 else()
-  message(WARNING
-    "GtaLogo.ico not found at launcher/assets/GtaLogo.ico — building without custom exe icon.\n"
-    "Restore with:\n"
-    "  git show d93ba1c9:desktop/GtaViCountdownWpf/Assets/GtaLogo.ico > launcher/assets/GtaLogo.ico")
+  message(WARNING "GtaLogo.ico not found under launcher/assets/ — building without custom exe icon.")
 endif()
 
 add_executable(GtaViCountdown WIN32 ${LAUNCHER_SOURCES})

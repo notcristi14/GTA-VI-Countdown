@@ -1,12 +1,7 @@
 #include "resource.h"
 
 /*
- * Preferred build path: CMake generates build/app_icon.rc that embeds
- * desktop/GtaViCountdownWpf/Assets/GtaLogo.ico as IDI_APPICON.
- *
- * This file is a manual fallback for Visual Studio resource editors:
- *   copy ..\desktop\GtaViCountdownWpf\Assets\GtaLogo.ico assets\app.ico
- * then uncomment:
- *
- * IDI_APPICON ICON "../assets/app.ico"
+ * Preferred path: CMake generates build/app_icon.rc from assets/GtaLogo.ico.
+ * Manual fallback (resource editor):
+ *   IDI_APPICON ICON "../assets/GtaLogo.ico"
  */
