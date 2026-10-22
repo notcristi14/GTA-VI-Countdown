@@ -452,13 +452,26 @@ const REPO = 'notcristi14/GTA-VI-Countdown';
 const COMMIT_CACHE_MS = 60 * 1000;
 let commitCache = { at: 0, data: null };
 
+/** Optional classic PAT or fine-grained token — raises rate limit from 60/hr to 5,000/hr */
+function githubToken() {
+  return String(process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '').trim();
+}
+
+function githubHeaders(extra) {
+  const headers = Object.assign({
+    'User-Agent': 'GTA-VI-Countdown (https://github.com/notcristi14/GTA-VI-Countdown)',
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  }, extra || {});
+  const token = githubToken();
+  if (token) headers.Authorization = 'Bearer ' + token;
+  return headers;
+}
+
 function fetchJson(url, headers) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, {
-      headers: Object.assign({
-        'User-Agent': 'GTA-VI-Countdown',
-        Accept: 'application/vnd.github+json'
-      }, headers || {})
+      headers: githubHeaders(headers)
     }, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         return fetchJson(res.headers.location, headers).then(resolve).catch(reject);
@@ -466,7 +479,13 @@ function fetchJson(url, headers) {
       let data = '';
       res.on('data', (c) => { data += c; });
       res.on('end', () => {
-        if (res.statusCode !== 200) return reject(new Error('status ' + res.statusCode));
+        if (res.statusCode !== 200) {
+          const err = new Error('status ' + res.statusCode);
+          err.statusCode = res.statusCode;
+          err.rateLimitRemaining = res.headers['x-ratelimit-remaining'];
+          err.rateLimitReset = res.headers['x-ratelimit-reset'];
+          return reject(err);
+        }
         try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
       });
     });
@@ -508,8 +527,10 @@ app.get('/api/commit', async (_req, res) => {
 const COMMITS_CACHE_MS = 60 * 1000;
 let commitsCache = { at: 0, data: null };
 
-const REPO_CACHE_MS = 60 * 1000;
+/* 60s with token; 5 min without (unauthenticated = 60 req/hr shared IP) */
+const REPO_CACHE_MS = githubToken() ? 60 * 1000 : 5 * 60 * 1000;
 let repoCache = { at: 0, data: null };
+let repoBackoffUntil = 0;
 
 function repoFingerprint(data) {
   if (!data || data.source === 'unavailable') return '';
@@ -517,10 +538,11 @@ function repoFingerprint(data) {
 }
 
 async function refreshRepoStats() {
+  if (Date.now() < repoBackoffUntil) {
+    return repoCache.data || null;
+  }
   try {
-    const repo = await fetchJson('https://api.github.com/repos/' + REPO, {
-      Accept: 'application/vnd.github+json'
-    });
+    const repo = await fetchJson('https://api.github.com/repos/' + REPO);
     if (!repo || !repo.full_name) throw new Error('no repo');
     const data = {
       fullName: repo.full_name,
@@ -541,12 +563,26 @@ async function refreshRepoStats() {
     const prevFp = repoFingerprint(repoCache.data);
     const nextFp = repoFingerprint(data);
     repoCache = { at: Date.now(), data: data };
+    repoBackoffUntil = 0;
     if (prevFp && prevFp !== nextFp) {
       console.log('  🐙  Repo stats changed:', data.stars + ' stars,', data.forks + ' forks,', data.openIssues + ' issues');
     }
     return data;
   } catch (err) {
-    console.log('  🐙  Repo stats auto-check failed:', err && err.message ? err.message : err);
+    const code = err && err.statusCode;
+    const msg = err && err.message ? err.message : err;
+    if (code === 403 || code === 429) {
+      /* Rate limited — back off until GitHub reset or 15 min */
+      let waitMs = 15 * 60 * 1000;
+      if (err.rateLimitReset) {
+        const resetMs = Number(err.rateLimitReset) * 1000 - Date.now();
+        if (resetMs > 0 && resetMs < 60 * 60 * 1000) waitMs = resetMs + 5000;
+      }
+      repoBackoffUntil = Date.now() + waitMs;
+      console.log('  🐙  Repo stats rate-limited (' + code + '); backoff ' + Math.round(waitMs / 1000) + 's. Set GITHUB_TOKEN on Render to avoid this.');
+    } else {
+      console.log('  🐙  Repo stats auto-check failed:', msg);
+    }
     return repoCache.data || null;
   }
 }
@@ -567,7 +603,6 @@ app.get('/api/repo', async (_req, res) => {
   }
 });
 
-// Background: re-check GitHub repo stats every 60s so the cache stays current
 setInterval(function () {
   refreshRepoStats().catch(function () {});
 }, REPO_CACHE_MS);
@@ -636,7 +671,11 @@ app.listen(PORT, () => {
   console.log('  🌴  GTA VI Countdown');
   console.log(`  🚗  Running at http://localhost:${PORT}`);
   console.log('  🎮  Regions, Newswire & Vice City backgrounds ready');
-  console.log('  🐙  Repo stats: auto-check every 60s');
+  if (githubToken()) {
+    console.log('  🐙  Repo stats: GITHUB_TOKEN set — auto-check every 60s');
+  } else {
+    console.log('  🐙  Repo stats: no GITHUB_TOKEN — auto-check every 5 min (set token to avoid 403 rate limits)');
+  }
   if (gaConfigured()) {
     console.log('  📊  Google Analytics stats: env vars present');
   } else {
