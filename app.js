@@ -47,10 +47,10 @@ function fetchText(url, extraHeaders) {
 function decode(str) {
   return String(str || '')
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"')
     .replace(/&#39;/g, "'")
     .trim();
 }
@@ -196,10 +196,10 @@ async function fetchGaStats() {
 }
 
 
-const TRAILERS_CACHE_MS = 30 * 60 * 1000; // 30 minutes
-const TRAILER_DATE_CACHE_MS = 24 * 60 * 60 * 1000; // 24 hours for per-video publish dates
+const TRAILERS_CACHE_MS = 30 * 60 * 1000;
+const TRAILER_DATE_CACHE_MS = 24 * 60 * 60 * 1000;
 let trailersCache = { at: 0, data: null };
-const trailerDateCache = new Map(); // youtubeId -> { at, publishedAt }
+const trailerDateCache = new Map();
 
 const SEED_TRAILERS = [
   { id: 'launch', title: 'Launch Trailer', label: 'Launch Trailer', meta: 'Official launch trailer · Rockstar Games', youtubeId: 'icy-lhqJhMQ' },
@@ -239,7 +239,6 @@ function textFromYt(obj) {
   return '';
 }
 
-/** Absolute publish date from the YouTube watch page (publishDate / uploadDate). Never invents dates. */
 async function fetchVideoPublishedAt(youtubeId) {
   if (!youtubeId) return null;
   const cached = trailerDateCache.get(youtubeId);
@@ -287,7 +286,6 @@ async function enrichPublishedDates(items) {
   return out;
 }
 
-/** Newest first. Missing/unparseable dates go last. Equal dates: stable by title then youtubeId. */
 function sortTrailersNewestFirst(list) {
   return list.slice().sort(function (a, b) {
     const ta = a.publishedAt ? Date.parse(a.publishedAt) : NaN;
@@ -432,7 +430,6 @@ app.get('/api/trailers', async (_req, res) => {
   }
 });
 
-
 app.get('/api/stats', async (_req, res) => {
   res.set('Cache-Control', 'no-store');
   if (!gaConfigured()) {
@@ -450,7 +447,6 @@ app.get('/api/stats', async (_req, res) => {
     return res.status(200).json(GA_UNAVAILABLE);
   }
 });
-
 
 const REPO = 'notcristi14/GTA-VI-Countdown';
 const COMMIT_CACHE_MS = 60 * 1000;
@@ -509,19 +505,18 @@ app.get('/api/commit', async (_req, res) => {
   }
 });
 
-
 const COMMITS_CACHE_MS = 60 * 1000;
 let commitsCache = { at: 0, data: null };
-
 
 const REPO_CACHE_MS = 60 * 1000;
 let repoCache = { at: 0, data: null };
 
-app.get('/api/repo', async (_req, res) => {
-  res.set('Cache-Control', 'no-store');
-  if (repoCache.data && Date.now() - repoCache.at < REPO_CACHE_MS) {
-    return res.json(repoCache.data);
-  }
+function repoFingerprint(data) {
+  if (!data || data.source === 'unavailable') return '';
+  return [data.stars, data.forks, data.watchers, data.openIssues, data.language, data.pushedAt].join('|');
+}
+
+async function refreshRepoStats() {
   try {
     const repo = await fetchJson('https://api.github.com/repos/' + REPO, {
       Accept: 'application/vnd.github+json'
@@ -540,16 +535,43 @@ app.get('/api/repo', async (_req, res) => {
       defaultBranch: repo.default_branch || 'main',
       createdAt: repo.created_at || '',
       updatedAt: repo.updated_at || '',
-      pushedAt: repo.pushed_at || ''
+      pushedAt: repo.pushed_at || '',
+      checkedAt: new Date().toISOString()
     };
-    repoCache = { at: Date.now(), data };
-    return res.json(data);
+    const prevFp = repoFingerprint(repoCache.data);
+    const nextFp = repoFingerprint(data);
+    repoCache = { at: Date.now(), data: data };
+    if (prevFp && prevFp !== nextFp) {
+      console.log('  🐙  Repo stats changed:', data.stars + ' stars,', data.forks + ' forks,', data.openIssues + ' issues');
+    }
+    return data;
+  } catch (err) {
+    console.log('  🐙  Repo stats auto-check failed:', err && err.message ? err.message : err);
+    return repoCache.data || null;
+  }
+}
+
+app.get('/api/repo', async (_req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (repoCache.data && Date.now() - repoCache.at < REPO_CACHE_MS) {
+    return res.json(repoCache.data);
+  }
+  try {
+    const data = await refreshRepoStats();
+    if (data) return res.json(data);
+    return res.status(200).json({ source: 'unavailable' });
   } catch (err) {
     console.log('  🐙  GitHub repo stats unavailable:', err && err.message ? err.message : err);
     if (repoCache.data) return res.json(repoCache.data);
     return res.status(200).json({ source: 'unavailable' });
   }
 });
+
+// Background: re-check GitHub repo stats every 60s so the cache stays current
+setInterval(function () {
+  refreshRepoStats().catch(function () {});
+}, REPO_CACHE_MS);
+refreshRepoStats().catch(function () {});
 
 app.get('/api/commits', async (_req, res) => {
   res.set('Cache-Control', 'no-store');
@@ -582,7 +604,6 @@ app.get('/api/commits', async (_req, res) => {
   }
 });
 
-
 app.get('/api/news', async (_req, res) => {
   try {
     const fresh = newsCache.at && Date.now() - newsCache.at < NEWS_CACHE_MS && newsCache.items.length;
@@ -599,7 +620,6 @@ app.get('/api/news', async (_req, res) => {
       return res.json({ items, source: 'live' });
     }
   } catch (_) {
-    // Live feed unavailable.
   }
 
   res.json({ items: [], source: 'live' });
@@ -616,6 +636,7 @@ app.listen(PORT, () => {
   console.log('  🌴  GTA VI Countdown');
   console.log(`  🚗  Running at http://localhost:${PORT}`);
   console.log('  🎮  Regions, Newswire & Vice City backgrounds ready');
+  console.log('  🐙  Repo stats: auto-check every 60s');
   if (gaConfigured()) {
     console.log('  📊  Google Analytics stats: env vars present');
   } else {
