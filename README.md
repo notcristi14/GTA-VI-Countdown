@@ -41,7 +41,7 @@ See [launcher/README.md](launcher/README.md).
 - **Live countdown** – Digit reels, continuous seconds, progress under Secs.
 - **Platform badges** – PS5 / Xbox pre-order; static at countdown zero.
 - **Watch Trailers** – Official Rockstar embeds; newest → oldest by YouTube `publishDate`.
-- **Commit history / repo stats** – GitHub panel + stars/forks/watchers/issues.
+- **Commit history / repo stats** – GitHub panel + stars/forks/watchers/issues. **`/api/repo` auto-checks GitHub every 60s** (server background refresh + client poll); response includes `checkedAt`.
 - **Welcome lights** – Vice City neon (CSS only, no audio).
 - **License + vibecoded** – Footer disclaimer.
 
