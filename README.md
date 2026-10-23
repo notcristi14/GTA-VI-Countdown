@@ -89,6 +89,8 @@ npm start
 | `/api/commits` | 60 s | Recent commit list |
 | `/api/commit` | 60 s | Latest commit card |
 
+Optional env on Render: **`GITHUB_TOKEN`** (classic PAT, `public_repo` or fine-grained read on this repo). Without it, GitHub uses the unauthenticated **60 requests/hour per shared IP** and can return **403** on Render. With a token you get **~5,000/hr**. GA4 timeouts (`ETIMEDOUT`) only affect `/api/stats` when configured; the UI already hides unavailable stats.
+
 ---
 
 ## License
