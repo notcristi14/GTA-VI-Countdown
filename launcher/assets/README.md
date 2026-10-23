@@ -6,4 +6,7 @@
 
 Do not remove `GtaLogo.ico` if you want a branded `.exe`.
 
-Related docs: [launcher/README.md](../README.md) · [root README](../../README.md).
+Related docs:
+
+- [launcher/README.md](../README.md) — build and toolbar
+- [root README](../../README.md) — site features, `github-api.js`, **`GITHUB_TOKEN`** on Render

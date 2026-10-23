@@ -44,7 +44,7 @@ See [launcher/README.md](launcher/README.md).
   - Publish dates come from a seeded map (`KNOWN_PUBLISHED_AT` in `app.js`) for known IDs — **no per-video `youtube.com/watch` scraping** (avoids YouTube 429 rate-limit log spam).
   - Rockstar channel search still runs on a **30-minute** cache (`/api/trailers`) to discover new GTA VI videos; new IDs without a seed date use relative time text only for labels.
   - Seeded dates (UTC day): Trailer 1 `2023-12-04`, Trailer 2 `2025-05-06`, Cover Art `2026-06-18`, Extended Look `2026-08-28` (YouTube window), Launch Trailer `2026-10-15`.
-- **Commit history / repo stats** – GitHub panel + stars/forks/watchers/issues. **`/api/repo` auto-checks GitHub every 60s** (server background refresh + client poll); response includes `checkedAt`.
+- **Commit history / repo stats** – GitHub panel + stars/forks/watchers/issues. **`/api/repo` auto-checks GitHub every 60s** (server background refresh + client poll); response includes `checkedAt`. GitHub calls go through [`github-api.js`](github-api.js) and use **`GITHUB_TOKEN`** when set.
 - **Welcome lights** – Vice City neon (CSS only, no audio).
 - **License + vibecoded** – Footer disclaimer.
 
@@ -54,7 +54,8 @@ See [launcher/README.md](launcher/README.md).
 
 ```text
 ├── gta-vi-countdown.html
-├── app.js
+├── app.js                 # Express app, trailers, GA, routes
+├── github-api.js          # GitHub fetch + optional GITHUB_TOKEN auth
 ├── bgs/
 ├── logo.png
 ├── launcher/
@@ -77,7 +78,7 @@ npm start
 ```
 
 - Frontend: HTML, CSS, JavaScript
-- Backend: Node.js + Express
+- Backend: Node.js + Express (`app.js` + `github-api.js`)
 - Desktop: C++ (Win32 + WebView2) via Visual Studio
 
 ### Notable API endpoints
@@ -85,11 +86,21 @@ npm start
 | Endpoint | Cache | Notes |
 |----------|-------|--------|
 | `/api/trailers` | 30 min | Seeded `publishedAt` + Rockstar channel discovery; sort `publishedAt-desc` |
-| `/api/repo` | 60 s | Background refresh; includes `checkedAt` |
+| `/api/repo` | 60 s | Background refresh via `github-api.js`; includes `checkedAt` |
 | `/api/commits` | 60 s | Recent commit list |
 | `/api/commit` | 60 s | Latest commit card |
+| `/api/stats` | 30 s | GA4 when env is set; UI hides panel if unavailable |
 
-Optional env on Render: **`GITHUB_TOKEN`** (classic PAT, `public_repo` or fine-grained read on this repo). Without it, GitHub uses the unauthenticated **60 requests/hour per shared IP** and can return **403** on Render. With a token you get **~5,000/hr**. GA4 timeouts (`ETIMEDOUT`) only affect `/api/stats` when configured; the UI already hides unavailable stats.
+### Environment variables (Render)
+
+| Variable | Required | Purpose |
+|----------|----------|--------|
+| **`GITHUB_TOKEN`** (or `GH_TOKEN`) | Recommended | Authenticated GitHub API (~5,000/hr). Without it, unauthenticated **60/hr per shared IP** often returns **403** on Render. Classic PAT with `public_repo`, or fine-grained **Contents: Read** on this repo. |
+| `GA_PROPERTY_ID` | Optional | Google Analytics 4 property id (numeric) |
+| `GA_CLIENT_EMAIL` | Optional | GA service account email |
+| `GA_PRIVATE_KEY` | Optional | GA service account private key |
+
+On startup the server logs whether `GITHUB_TOKEN` is present. GitHub **403** and GA **ETIMEDOUT** messages are throttled to about once per hour so logs stay readable.
 
 ---
 

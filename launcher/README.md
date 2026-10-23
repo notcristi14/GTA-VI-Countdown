@@ -16,7 +16,14 @@ Native **Windows C++** shell for the live countdown site. **WebView2** with a co
 - **GTA VI logo** as `.exe` / taskbar icon
 - Dark neon window chrome matching the site
 
-Site content (countdown, trailers, repo stats) is served by the live web app — see the [root README](../README.md) for trailers (seeded publish dates, no watch-page scrape), `/api/repo` 60s auto-check, and other features.
+Site content (countdown, trailers, repo stats) is served by the **live web app** on Render — not by this executable.
+
+See the [root README](../README.md) for:
+
+- Trailers (seeded publish dates, no watch-page scrape)
+- `/api/repo` 60s auto-check
+- **`GITHUB_TOKEN`** on the server (required to avoid GitHub **403** on shared Render IPs)
+- Optional GA4 env vars
 
 ## Requirements
 
