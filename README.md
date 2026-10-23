@@ -40,7 +40,10 @@ See [launcher/README.md](launcher/README.md).
 - **Regional countdowns** – Official store unlock windows (e.g. `/eastern-europe`).
 - **Live countdown** – Digit reels, continuous seconds, progress under Secs.
 - **Platform badges** – PS5 / Xbox pre-order; static at countdown zero.
-- **Watch Trailers** – Official Rockstar embeds; newest → oldest by YouTube `publishDate`.
+- **Watch Trailers** – Official Rockstar YouTube embeds, sorted **newest → oldest**.
+  - Publish dates come from a seeded map (`KNOWN_PUBLISHED_AT` in `app.js`) for known IDs — **no per-video `youtube.com/watch` scraping** (avoids YouTube 429 rate-limit log spam).
+  - Rockstar channel search still runs on a **30-minute** cache (`/api/trailers`) to discover new GTA VI videos; new IDs without a seed date use relative time text only for labels.
+  - Seeded dates (UTC day): Trailer 1 `2023-12-04`, Trailer 2 `2025-05-06`, Cover Art `2026-06-18`, Extended Look `2026-08-28` (YouTube window), Launch Trailer `2026-10-15`.
 - **Commit history / repo stats** – GitHub panel + stars/forks/watchers/issues. **`/api/repo` auto-checks GitHub every 60s** (server background refresh + client poll); response includes `checkedAt`.
 - **Welcome lights** – Vice City neon (CSS only, no audio).
 - **License + vibecoded** – Footer disclaimer.
@@ -76,6 +79,15 @@ npm start
 - Frontend: HTML, CSS, JavaScript
 - Backend: Node.js + Express
 - Desktop: C++ (Win32 + WebView2) via Visual Studio
+
+### Notable API endpoints
+
+| Endpoint | Cache | Notes |
+|----------|-------|--------|
+| `/api/trailers` | 30 min | Seeded `publishedAt` + Rockstar channel discovery; sort `publishedAt-desc` |
+| `/api/repo` | 60 s | Background refresh; includes `checkedAt` |
+| `/api/commits` | 60 s | Recent commit list |
+| `/api/commit` | 60 s | Latest commit card |
 
 ---
 

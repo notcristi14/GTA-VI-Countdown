@@ -16,6 +16,8 @@ Native **Windows C++** shell for the live countdown site. **WebView2** with a co
 - **GTA VI logo** as `.exe` / taskbar icon
 - Dark neon window chrome matching the site
 
+Site content (countdown, trailers, repo stats) is served by the live web app — see the [root README](../README.md) for trailers (seeded publish dates, no watch-page scrape), `/api/repo` 60s auto-check, and other features.
+
 ## Requirements
 
 - Windows 10/11
