@@ -1,6 +1,6 @@
 # 🌴 Grand Theft Auto VI Countdown
 
-Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock times — plus official trailers, soundtrack playback, GitHub live data, and a **C++ desktop shell** that embeds the live site.
+Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock times — plus official trailers, full playable soundtrack panel, live GitHub data, Rockstar Newswire, and a **C++ desktop shell** that embeds the live site.
 
 🚀 **Live Demo:** [gta-vi-countdown.onrender.com](https://gta-vi-countdown.onrender.com/)  
 🌍 **Eastern Europe:** [gta-vi-countdown.onrender.com/eastern-europe](https://gta-vi-countdown.onrender.com/eastern-europe)
@@ -12,12 +12,12 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ### Countdown & regions
 - **Release line** — Subtitle: “Releasing November 19, 2026”. Document title: `GTA VI Countdown - {region}`.
 - **Regional unlock targets** — Fixed **UTC** instants (DST clock changes do not shift remaining time). Includes Eastern Europe / Romania (`/eastern-europe`), Europe, US, Asia, Oceania, and more.
-- **Smooth digit reels** — Rolling numbers, continuous seconds, progress bar under Secs.
+- **Smooth digit reels** — Rolling numbers via `requestAnimationFrame`, continuous seconds, progress bar under Secs.
 - **Available now** — When the timer hits zero (even if you stay on the page), the UI switches to **Available now**, hides pre-order chrome, and makes PS5 / Xbox badges static (no pre-order links) for that region.
 - **Welcome lights** — GTA VI / Vice City neon wash (pink, magenta, cyan, sunset), continuous CSS pulse, **no audio**.
 
 ### Platforms & commerce
-- **PS5 / Xbox Series X|S badges** — Link to official pre-order pages until that region’s countdown reaches zero.
+- **PS5 / Xbox Series X|S badges** — Link to official pre-order pages until that region’s countdown reaches zero; become static at zero.
 - **Pre-Order button** — Platform picker overlay (PlayStation / Xbox).
 - **Netflix** — Link to *An Extended Look* on Netflix (kept alongside other media).
 
@@ -28,19 +28,22 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - Seeded dates (UTC): Trailer 1 `2023-12-04`, Trailer 2 `2025-05-06`, Cover Art `2026-06-18`, Extended Look `2026-08-28`, Launch Trailer `2026-10-15`.
 - Smooth tab switch animation; “Open on YouTube” link.
 
-### Music (soundtrack)
-- **Play Music** — Panel matching site neon design; **official Spotify embeds** only (no pirated audio).
-- **Released singles** from *Grand Theft Auto VI: The Album* (Atlantic / Rockstar), playable in-page:
-  - That’s It — Yung Lean feat. Future & Metro Boomin  
-  - RHYNO — Travis Scott  
-  - Sexy Magic — CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.. & Étienne de Crécy  
-  - Flower in a Hurricane — Justice feat. Tame Impala, SZA & King Gizzard  
-  - Last Thing You Need — Morgan Wallen  
-  - Suzuki — Fuerza Regida  
-  - Macacoa 2000 — Rauw Alejandro  
-  - Don’t Chart — Cardi B  
+### Music (soundtrack) — every released song playable
+- **Play Music** — Neon panel matching site design; **official Spotify embeds** only (no pirated audio).
+- **Every released single** from *Grand Theft Auto VI: The Album* (Atlantic / Rockstar) is playable in-page via tabbed embeds:
+  1. **That’s It** — Yung Lean feat. Future & Metro Boomin
+  2. **RHYNO** — Travis Scott (prod. Guy-Manuel de Homem-Christo)
+  3. **Sexy Magic** — CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.. & Étienne de Crécy
+  4. **Flower in a Hurricane** — Justice feat. Tame Impala, SZA & King Gizzard
+  5. **Last Thing You Need** — Morgan Wallen
+  6. **Suzuki** — Fuerza Regida
+  7. **Macacoa 2000** — Rauw Alejandro
+  8. **Don’t Chart** — Cardi B
+  9. **Bright Lights, Big City** — Keith Richards
+- **Score preview** — **Pusher** (Justice feat. Gesaffelstein) from the Original Score.
 - **Full album embed** — Spotify album player (`5BYKG4MHfySZthe2W6r7n4`); remaining tracks unlock when the album releases **Nov 19, 2026** (34 tracks total).
-- Links out to Spotify and Rockstar’s VI hub. Radio station full playlists are not mirrored (licensed in-game only).
+- Scrollable tab strip, smooth switch animation, “Open on Spotify” link, Escape / click-outside to close.
+- Radio station full playlists are not mirrored (licensed in-game only).
 
 ### GitHub & project meta
 - **Latest commit card** — Opens that commit on GitHub when pressed.
@@ -53,7 +56,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - **GA4 stats** (optional) — `/api/stats` when `GA_PROPERTY_ID`, `GA_CLIENT_EMAIL`, `GA_PRIVATE_KEY` are set; UI hides when unavailable.
 - **Background gallery** — Vice City / Leonida art switcher, auto-rotate option.
 - **FPS counter** toggle.
-- **Shared button press** — Opacity/scale pulse on controls.
+- **Shared button press** — Opacity/scale pulse (`pulsePress`) on controls.
 - **Footer** — License disclaimer + **“100% vibecoded — built fully with AI.”**
 
 ### Desktop launcher (C++)
@@ -68,9 +71,11 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ## 📁 Structure
 
 ```text
-├── gta-vi-countdown.html   # Frontend UI
-├── app.js                  # Express: regions APIs, trailers, news, GA
-├── github-api.js           # GitHub API + GITHUB_TOKEN auth
+├── gta-vi-countdown.html   # Frontend UI (countdown, trailers, music, stats)
+├── app.js                  # Express: regions, trailers, news, GA, repo APIs
+├── github-api.js           # GitHub API + GITHUB_TOKEN auth + throttled logs
+├── music.js                # Music panel logic (all released songs + album)
+├── music.css               # Neon music overlay / tabs / frame
 ├── bgs/                    # Background images
 ├── logo.png
 ├── launcher/               # C++ WebView2 desktop shell

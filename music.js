@@ -1,19 +1,25 @@
 (function () {
+  // Official Spotify embeds only — every released single from The Album + score preview.
+  // Remaining album tracks unlock Nov 19, 2026 with the full album embed.
   const songs = [
-    { id: 'album', title: 'Full Album (preview)', artist: '34 tracks \u00b7 Atlantic / Rockstar', spotify: 'album/5BYKG4MHfySZthe2W6r7n4', album: true },
+    { id: 'album', title: 'Full Album (preview)', artist: '34 tracks · Atlantic / Rockstar · unlocks Nov 19', spotify: 'album/5BYKG4MHfySZthe2W6r7n4', album: true },
     { id: 'thats-it', title: "That's It", artist: 'Yung Lean feat. Future & Metro Boomin', spotify: 'track/6dUXpM7mnGr7cSpCUQewCs' },
-    { id: 'rhyno', title: 'RHYNO', artist: 'Travis Scott', spotify: 'track/2NliF6CtlWolNA0Jzkw4ba' },
-    { id: 'sexy-magic', title: 'Sexy Magic', artist: 'CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.. & \u00c9tienne de Cr\u00e9cy', spotify: 'track/5AIwo9vC79ce0A7u3DgB1N' },
+    { id: 'rhyno', title: 'RHYNO', artist: 'Travis Scott (prod. Guy-Manuel de Homem-Christo)', spotify: 'track/2NliF6CtlWolNA0Jzkw4ba' },
+    { id: 'sexy-magic', title: 'Sexy Magic', artist: 'CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.. & Étienne de Crécy', spotify: 'track/5AIwo9vC79ce0A7u3DgB1N' },
     { id: 'flower', title: 'Flower in a Hurricane', artist: 'Justice feat. Tame Impala, SZA & King Gizzard', spotify: 'track/1bRWSJwUGWCsOih08iFFTV' },
     { id: 'last-thing', title: 'Last Thing You Need', artist: 'Morgan Wallen', spotify: 'track/1KVvsmAWUhd3Xyex4IS3DD' },
     { id: 'suzuki', title: 'Suzuki', artist: 'Fuerza Regida', spotify: 'track/4DuL1odbViQNnk9o1nol5J' },
     { id: 'macacoa', title: 'Macacoa 2000', artist: 'Rauw Alejandro', spotify: 'track/2oOtzWzQrHPmvtMAzoms7Q' },
-    { id: 'dont-chart', title: "Don't Chart", artist: 'Cardi B', spotify: 'track/5ES7lNls3ZjYuSfTIdKOvr' }
+    { id: 'dont-chart', title: "Don't Chart", artist: 'Cardi B', spotify: 'track/5ES7lNls3ZjYuSfTIdKOvr' },
+    { id: 'bright-lights', title: 'Bright Lights, Big City', artist: 'Keith Richards', spotify: 'track/2X67K1KTLBg9EU2dMUQC42' },
+    { id: 'pusher', title: 'Pusher', artist: 'Justice feat. Gesaffelstein · Original Score', spotify: 'track/6pxjskMHpE4QBmxoOX6O5H' }
   ];
+
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
     else document.addEventListener('DOMContentLoaded', fn);
   }
+
   ready(function () {
     const overlay = document.getElementById('musicOverlay');
     const frame = document.getElementById('musicFrame');
@@ -24,12 +30,15 @@
     const closeBtn = document.getElementById('musicCloseBtn');
     const spLink = document.getElementById('musicSpotifyLink');
     if (!overlay || !frame || !tabs || !openBtn) return;
+
     let activeId = songs[0].id;
     let switchTimer = null;
+
     function embedSrc(song) {
       if (wrap) wrap.classList.toggle('album', !!song.album);
       return 'https://open.spotify.com/embed/' + song.spotify + '?utm_source=generator&theme=0';
     }
+
     function setActive(song, animate) {
       if (!song) return;
       activeId = song.id;
@@ -48,6 +57,7 @@
         if (wrap) wrap.classList.remove('is-switching');
       }, animate ? 160 : 0);
     }
+
     function buildTabs() {
       tabs.innerHTML = '';
       songs.forEach(function (s) {
@@ -56,6 +66,7 @@
         btn.className = 'music-tab' + (s.id === activeId ? ' active' : '');
         btn.dataset.id = s.id;
         btn.textContent = s.title;
+        btn.title = s.artist || s.title;
         btn.addEventListener('click', function () {
           if (s.id === activeId) return;
           btn.classList.add('switching');
@@ -65,6 +76,7 @@
         tabs.appendChild(btn);
       });
     }
+
     function openMusic() {
       if (typeof pulsePress === 'function') pulsePress(openBtn);
       buildTabs();
@@ -72,11 +84,13 @@
       overlay.classList.add('open');
       overlay.setAttribute('aria-hidden', 'false');
     }
+
     function closeMusic() {
       overlay.classList.remove('open');
       overlay.setAttribute('aria-hidden', 'true');
       frame.src = '';
     }
+
     openBtn.addEventListener('click', openMusic);
     if (closeBtn) closeBtn.addEventListener('click', closeMusic);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) closeMusic(); });
