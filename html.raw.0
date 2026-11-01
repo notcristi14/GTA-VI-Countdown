@@ -2,4 +2,313 @@
 <html lang="en">
 <head>
 <!-- Google tag (gtag.js) -->
-<script as
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QPLS07EN95"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QPLS07EN95');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0612">
+<title>GTA VI Countdown</title>
+<link rel="icon" href="/logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/music.css">
+<style>
+  :root {
+    --pink: #ff2d95;
+    --magenta: #e100ff;
+    --cyan: #00f0ff;
+    --sunset: #ff6b35;
+    --bg: #0a0612;
+    --panel: rgba(12, 8, 24, 0.72);
+    --text: #f5f0ff;
+    --muted: #a89bbf;
+    --neon-glow: 0 0 12px rgba(255, 45, 149, 0.55), 0 0 28px rgba(0, 240, 255, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+  body {
+    background-image: url('/bg.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,6,18,0.55) 0%, rgba(10,6,18,0.82) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .wrap {
+    position: relative;
+    z-index: 1;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.25rem 1rem 2rem;
+  }
+  header {
+    width: 100%;
+    max-width: 980px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .logo {
+    height: 48px;
+    filter: drop-shadow(0 0 10px rgba(255,45,149,0.45));
+  }
+  .region-select {
+    background: var(--panel);
+    border: 1px solid rgba(255,45,149,0.35);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 0.45rem 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .hero {
+    text-align: center;
+    margin: 0.5rem 0 1.25rem;
+  }
+  .hero h1 {
+    font-family: Oswald, sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    letter-spacing: 0.04em;
+    text-shadow: var(--neon-glow);
+  }
+  .hero .sub {
+    color: var(--muted);
+    margin-top: 0.35rem;
+    font-size: 0.95rem;
+  }
+  .countdown {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(70px, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+  }
+  .unit {
+    background: var(--panel);
+    border: 1px solid rgba(0,240,255,0.25);
+    border-radius: 14px;
+    padding: 0.85rem 0.4rem 0.65rem;
+    text-align: center;
+    box-shadow: 0 0 18px rgba(225,0,255,0.12);
+  }
+  .unit .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+  }
+  .digit-reel {
+    font-family: Oswald, sans-serif;
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1;
+    height: 1.15em;
+    overflow: hidden;
+    position: relative;
+  }
+  .digit-reel span {
+    display: block;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .progress-wrap {
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 99px;
+    margin-top: 0.55rem;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--pink), var(--cyan));
+    border-radius: 99px;
+    transition: width 0.35s linear;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .btn {
+    appearance: none;
+    border: 1px solid rgba(255,45,149,0.45);
+    background: linear-gradient(135deg, rgba(255,45,149,0.18), rgba(0,240,255,0.12));
+    color: var(--text);
+    font-weight: 600;
+    padding: 0.65rem 1.1rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 0 14px rgba(255,45,149,0.2);
+  }
+  .btn:hover { box-shadow: 0 0 22px rgba(0,240,255,0.28); }
+  .btn:active, .btn.pulse { transform: scale(0.96); opacity: 0.85; }
+  .platforms {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .platforms a, .platforms span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 10px;
+    background: var(--panel);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .platforms a:hover { border-color: var(--cyan); }
+  .panel {
+    width: 100%;
+    max-width: 980px;
+    background: var(--panel);
+    border: 1px solid rgba(255,45,149,0.22);
+    border-radius: 16px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .panel h2 {
+    font-family: Oswald, sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.75rem;
+    color: var(--cyan);
+  }
+  footer {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    max-width: 640px;
+  }
+  /* neon wash */
+  .neon-wash {
+    position: fixed;
+    inset: -20%;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(255,45,149,0.18), transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(0,240,255,0.14), transparent 45%),
+      radial-gradient(ellipse at 50% 90%, rgba(225,0,255,0.12), transparent 50%);
+    animation: wash 8s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes wash {
+    from { opacity: 0.7; transform: scale(1); }
+    to { opacity: 1; transform: scale(1.05); }
+  }
+  @media (max-width: 520px) {
+    .countdown { grid-template-columns: repeat(2, 1fr); max-width: 280px; }
+  }
+</style>
+</head>
+<body>
+<div class="neon-wash" aria-hidden="true"></div>
+<div class="overlay" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <img class="logo" src="/logo.png" alt="GTA VI">
+    <select class="region-select" id="regionSelect" aria-label="Region">
+      <option value="eastern-europe">Eastern Europe</option>
+      <option value="europe">Europe</option>
+      <option value="us">United States</option>
+      <option value="asia">Asia</option>
+      <option value="oceania">Oceania</option>
+    </select>
+  </header>
+  <div class="hero">
+    <h1 id="mainTitle">GTA VI Countdown</h1>
+    <p class="sub" id="releaseLine">Releasing November 19, 2026</p>
+  </div>
+  <div class="countdown" id="countdown">
+    <div class="unit">
+      <div class="label">Days</div>
+      <div class="digit-reel" id="daysReel"><span>000</span></div>
+    </div>
+    <div class="unit">
+      <div class="label">Hours</div>
+      <div class="digit-reel" id="hoursReel"><span>00</span></div>
+    </div>
+    <div class="unit">
+      <div class="label">Mins</div>
+      <div class="digit-reel" id="minsReel"><span>00</span></div>
+    </div>
+    <div class="unit">
+      <div class="label">Secs</div>
+      <div class="digit-reel" id="secsReel"><span>00</span></div>
+      <div class="progress-wrap"><div class="progress-bar" id="secProgress"></div></div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn" id="trailersBtn" type="button">Watch Trailers</button>
+    <button class="btn" id="musicBtn" type="button">Play Music</button>
+    <button class="btn" id="preorderBtn" type="button">Pre-Order</button>
+  </div>
+  <div class="platforms" id="platformBadges">
+    <a href="#" id="ps5Badge" target="_blank" rel="noopener">PS5</a>
+    <a href="#" id="xboxBadge" target="_blank" rel="noopener">Xbox Series X|S</a>
+  </div>
+  <section class="panel" id="repoPanel">
+    <h2>Latest from the repo</h2>
+    <div id="latestCommit">Loading…</div>
+  </section>
+  <footer>
+    Fan-made countdown. Not affiliated with Rockstar Games / Take-Two.<br>
+    100% vibecoded — built fully with AI.
+  </footer>
+</div>
+<script>
+(function(){
+  const TARGETS = {
+    'eastern-europe': Date.UTC(2026, 10, 19, 0, 0, 0),
+    europe: Date.UTC(2026, 10, 19, 0, 0, 0),
+    us: Date.UTC(2026, 10, 19, 5, 0, 0),
+    asia: Date.UTC(2026, 10, 18, 15, 0, 0),
+    oceania: Date.UTC(2026, 10, 18, 13, 0, 0)
+  };
+  let region = 'eastern-europe';
+  const qs = new URLSearchParams(location.search);
+  if (qs.get('region') && TARGETS[qs.get('region')]) region = qs.get('region');
+  if (location.pathname.indexOf('eastern-europe') >= 0) region = 'eastern-europe';
+  const regionSelect = document.getElementById('regionSelect');
+  if (regionSelect) regionSelect.value = region;
+  function pulsePress(el) {
+    if (!el) return;
+    el.classList.add('pulse');
+    setTimeout(() => el.classList.remove('pulse'), 160);
+  }
+  // digit reels + rAF tick continue in later parts…
+  window.__GTA_PARTIAL = true;
+})();
+</script>
