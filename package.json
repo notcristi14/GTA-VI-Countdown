@@ -4,7 +4,7 @@
   "description": "GTA VI release countdown website",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node -e \"require('./restore-html')()\" && node app.js"
   },
   "dependencies": {
     "express": "^4.21.0"
