@@ -24,13 +24,14 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ### Trailers
 - **Watch Trailers** — In-page YouTube embeds of official Rockstar GTA VI videos.
 - Sorted **newest → oldest** by real publish dates (`KNOWN_PUBLISHED_AT` seeds; no per-video watch-page scrape — avoids YouTube **429** log spam).
-- Rockstar channel discovery every **30 minutes** (`/api/trailers`) merges new finds with seeds.
+- Rockstar channel discovery every **30 minutes** (`/api/trailers`) with **server background refresh** + on-demand cache; merges new finds with seeds.
 - Seeded dates (UTC): Trailer 1 `2023-12-04`, Trailer 2 `2025-05-06`, Cover Art `2026-06-18`, Extended Look `2026-08-28`, Launch Trailer `2026-10-15`.
 - Smooth tab switch animation; “Open on YouTube” link.
 
-### Music (soundtrack) — every released song playable
+### Music (soundtrack) — every released song playable + auto-discovery
 - **Play Music** — Neon panel matching site design; **official Spotify embeds** only (no pirated audio).
-- **Every released single** from *Grand Theft Auto VI: The Album* (Atlantic / Rockstar) is playable in-page via tabbed embeds:
+- **Auto-check for new tracks** — Server scrapes the official Spotify album embed (`Grand Theft Auto VI: The Album`, id `5BYKG4MHfySZthe2W6r7n4`) every **30 minutes**, merges any newly playable singles into the list, and exposes them via **`/api/music`**. Client also polls every 30 minutes and on tab focus.
+- Seeded released singles (always present even if discovery fails):
   1. **That’s It** — Yung Lean feat. Future & Metro Boomin
   2. **RHYNO** — Travis Scott (prod. Guy-Manuel de Homem-Christo)
   3. **Sexy Magic** — CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.. & Étienne de Crécy
@@ -41,7 +42,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
   8. **Don’t Chart** — Cardi B
   9. **Bright Lights, Big City** — Keith Richards
 - **Score preview** — **Pusher** (Justice feat. Gesaffelstein) from the Original Score.
-- **Full album embed** — Spotify album player (`5BYKG4MHfySZthe2W6r7n4`); remaining tracks unlock when the album releases **Nov 19, 2026** (34 tracks total).
+- **Full album embed** — Spotify album player; remaining placeholder tracks unlock when the album releases **Nov 19, 2026** (34 tracks total).
+- New playable album tracks discovered after a single drop are added automatically (no redeploy required).
 - Scrollable tab strip, smooth switch animation, “Open on Spotify” link, Escape / click-outside to close.
 - Radio station full playlists are not mirrored (licensed in-game only).
 
@@ -49,72 +51,49 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - **Latest commit card** — Opens that commit on GitHub when pressed.
 - **Commit history panel** — Recent commits list (scrollable).
 - **Repo stats** — Stars, forks, watchers, issues, language; **`/api/repo` background refresh every 60s** + client poll; `checkedAt` in response.
-- **`github-api.js`** — Shared GitHub fetch with optional **`GITHUB_TOKEN`** / `GH_TOKEN` (recommended on Render to avoid **403** on shared IPs). 403 logs throttled ~1/hour.
+- Optional **`GITHUB_TOKEN`** / **`GH_TOKEN`** on the server for authenticated GitHub rate limits (avoids **403** on shared Render IPs).
 
-### News, stats, UX
+### News & analytics
 - **Rockstar Newswire** — Live feed via `/api/news`.
 - **GA4 stats** (optional) — `/api/stats` when `GA_PROPERTY_ID`, `GA_CLIENT_EMAIL`, `GA_PRIVATE_KEY` are set; UI hides when unavailable.
-- **Background gallery** — Vice City / Leonida art switcher, auto-rotate option.
-- **FPS counter** toggle.
-- **Shared button press** — Opacity/scale pulse (`pulsePress`) on controls.
-- **Footer** — License disclaimer + **“100% vibecoded — built fully with AI.”**
 
-### Desktop launcher (C++)
-- **Win32 + WebView2** app loads the live site (default Eastern Europe).
-- Toolbar: Back · Forward · Home · Refresh (flat owner-draw, no white borders).
-- Links stay **inside** the app (`NewWindowRequested`).
-- **GtaLogo.ico** embedded as `.exe` icon.
-- Build with **Visual Studio 2022** (`launcher/GtaViCountdown.sln`). See [launcher/README.md](launcher/README.md).
+### License & vibecoded
+- Footer license + **100% vibecoded — built fully with AI.**
 
 ---
 
-## 📁 Structure
+## 💻 Desktop app (C++)
 
-```text
-├── gta-vi-countdown.html   # Frontend UI (countdown, trailers, music, stats)
-├── app.js                  # Express: regions, trailers, news, GA, repo APIs
-├── github-api.js           # GitHub API + GITHUB_TOKEN auth + throttled logs
-├── music.js                # Music panel logic (all released songs + album)
-├── music.css               # Neon music overlay / tabs / frame
-├── bgs/                    # Background images
-├── logo.png
-├── launcher/               # C++ WebView2 desktop shell
-│   ├── GtaViCountdown.sln
-│   ├── assets/GtaLogo.ico
-│   └── src/
-├── package.json
-└── README.md
-```
+See [`launcher/`](launcher/) — Win32 + WebView2, loads the live Eastern Europe URL, owner-drawn toolbar, in-app links, GTA VI exe icon.
 
 ---
 
-## 🛠️ Run the web app
+## API caches
 
-```bash
-npm install
-npm start
-```
-
-### API endpoints
-
-| Endpoint | Cache | Notes |
-|----------|-------|--------|
-| `/api/trailers` | 30 min | Seeded dates + Rockstar discovery; `publishedAt-desc` |
+| Endpoint | Interval | Notes |
+|----------|----------|-------|
+| `/api/trailers` | 30 min | Seeded dates + Rockstar discovery; **background refresh**; `publishedAt-desc` |
+| `/api/music` | 30 min | Spotify album embed discovery; **background refresh**; seeds + new playable tracks |
 | `/api/repo` | 60 s | Background refresh; `checkedAt` |
 | `/api/commits` | 60 s | Recent commits |
 | `/api/commit` | 60 s | Latest commit |
 | `/api/news` | 30 s | Newswire |
 | `/api/stats` | 30 s | GA4 if configured |
 
-### Environment (Render)
-
-| Variable | Purpose |
-|----------|---------|
-| **`GITHUB_TOKEN`** (or `GH_TOKEN`) | Authenticated GitHub (~5k/hr). Without it: 60/hr per IP → often **403** on Render. |
-| `GA_PROPERTY_ID` / `GA_CLIENT_EMAIL` / `GA_PRIVATE_KEY` | Optional GA4 panel |
-
 ---
+
+## Project layout
+
+```
+├── app.js                  # Express API + discovery jobs
+├── gta-vi-countdown.html  # Main UI
+├── music.js                # Music panel (seeds + /api/music auto-discovery)
+├── music.css
+├── github-api.js
+├── launcher/               # C++ WebView2 desktop shell
+└── README.md
+```
 
 ## License
 
-Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trademarks of Take-Two Interactive. Not affiliated with or endorsed by Rockstar Games / Take-Two. Soundtrack embeds use **official Spotify** players; all rights belong to their respective owners.
+See site footer / repo license notice.

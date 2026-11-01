@@ -20,7 +20,8 @@ Site content (countdown, trailers, repo stats) is served by the **live web app**
 
 See the [root README](../README.md) for:
 
-- Trailers (seeded publish dates, no watch-page scrape)
+- Trailers (seeded publish dates, no watch-page scrape; 30 min background refresh)
+- Music tracks auto-discovery via `/api/music` (30 min background refresh from Spotify album)
 - `/api/repo` 60s auto-check
 - **`GITHUB_TOKEN`** on the server (required to avoid GitHub **403** on shared Render IPs)
 - Optional GA4 env vars
@@ -37,7 +38,3 @@ See the [root README](../README.md) for:
 2. Restore NuGet packages
 3. **Release | x64** → Build Solution
 4. Run: `bin\x64\Release\GtaViCountdown.exe`
-
-## Notes
-
-Fan-made. Not affiliated with Rockstar Games / Take-Two.
