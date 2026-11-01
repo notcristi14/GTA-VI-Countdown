@@ -75,8 +75,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ## 📁 Structure
 
 ```text
-├── gta-vi-countdown.html   # Frontend UI (restored at boot from html.raw.* if needed)
-├── app.js                  # Bootstrap → known-good server + music-discovery hook
+├── gta-vi-countdown.html   # Frontend UI (countdown, trailers, music panel)
+├── app.js                  # Express server + API routes + music-discovery hook
 ├── music-discovery.js      # /api/music + 30m Spotify album auto-check
 ├── music.js / music.css    # Music panel UI
 ├── github-api.js           # GitHub API + GITHUB_TOKEN auth
