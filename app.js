@@ -1,7 +1,6 @@
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
-const zlib = require('zlib');
 const Module = require('module');
 
 function get(url) {
@@ -19,16 +18,19 @@ function get(url) {
 
 function restoreHtml() {
   try {
-    const b64 = [0,1,2,3,4,5,6,7].map(function (i) {
-      return fs.readFileSync(path.join(__dirname, 'html.p' + i), 'utf8');
-    }).join('');
-    const html = zlib.inflateSync(Buffer.from(b64, 'base64'));
+    const countPath = path.join(__dirname, 'html.raw.count');
+    const n = parseInt(fs.readFileSync(countPath, 'utf8').trim(), 10);
+    if (!n || n < 1) throw new Error('bad html.raw.count');
+    let html = '';
+    for (let i = 0; i < n; i++) {
+      html += fs.readFileSync(path.join(__dirname, 'html.raw.' + i), 'utf8');
+    }
     const out = path.join(__dirname, 'gta-vi-countdown.html');
     let existing = '';
     try { existing = fs.readFileSync(out, 'utf8'); } catch (_) {}
     if (!existing || existing.indexOf('RESTORE_IN_PROGRESS') >= 0 || existing.length < 1000) {
       fs.writeFileSync(out, html);
-      console.log('  \ud83d\udcc4  Restored gta-vi-countdown.html (' + html.length + ' bytes)');
+      console.log('  \ud83d\udcc4  Restored gta-vi-countdown.html (' + html.length + ' bytes from ' + n + ' parts)');
     }
   } catch (err) {
     console.log('  \ud83d\udcc4  HTML restore skipped:', err && err.message ? err.message : err);
