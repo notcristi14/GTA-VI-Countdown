@@ -1,8 +1,10 @@
-const zlib = require('zlib');
+const fs = require('fs');
 const path = require('path');
 const Module = require('module');
-const b64 = require('fs').readFileSync(require('path').join(__dirname, 'app.js.z64'), 'utf8');
-const code = zlib.inflateSync(Buffer.from(b64, 'base64')).toString('utf8');
+const parts = [0, 1, 2].map(function (i) {
+  return fs.readFileSync(path.join(__dirname, 'app.core.p' + i), 'utf8');
+});
+const code = parts.join('');
 const filename = path.join(__dirname, 'app.runtime.js');
 const m = new Module(filename);
 m.filename = filename;
