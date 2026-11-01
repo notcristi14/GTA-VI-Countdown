@@ -47,10 +47,10 @@ function fetchText(url, extraHeaders) {
 function decode(str) {
   return String(str || '')
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .trim();
 }
@@ -152,126 +152,227 @@ async function getGaToken() {
   const sign = crypto.createSign('RSA-SHA256');
   sign.update(header + '.' + claim);
   const jwt = header + '.' + claim + '.' + b64url(sign.sign(key));
-  const tokenRes = await postJson('https://oauth2.googleapis.com/token', {
-    grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-    assertion: jwt
+  const body = 'grant_type=' + encodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer') +
+    '&assertion=' + encodeURIComponent(jwt);
+  const res = await postJson('https://oauth2.googleapis.com/token', body, {
+    'Content-Type': 'application/x-www-form-urlencoded'
   });
-  if (tokenRes.status !== 200) throw new Error('ga token ' + tokenRes.status);
-  const parsed = JSON.parse(tokenRes.data);
-  gaToken = { access: parsed.access_token, exp: Date.now() + (parsed.expires_in || 3600) * 1000 };
+  const json = JSON.parse(res.data || '{}');
+  if (!json.access_token) throw new Error(json.error || 'no token');
+  gaToken = { access: json.access_token, exp: Date.now() + (json.expires_in || 3600) * 1000 };
   return gaToken.access;
 }
 
-let gaCache = { at: 0, data: null };
+let gaStatsCache = { at: 0, data: null };
+
 async function fetchGaStats() {
-  if (!gaConfigured()) return GA_UNAVAILABLE;
-  if (gaCache.data && Date.now() - gaCache.at < GA_CACHE_MS) return gaCache.data;
-  try {
-    const token = await getGaToken();
-    const propertyId = gaPropertyId();
-    const body = {
-      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
-      metrics: [{ name: 'activeUsers' }, { name: 'sessions' }, { name: 'screenPageViews' }]
-    };
-    const r = await postJson(
-      'https://analyticsdata.googleapis.com/v1beta/properties/' + propertyId + ':runReport',
-      body,
-      { Authorization: 'Bearer ' + token }
-    );
-    if (r.status !== 200) throw new Error('ga report ' + r.status);
-    const report = JSON.parse(r.data);
-    const row = report.rows && report.rows[0] && report.rows[0].metricValues;
-    const data = {
-      source: 'ga4',
-      activeUsers: row && row[0] ? Number(row[0].value) : 0,
-      sessions: row && row[1] ? Number(row[1].value) : 0,
-      pageViews: row && row[2] ? Number(row[2].value) : 0,
-      checkedAt: new Date().toISOString()
-    };
-    gaCache = { at: Date.now(), data };
-    return data;
-  } catch (err) {
-    console.log('  GA stats failed:', err && err.message ? err.message : err);
-    return GA_UNAVAILABLE;
-  }
+  const propertyId = gaPropertyId();
+  const token = await getGaToken();
+  const payload = {
+    dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
+    metrics: [{ name: 'activeUsers' }, { name: 'sessions' }, { name: 'eventCount' }],
+    metricAggregations: ['TOTAL']
+  };
+  const res = await postJson(
+    'https://analyticsdata.googleapis.com/v1beta/properties/' + propertyId + ':runReport',
+    payload,
+    { Authorization: 'Bearer ' + token }
+  );
+  const json = JSON.parse(res.data || '{}');
+  if (json.error) throw new Error(json.error.message || json.error.status || 'ga4 error');
+  const row = (json.totals && json.totals[0] && json.totals[0].metricValues)
+    || (json.rows && json.rows[0] && json.rows[0].metricValues)
+    || [];
+  const num = (cell) => {
+    const n = Number(cell && cell.value);
+    return Number.isFinite(n) ? n : 0;
+  };
+  return {
+    source: 'ga4',
+    visitors: num(row[0]),
+    visits: num(row[1]),
+    events: num(row[2])
+  };
 }
 
-// --- Trailers ---
-const TRAILERS_CACHE_MS = 15 * 60 * 1000;
-const trailersCache = { at: 0, data: null };
 
+const TRAILERS_CACHE_MS = 30 * 60 * 1000;
+let trailersCache = { at: 0, data: null };
+
+/* Official Rockstar upload dates (UTC). Seeded so we never scrape youtube.com/watch (429). */
 const KNOWN_PUBLISHED_AT = {
-  'rz1B4B2yBZY': '2026-10-15T00:00:00.000Z',
-  'QdBZYHLqY8k': '2025-05-06T00:00:00.000Z',
-  'VQRLujxTm3c': '2023-12-04T00:00:00.000Z'
+  'QdBZY2fkU-0': '2023-12-04T00:00:00.000Z',
+  'VQRLujxTm3c': '2025-05-06T00:00:00.000Z',
+  'EiQEBYDox_k': '2026-06-18T00:00:00.000Z',
+  'INjHGpMRjRA': '2026-06-18T00:00:00.000Z',
+  'tJbzMqJGH4k': '2026-08-28T01:00:00.000Z',
+  'MJOrsRRa9GM': '2026-08-28T01:00:00.000Z',
+  'qq76pQsI1iw': '2026-08-06T00:00:00.000Z',
+  'icy-lhqJhMQ': '2026-10-15T00:00:00.000Z',
+  'rz1B4B2yBZY': '2026-10-15T00:00:00.000Z'
 };
 
 const SEED_TRAILERS = [
-  {
-    id: 'grand-theft-auto-vi-launch-trailer',
-    title: 'Grand Theft Auto VI Launch Trailer',
-    label: 'Launch Trailer',
-    youtubeId: 'rz1B4B2yBZY',
-    publishedTimeText: 'Oct 15, 2026',
-    publishedAt: KNOWN_PUBLISHED_AT['rz1B4B2yBZY']
-  },
-  {
-    id: 'grand-theft-auto-vi-trailer-2',
-    title: 'Grand Theft Auto VI Trailer 2',
-    label: 'Trailer 2',
-    youtubeId: 'QdBZYHLqY8k',
-    publishedTimeText: 'May 6, 2025',
-    publishedAt: KNOWN_PUBLISHED_AT['QdBZYHLqY8k']
-  },
-  {
-    id: 'grand-theft-auto-vi-trailer-1',
-    title: 'Grand Theft Auto VI Trailer 1',
-    label: 'Trailer 1',
-    youtubeId: 'VQRLujxTm3c',
-    publishedTimeText: 'Dec 4, 2023',
-    publishedAt: KNOWN_PUBLISHED_AT['VQRLujxTm3c']
-  }
+  { id: 'launch', title: 'Launch Trailer', label: 'Launch Trailer', meta: 'Official launch trailer · Rockstar Games', youtubeId: 'icy-lhqJhMQ', publishedAt: KNOWN_PUBLISHED_AT['icy-lhqJhMQ'] },
+  { id: 'extended', title: 'An Extended Look', label: 'An Extended Look', meta: 'Official gameplay presentation · Rockstar Games', youtubeId: 'tJbzMqJGH4k', publishedAt: KNOWN_PUBLISHED_AT['tJbzMqJGH4k'] },
+  { id: 'cover', title: 'Cover Art Reveal', label: 'Cover Art Reveal', meta: 'Official cover art reveal · Rockstar Games', youtubeId: 'EiQEBYDox_k', publishedAt: KNOWN_PUBLISHED_AT['EiQEBYDox_k'] },
+  { id: 'trailer2', title: 'Trailer 2', label: 'Trailer 2', meta: 'Official trailer · Rockstar Games', youtubeId: 'VQRLujxTm3c', publishedAt: KNOWN_PUBLISHED_AT['VQRLujxTm3c'] },
+  { id: 'trailer1', title: 'Trailer 1', label: 'Trailer 1', meta: 'Official reveal trailer · Rockstar Games', youtubeId: 'QdBZY2fkU-0', publishedAt: KNOWN_PUBLISHED_AT['QdBZY2fkU-0'] }
 ];
 
-async function fetchRockstarGtaViVideos() {
-  // Prefer seeded list to avoid YouTube 429s; discovery can still enrich titles.
-  return SEED_TRAILERS.map(function (t) {
-    return Object.assign({}, t, {
-      meta: t.title + ' · ' + (t.publishedTimeText || '') + ' · Rockstar Games',
-      source: 'seed'
-    });
+function isGtaViTitle(title) {
+  if (!title) return false;
+  const t = String(title).toLowerCase();
+  return /(grand theft auto\s*vi|gta\s*vi|gtavi)/i.test(t);
+}
+
+function slugId(title, youtubeId) {
+  const base = String(title || youtubeId || 'video')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 40);
+  return base || youtubeId;
+}
+
+function parsePublishedAt(value) {
+  if (!value || typeof value !== 'string') return null;
+  const t = Date.parse(value);
+  if (Number.isNaN(t)) return null;
+  return new Date(t).toISOString();
+}
+
+function textFromYt(obj) {
+  if (!obj) return '';
+  if (typeof obj === 'string') return obj;
+  if (obj.simpleText) return obj.simpleText;
+  if (Array.isArray(obj.runs)) return obj.runs.map((x) => x.text || '').join('');
+  return '';
+}
+
+function resolvePublishedAt(youtubeId, existing) {
+  if (existing) {
+    const p = parsePublishedAt(existing);
+    if (p) return p;
+  }
+  if (youtubeId && KNOWN_PUBLISHED_AT[youtubeId]) {
+    return KNOWN_PUBLISHED_AT[youtubeId];
+  }
+  return null;
+}
+
+async function enrichPublishedDates(items) {
+  const out = [];
+  for (const item of items) {
+    const publishedAt = resolvePublishedAt(item.youtubeId, item.publishedAt);
+    let meta = item.meta || item.title || '';
+    if (publishedAt) {
+      const d = new Date(publishedAt);
+      const dateLabel = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+      meta = (item.title || item.label || 'Trailer') + ' · ' + dateLabel + ' · Rockstar Games';
+    } else if (item.publishedTimeText) {
+      meta = (item.title || item.label || 'Trailer') + ' · ' + item.publishedTimeText + ' · Rockstar Games';
+    }
+    out.push(Object.assign({}, item, { publishedAt: publishedAt || null, meta: meta }));
+  }
+  return out;
+}
+
+function sortTrailersNewestFirst(list) {
+  return list.slice().sort(function (a, b) {
+    const ta = a.publishedAt ? Date.parse(a.publishedAt) : NaN;
+    const tb = b.publishedAt ? Date.parse(b.publishedAt) : NaN;
+    const aOk = !Number.isNaN(ta);
+    const bOk = !Number.isNaN(tb);
+    if (aOk && bOk && ta !== tb) return tb - ta;
+    if (aOk && !bOk) return -1;
+    if (!aOk && bOk) return 1;
+    const titleCmp = String(a.title || '').localeCompare(String(b.title || ''));
+    if (titleCmp) return titleCmp;
+    return String(a.youtubeId || '').localeCompare(String(b.youtubeId || ''));
   });
+}
+
+async function fetchRockstarGtaViVideos() {
+  const url = 'https://www.youtube.com/@RockstarGames/search?query=Grand+Theft+Auto+VI';
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept-Language': 'en-US,en;q=0.9'
+    }
+  });
+  if (!res.ok) throw new Error('yt status ' + res.status);
+  const page = await res.text();
+  const m = page.match(/var ytInitialData = (\{.*?\});<\/script>/s) || page.match(/ytInitialData\s*=\s*(\{.*?\});/s);
+  if (!m) throw new Error('no ytInitialData');
+  const data = JSON.parse(m[1]);
+  const found = [];
+  function walk(o) {
+    if (!o || typeof o !== 'object') return;
+    if (Array.isArray(o)) return o.forEach(walk);
+    if (o.videoRenderer && o.videoRenderer.videoId) {
+      const vr = o.videoRenderer;
+      found.push({
+        youtubeId: vr.videoId,
+        title: textFromYt(vr.title),
+        publishedTimeText: textFromYt(vr.publishedTimeText) || null
+      });
+    }
+    Object.keys(o).forEach(function (k) { walk(o[k]); });
+  }
+  walk(data);
+  const seen = new Set();
+  const items = [];
+  for (let idx = 0; idx < found.length; idx++) {
+    const row = found[idx];
+    if (!row.youtubeId || seen.has(row.youtubeId)) continue;
+    if (!isGtaViTitle(row.title)) continue;
+    seen.add(row.youtubeId);
+    items.push({
+      id: slugId(row.title, row.youtubeId),
+      title: row.title,
+      label: row.title.replace(/^Grand Theft Auto VI:\s*/i, '').replace(/^Grand Theft Auto VI\s*/i, '') || row.title,
+      meta: row.title + ' · Rockstar Games',
+      youtubeId: row.youtubeId,
+      publishedTimeText: row.publishedTimeText,
+      publishedAt: null,
+      source: 'rockstar-youtube'
+    });
+  }
+  return items;
 }
 
 async function mergeTrailers(discovered) {
   const byId = new Map();
-  SEED_TRAILERS.forEach(function (t) {
-    byId.set(t.youtubeId, Object.assign({}, t, {
-      meta: t.title + ' · ' + (t.publishedTimeText || '') + ' · Rockstar Games',
-      source: 'seed'
-    }));
+  SEED_TRAILERS.forEach(function (s) {
+    byId.set(s.youtubeId, Object.assign({}, s, { publishedAt: s.publishedAt || KNOWN_PUBLISHED_AT[s.youtubeId] || null, source: 'seed' }));
   });
   (discovered || []).forEach(function (d) {
     if (!d.youtubeId) return;
-    const existing = byId.get(d.youtubeId);
-    if (existing) {
-      byId.set(d.youtubeId, Object.assign({}, existing, d, {
-        publishedAt: existing.publishedAt || d.publishedAt || KNOWN_PUBLISHED_AT[d.youtubeId]
+    if (byId.has(d.youtubeId)) {
+      const existing = byId.get(d.youtubeId);
+      byId.set(d.youtubeId, Object.assign({}, existing, {
+        publishedTimeText: d.publishedTimeText || existing.publishedTimeText,
+        source: existing.source === 'seed' ? 'seed+youtube' : d.source
       }));
-    } else {
-      byId.set(d.youtubeId, Object.assign({}, d, {
-        publishedAt: d.publishedAt || KNOWN_PUBLISHED_AT[d.youtubeId] || null,
-        source: d.source || 'youtube'
-      }));
+      return;
     }
+    var sameTitle = null;
+    byId.forEach(function (x) {
+      if (sameTitle) return;
+      if (String(x.title || '').toLowerCase() === String(d.title || '').toLowerCase()) sameTitle = x;
+    });
+    if (sameTitle) {
+      if (d.publishedTimeText && !sameTitle.publishedTimeText) {
+        sameTitle.publishedTimeText = d.publishedTimeText;
+      }
+      return;
+    }
+    byId.set(d.youtubeId, d);
   });
-  const items = Array.from(byId.values());
-  items.sort(function (a, b) {
-    const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
-    const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
-    return tb - ta;
-  });
-  return items;
+  const merged = Array.from(byId.values());
+  const enriched = await enrichPublishedDates(merged);
+  return sortTrailersNewestFirst(enriched);
 }
 
 app.get('/api/trailers', async (_req, res) => {
@@ -289,23 +390,38 @@ app.get('/api/trailers', async (_req, res) => {
       checkedAt: new Date().toISOString(),
       channel: 'https://www.youtube.com/@RockstarGames'
     };
-    trailersCache.at = Date.now();
-    trailersCache.data = data;
+    trailersCache = { at: Date.now(), data: data };
     return res.json(data);
   } catch (err) {
-    console.log('  trailers failed:', err && err.message ? err.message : err);
-    if (trailersCache.data) return res.json(trailersCache.data);
-    const items = await mergeTrailers([]);
-    return res.json({
-      items: items,
-      source: 'seed',
-      sort: 'publishedAt-desc',
-      checkedAt: new Date().toISOString(),
-      channel: 'https://www.youtube.com/@RockstarGames',
-      error: 'discovery_failed'
-    });
+    console.log('  🎬  Trailer discovery failed:', err && err.message ? err.message : err);
+    try {
+      const items = await mergeTrailers([]);
+      const fallback = {
+        items: items,
+        source: 'seed',
+        sort: 'publishedAt-desc',
+        checkedAt: new Date().toISOString(),
+        channel: 'https://www.youtube.com/@RockstarGames',
+        error: 'discovery_failed'
+      };
+      if (trailersCache.data) return res.json(trailersCache.data);
+      return res.json(fallback);
+    } catch (err2) {
+      const items = sortTrailersNewestFirst(SEED_TRAILERS.map(function (s) {
+        return Object.assign({}, s, { publishedAt: s.publishedAt || KNOWN_PUBLISHED_AT[s.youtubeId] || null });
+      }));
+      return res.json({
+        items: items,
+        source: 'seed',
+        sort: 'publishedAt-desc',
+        checkedAt: new Date().toISOString(),
+        channel: 'https://www.youtube.com/@RockstarGames',
+        error: 'discovery_failed'
+      });
+    }
   }
 });
+
 
 try {
   require('./music-discovery')(app, {
@@ -316,19 +432,112 @@ try {
     mergeTrailers
   });
 } catch (err) {
-  console.log('  \ud83c\udfb5  music-discovery load failed:', err && err.message ? err.message : err);
+  console.log('  🎵  music-discovery load failed:', err && err.message ? err.message : err);
 }
 
 app.get('/api/stats', async (_req, res) => {
   res.set('Cache-Control', 'no-store');
-  const data = await fetchGaStats();
-  res.json(data);
+  if (!gaConfigured()) {
+    return res.status(200).json(GA_UNAVAILABLE);
+  }
+  try {
+    if (gaStatsCache.data && Date.now() - gaStatsCache.at < GA_CACHE_MS) {
+      return res.status(200).json(gaStatsCache.data);
+    }
+    const data = await fetchGaStats();
+    gaStatsCache = { at: Date.now(), data };
+    return res.status(200).json(data);
+  } catch (err) {
+    const gaMsg = String(err && err.message ? err.message : err).split('\n')[0];
+    if (!global.__gaLogAt || Date.now() - global.__gaLogAt > 3600000) {
+      global.__gaLogAt = Date.now();
+      console.log('  📊  GA stats unavailable:', gaMsg);
+    }
+    return res.status(200).json(GA_UNAVAILABLE);
+  }
 });
 
-const { fetchJson, logGithubOnce } = require('./github-api');
 const REPO = 'notcristi14/GTA-VI-Countdown';
+const COMMIT_CACHE_MS = 60 * 1000;
+let commitCache = { at: 0, data: null };
+
+const { fetchJson, logGithubOnce } = require('./github-api');
+
+app.get('/api/commit', async (_req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (commitCache.data && Date.now() - commitCache.at < COMMIT_CACHE_MS) {
+    return res.json(commitCache.data);
+  }
+  try {
+    const list = await fetchJson('https://api.github.com/repos/' + REPO + '/commits?per_page=1');
+    const item = Array.isArray(list) ? list[0] : null;
+    if (!item || !item.sha) throw new Error('no commit');
+    const message = String((item.commit && item.commit.message) || '').split('\n')[0].slice(0, 180);
+    const when = item.commit && item.commit.author && item.commit.author.date;
+    const parsed = when ? new Date(when) : null;
+    const data = {
+      sha: item.sha.slice(0, 7),
+      fullSha: item.sha,
+      message,
+      author: (item.author && item.author.login) || (item.commit && item.commit.author && item.commit.author.name) || '',
+      date: parsed && !isNaN(parsed) ? parsed.toISOString() : '',
+      url: item.html_url || ('https://github.com/' + REPO + '/commit/' + item.sha),
+      repo: 'https://github.com/' + REPO
+    };
+    commitCache = { at: Date.now(), data };
+    return res.json(data);
+  } catch (err) {
+    logGithubOnce('commit', '  🐙  GitHub commit unavailable: ' + (err && err.message ? err.message : err) + (!(process.env.GITHUB_TOKEN || process.env.GH_TOKEN) && String(err && err.message).includes('403') ? ' — set GITHUB_TOKEN on Render' : ''));
+    if (commitCache.data) return res.json(commitCache.data);
+    return res.status(200).json({ source: 'unavailable' });
+  }
+});
+
+const COMMITS_CACHE_MS = 60 * 1000;
+let commitsCache = { at: 0, data: null };
+
 const REPO_CACHE_MS = 60 * 1000;
 let repoCache = { at: 0, data: null };
+
+function repoFingerprint(data) {
+  if (!data || data.source === 'unavailable') return '';
+  return [data.stars, data.forks, data.watchers, data.openIssues, data.language, data.pushedAt].join('|');
+}
+
+async function refreshRepoStats() {
+  try {
+    const repo = await fetchJson('https://api.github.com/repos/' + REPO, {
+      Accept: 'application/vnd.github+json'
+    });
+    if (!repo || !repo.full_name) throw new Error('no repo');
+    const data = {
+      fullName: repo.full_name,
+      description: repo.description || '',
+      url: repo.html_url || ('https://github.com/' + REPO),
+      stars: repo.stargazers_count || 0,
+      forks: repo.forks_count || 0,
+      watchers: repo.subscribers_count != null ? repo.subscribers_count : (repo.watchers_count || 0),
+      openIssues: repo.open_issues_count || 0,
+      language: repo.language || '',
+      size: repo.size || 0,
+      defaultBranch: repo.default_branch || 'main',
+      createdAt: repo.created_at || '',
+      updatedAt: repo.updated_at || '',
+      pushedAt: repo.pushed_at || '',
+      checkedAt: new Date().toISOString()
+    };
+    const prevFp = repoFingerprint(repoCache.data);
+    const nextFp = repoFingerprint(data);
+    repoCache = { at: Date.now(), data: data };
+    if (prevFp && prevFp !== nextFp) {
+      console.log('  🐙  Repo stats changed:', data.stars + ' stars,', data.forks + ' forks,', data.openIssues + ' issues');
+    }
+    return data;
+  } catch (err) {
+    logGithubOnce('repo-bg', '  🐙  Repo stats auto-check failed: ' + (err && err.message ? err.message : err) + (!(process.env.GITHUB_TOKEN || process.env.GH_TOKEN) && String(err && err.message).includes('403') ? ' — set GITHUB_TOKEN on Render' : ''));
+    return repoCache.data || null;
+  }
+}
 
 app.get('/api/repo', async (_req, res) => {
   res.set('Cache-Control', 'no-store');
@@ -336,52 +545,70 @@ app.get('/api/repo', async (_req, res) => {
     return res.json(repoCache.data);
   }
   try {
-    const [repo, commits] = await Promise.all([
-      fetchJson('https://api.github.com/repos/' + REPO),
-      fetchJson('https://api.github.com/repos/' + REPO + '/commits?per_page=8')
-    ]);
-    const data = {
-      full_name: repo.full_name,
-      html_url: repo.html_url,
-      stargazers_count: repo.stargazers_count,
-      forks_count: repo.forks_count,
-      open_issues_count: repo.open_issues_count,
-      pushed_at: repo.pushed_at,
-      commits: (commits || []).map(function (c) {
-        return {
-          sha: c.sha,
-          html_url: c.html_url,
-          message: c.commit && c.commit.message ? c.commit.message.split('\n')[0] : '',
-          author: c.commit && c.commit.author ? c.commit.author.name : '',
-          date: c.commit && c.commit.author ? c.commit.author.date : ''
-        };
-      }),
-      checkedAt: new Date().toISOString()
-    };
-    repoCache = { at: Date.now(), data: data };
+    const data = await refreshRepoStats();
+    if (data) return res.json(data);
+    return res.status(200).json({ source: 'unavailable' });
+  } catch (err) {
+    logGithubOnce('repo', '  🐙  GitHub repo stats unavailable: ' + (err && err.message ? err.message : err));
+    if (repoCache.data) return res.json(repoCache.data);
+    return res.status(200).json({ source: 'unavailable' });
+  }
+});
+
+setInterval(function () {
+  refreshRepoStats().catch(function () {});
+}, REPO_CACHE_MS);
+refreshRepoStats().catch(function () {});
+
+app.get('/api/commits', async (_req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (commitsCache.data && Date.now() - commitsCache.at < COMMITS_CACHE_MS) {
+    return res.json(commitsCache.data);
+  }
+  try {
+    const list = await fetchJson('https://api.github.com/repos/' + REPO + '/commits?per_page=15');
+    if (!Array.isArray(list) || !list.length) throw new Error('no commits');
+    const items = list.map((item) => {
+      const message = String((item.commit && item.commit.message) || '').split('\n')[0].slice(0, 180);
+      const when = item.commit && item.commit.author && item.commit.author.date;
+      const parsed = when ? new Date(when) : null;
+      return {
+        sha: item.sha ? item.sha.slice(0, 7) : '',
+        fullSha: item.sha || '',
+        message,
+        author: (item.author && item.author.login) || (item.commit && item.commit.author && item.commit.author.name) || '',
+        date: parsed && !isNaN(parsed) ? parsed.toISOString() : '',
+        url: item.html_url || ('https://github.com/' + REPO + '/commit/' + item.sha)
+      };
+    }).filter((x) => x.sha);
+    const data = { items, repo: 'https://github.com/' + REPO };
+    commitsCache = { at: Date.now(), data };
     return res.json(data);
   } catch (err) {
-    logGithubOnce('repo', err);
-    if (repoCache.data) return res.json(repoCache.data);
-    return res.status(502).json({ error: 'github_unavailable' });
+    logGithubOnce('commits', '  🐙  GitHub commits unavailable: ' + (err && err.message ? err.message : err));
+    if (commitsCache.data) return res.json(commitsCache.data);
+    return res.status(200).json({ source: 'unavailable', items: [] });
   }
 });
 
 app.get('/api/news', async (_req, res) => {
-  res.set('Cache-Control', 'no-store');
-  if (newsCache.items.length && Date.now() - newsCache.at < NEWS_CACHE_MS) {
-    return res.json({ items: newsCache.items, source: 'cache' });
-  }
   try {
+    const fresh = newsCache.at && Date.now() - newsCache.at < NEWS_CACHE_MS && newsCache.items.length;
+    if (fresh) {
+      return res.json({ items: newsCache.items, source: 'cache' });
+    }
+
     const items = parseNewswire(JSON.parse(await fetchText(NEWS_FEED, {
       Origin: 'https://www.rockstargames.com',
       Referer: NEWSWIRE_URL
     }))).slice(0, 8);
     if (items.length) {
-      newsCache = { at: Date.now(), items: items };
-      return res.json({ items: items, source: 'live' });
+      newsCache = { at: Date.now(), items };
+      return res.json({ items, source: 'live' });
     }
-  } catch (_) {}
+  } catch (_) {
+  }
+
   res.json({ items: [], source: 'live' });
 });
 
@@ -393,18 +620,18 @@ app.get('*', (_req, res) => {
 
 app.listen(PORT, () => {
   console.log('');
-  console.log('  \ud83c\udf34  GTA VI Countdown');
-  console.log('  \ud83d\ude97  Running at http://localhost:' + PORT);
-  console.log('  \ud83c\udfae  Regions, Newswire & Vice City backgrounds ready');
+  console.log('  🌴  GTA VI Countdown');
+  console.log(`  🚗  Running at http://localhost:${PORT}`);
+  console.log('  🎮  Regions, Newswire & Vice City backgrounds ready');
   if (process.env.GITHUB_TOKEN || process.env.GH_TOKEN) {
-    console.log('  \ud83d\udc19  GitHub API: GITHUB_TOKEN present (authenticated rate limit)');
+    console.log('  🐙  GitHub API: GITHUB_TOKEN present (authenticated rate limit)');
   } else {
-    console.log('  \ud83d\udc19  GitHub API: unauthenticated (60/hr per IP) — set GITHUB_TOKEN on Render if you see 403');
+    console.log('  🐙  GitHub API: unauthenticated (60/hr per IP) — set GITHUB_TOKEN on Render if you see 403');
   }
   if (gaConfigured()) {
-    console.log('  \ud83d\udcca  Google Analytics stats: env vars present');
+    console.log('  📊  Google Analytics stats: env vars present');
   } else {
-    console.log('  \ud83d\udcca  Google Analytics stats: env vars not set — /api/stats stays hidden');
+    console.log('  📊  Google Analytics stats: env vars not set — /api/stats stays hidden');
     console.log('      Set GA_PROPERTY_ID, GA_CLIENT_EMAIL, GA_PRIVATE_KEY to use GA4');
   }
   console.log('');
