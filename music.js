@@ -1,7 +1,7 @@
 (function () {
-  // Official Spotify embeds only — every released single from The Album + score preview.
-  // Remaining album tracks unlock Nov 19, 2026 with the full album embed.
-  const songs = [
+  // Official Spotify embeds only. Seeds + auto-discovered playable tracks from
+  // Grand Theft Auto VI: The Album via /api/music (refreshes every 30 minutes).
+  const FALLBACK_SONGS = [
     { id: 'album', title: 'Full Album (preview)', artist: '34 tracks · Atlantic / Rockstar · unlocks Nov 19', spotify: 'album/5BYKG4MHfySZthe2W6r7n4', album: true },
     { id: 'thats-it', title: "That's It", artist: 'Yung Lean feat. Future & Metro Boomin', spotify: 'track/6dUXpM7mnGr7cSpCUQewCs' },
     { id: 'rhyno', title: 'RHYNO', artist: 'Travis Scott (prod. Guy-Manuel de Homem-Christo)', spotify: 'track/2NliF6CtlWolNA0Jzkw4ba' },
@@ -31,8 +31,10 @@
     const spLink = document.getElementById('musicSpotifyLink');
     if (!overlay || !frame || !tabs || !openBtn) return;
 
+    let songs = FALLBACK_SONGS.slice();
     let activeId = songs[0].id;
     let switchTimer = null;
+    let pollTimer = null;
 
     function embedSrc(song) {
       if (wrap) wrap.classList.toggle('album', !!song.album);
@@ -50,12 +52,16 @@
         spLink.href = 'https://open.spotify.com/' + song.spotify;
         spLink.textContent = song.album ? 'Open album on Spotify' : 'Open track on Spotify';
       }
-      if (animate && wrap) wrap.classList.add('is-switching');
-      if (switchTimer) clearTimeout(switchTimer);
-      switchTimer = setTimeout(function () {
+      if (animate && frame) {
+        if (wrap) wrap.classList.add('is-switching');
+        clearTimeout(switchTimer);
+        switchTimer = setTimeout(function () {
+          frame.src = embedSrc(song);
+          if (wrap) wrap.classList.remove('is-switching');
+        }, 180);
+      } else if (frame) {
         frame.src = embedSrc(song);
-        if (wrap) wrap.classList.remove('is-switching');
-      }, animate ? 160 : 0);
+      }
     }
 
     function buildTabs() {
@@ -66,36 +72,83 @@
         btn.className = 'music-tab' + (s.id === activeId ? ' active' : '');
         btn.dataset.id = s.id;
         btn.textContent = s.title;
-        btn.title = s.artist || s.title;
         btn.addEventListener('click', function () {
           if (s.id === activeId) return;
-          btn.classList.add('switching');
-          setTimeout(function () { btn.classList.remove('switching'); }, 200);
-          setActive(s, true);
+          tabs.querySelectorAll('.music-tab').forEach(function (b) {
+            b.classList.add('switching');
+          });
+          setTimeout(function () {
+            setActive(s, true);
+            tabs.querySelectorAll('.music-tab').forEach(function (b) {
+              b.classList.remove('switching');
+            });
+          }, 120);
         });
         tabs.appendChild(btn);
       });
     }
 
-    function openMusic() {
-      if (typeof pulsePress === 'function') pulsePress(openBtn);
+    function applySongs(list) {
+      if (!Array.isArray(list) || !list.length) return;
+      const prev = activeId;
+      songs = list.map(function (x) {
+        return {
+          id: x.id || x.spotify,
+          title: x.title || 'Track',
+          artist: x.artist || '',
+          spotify: x.spotify,
+          album: !!x.album
+        };
+      }).filter(function (x) { return x.spotify; });
+      if (!songs.length) return;
+      const still = songs.some(function (s) { return s.id === prev; });
+      if (!still) activeId = songs[0].id;
       buildTabs();
       setActive(songs.find(function (x) { return x.id === activeId; }) || songs[0], false);
+    }
+
+    function loadMusic() {
+      fetch('/api/music', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (data && Array.isArray(data.items) && data.items.length) {
+            applySongs(data.items);
+          }
+        })
+        .catch(function () {});
+    }
+
+    function openMusic() {
       overlay.classList.add('open');
       overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      setActive(songs.find(function (x) { return x.id === activeId; }) || songs[0], false);
+      loadMusic();
     }
 
     function closeMusic() {
       overlay.classList.remove('open');
       overlay.setAttribute('aria-hidden', 'true');
-      frame.src = '';
+      document.body.style.overflow = '';
+      if (frame) frame.src = '';
     }
 
     openBtn.addEventListener('click', openMusic);
     if (closeBtn) closeBtn.addEventListener('click', closeMusic);
-    overlay.addEventListener('click', function (e) { if (e.target === overlay) closeMusic(); });
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeMusic();
+    });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlay.classList.contains('open')) closeMusic();
+    });
+
+    buildTabs();
+    setActive(songs[0], false);
+    loadMusic();
+    // Client poll every 30 minutes (server also refreshes in the background)
+    pollTimer = setInterval(loadMusic, 30 * 60 * 1000);
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') loadMusic();
     });
   });
 })();
