@@ -1,4 +1,4 @@
-/* Music panel — compact + polished (mobile + desktop) */
+/* Music panel — compact + polished (mobile + desktop) — always centered */
 .music-overlay{
   position:fixed;inset:0;
   background:rgba(8,4,18,0);
@@ -152,21 +152,22 @@
   .music-frame-wrap.album iframe{height:min(280px,38vh,38dvh)}
 }
 
-/* ---- Phone ---- */
+/* ---- Phone — keep centered (same as desktop) ---- */
 @media (max-width:600px){
   .music-overlay{
-    align-items:flex-end;
-    padding:0;
+    align-items:center;
+    justify-content:center;
+    padding:max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
   }
   .music-panel{
-    width:100%;
-    max-width:100%;
-    max-height:min(88vh,88dvh);
-    border-radius:16px 16px 0 0;
+    width:min(520px,94vw);
+    max-width:94vw;
+    max-height:min(86vh,86dvh);
+    border-radius:16px;
     padding:14px 12px calc(14px + env(safe-area-inset-bottom, 0px));
-    transform:translateY(20px);
+    transform:translateY(10px) scale(.97);
   }
-  .music-overlay.open .music-panel{transform:translateY(0)}
+  .music-overlay.open .music-panel{transform:translateY(0) scale(1)}
   .music-tabs{
     max-height:min(200px,30vh,30dvh);
     gap:6px;
