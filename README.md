@@ -10,8 +10,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ## ✨ Features (complete)
 
 ### ⏱️ Countdown & regions
-- 📅 **Release line** — Subtitle: “Releasing November 19, 2026”. Document title: `GTA VI Countdown - {region}`.
-- 🌐 **14 regional unlock targets** — Fixed **UTC** instants (DST clock changes do not shift remaining time). Path slug + `localStorage` persistence; URL stays in sync with the selected region.
+- 📅 **Release line** — Subtitle: “Releasing November 19, 2026” (with selected region name). Document title: `GTA VI Countdown - {region}`.
+- 🌐 **15 regional unlock targets** — Fixed **UTC** instants (DST clock changes do not shift remaining time). Path slug + `localStorage` persistence; URL stays in sync with the selected region. Default when no path / saved preference: **Central Europe (`europe`)**. Launcher home URL uses **Eastern Europe**.
 
 | Region slug | Label | Unlock (UTC) |
 |-------------|-------|--------------|
@@ -23,7 +23,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 | `india` | India | 2026-11-18 18:30 |
 | `uae` | United Arab Emirates | 2026-11-18 20:00 |
 | `saudi-turkey` | Saudi Arabia & Turkey | 2026-11-18 21:00 |
-| `eastern-europe` | Eastern Europe / UTC+2 (Greece, Romania, Finland, Israel, South Africa, …) | 2026-11-18 22:00 |
+| `eastern-europe` | Eastern Europe / UTC+2 (Greece, Romania, Finland, Israel, South Africa, etc.) | 2026-11-18 22:00 |
 | `europe` | Central Europe (CET) | 2026-11-18 23:00 |
 | `uk` | United Kingdom, Ireland, Iceland, Portugal | 2026-11-19 00:00 |
 | `south-america` | Brazil, Argentina, Chile, Paraguay, Uruguay | 2026-11-19 03:00 |
@@ -54,7 +54,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 
 ### 🎵 Music (soundtrack) — every released song playable + auto-discovery
 - 🎧 **Play Music** — Neon panel matching site design; **official Spotify embeds** only (no pirated audio).
-- 🔎 **Auto-check for new tracks** — Server scrapes the official Spotify album embed (`Grand Theft Auto VI: The Album`, id `5BYKG4MHfySZthe2W6r7n4`) every **30 minutes**, merges any newly playable singles into the list, and exposes them via **`/api/music`**. Client also polls every 30 minutes and on tab focus.
+- 🔎 **Auto-check for new tracks** — Server scrapes the official Spotify album embed (`Grand Theft Auto VI: The Album`, id `5BYKG4MHfySZthe2W6r7n4`) every **30 minutes**, merges any newly playable singles into the list, and exposes them via **`/api/music`**. Client also polls every 30 minutes and on tab focus (`visibilitychange`).
 - 💿 Seeded released singles (always present even if discovery fails):
   1. **That’s It** — Yung Lean feat. Future & Metro Boomin
   2. **RHYNO** — Travis Scott (prod. Guy-Manuel de Homem-Christo)
@@ -73,24 +73,24 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 
 ### 🐙 GitHub & project meta
 - 📝 **Latest commit card** — Opens that commit on GitHub when pressed.
-- 📜 **Commit history panel** — Recent commits list (scrollable).
+- 📜 **Commit history panel** — Recent commits list (scrollable, up to 15).
 - ⭐ **Repo stats** — Stars, forks, watchers, issues, language; **`/api/repo` background refresh every 60s** + client poll; `checkedAt` in response.
 - 🔑 Optional **`GITHUB_TOKEN`** / **`GH_TOKEN`** on the server for authenticated GitHub rate limits (avoids **403** on shared Render IPs).
 
 ### 📰 News & analytics
-- 🗯️ **Rockstar Newswire** — Live feed via `/api/news` (GraphQL NewswireList, 30s cache); toggleable panel.
-- 📊 **GA4 stats** (optional) — `/api/stats` when `GA_PROPERTY_ID`, `GA_CLIENT_EMAIL`, `GA_PRIVATE_KEY` are set; UI hides when unavailable.
+- 🗨️ **Rockstar Newswire** — Live feed via `/api/news` (GraphQL NewswireList, 30s cache); toggleable panel.
+- 📊 **GA4 stats** (optional) — `/api/stats` when `GA_PROPERTY_ID`, `GA_CLIENT_EMAIL`, `GA_PRIVATE_KEY` are set; UI hides when unavailable. Site also uses GA measurement ID `G-QPLS07EN95` in the page head.
 
 ### 🖼️ Backgrounds & UX
-- 🌆 **Background gallery** — 20+ Vice City / Leonida official artworks in `bgs/` (postcards, Jason & Lucia key art, characters, cover art, album art). Manual cycle, reset, and **auto-rotate** option.
-- 📈 **FPS counter** toggle.
+- 🌆 **Background gallery** — **24** Vice City / Leonida official artworks in `bgs/` (postcards, Jason & Lucia key art, characters, cover art, album art). Manual cycle, reset, and **auto-rotate** option (persisted in `localStorage`).
+- 📈 **FPS counter** toggle (persisted).
 - 👆 **Shared button press** — Opacity/scale pulse on controls (buttons, badges, social links).
-- 🔗 **Social links** — Rockstar site, Support, X, Instagram, Facebook, YouTube.
+- 🔗 **Social links** — Rockstar site, Support, X, Instagram, Facebook, YouTube (plus Rockstar Support on X).
 - 📱 **PWA-ready** — Web App Manifest (standalone, theme colors, icons) for install on Android / desktop Chrome.
 - 📄 **Footer** — License disclaimer + **“100% vibecoded — built fully with AI.”**
 
 ### 💻 Desktop launcher (C++)
-- 🚪 **Win32 + WebView2** app loads the live site (default Eastern Europe).
+- 🚪 **Win32 + WebView2** app loads the live site (default **Eastern Europe**).
 - ⬅️ Toolbar: Back · Forward · Home · Refresh (flat owner-draw, purple/pink, **no white system borders**).
 - ⌨️ Keyboard: **F5** refresh · **Alt+Left / Alt+Right** history · **Alt+Home**.
 - 🔗 Links stay **inside** the app (`NewWindowRequested` / `target=_blank` intercepted).
@@ -107,7 +107,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── music-discovery.js      # /api/music + 30m Spotify album auto-check + trailer jobs
 ├── music.js / music.css    # Music panel UI
 ├── github-api.js           # GitHub API helper + GITHUB_TOKEN auth
-├── bgs/                    # Background images (Vice City / Leonida art)
+├── bgs/                    # Background images (24 Vice City / Leonida artworks)
 ├── logo.png
 ├── launcher/               # C++ WebView2 desktop shell
 │   ├── GtaViCountdown.sln
@@ -138,7 +138,7 @@ Opens on `http://localhost:3000` (or `PORT` env). Any path that matches a region
 | ⭐ `/api/repo` | 60 s | Background refresh; `checkedAt` |
 | 📜 `/api/commits` | 60 s | Recent commits (up to 15) |
 | 📝 `/api/commit` | 60 s | Latest commit |
-| 🗯️ `/api/news` | 30 s | Rockstar Newswire (GraphQL) |
+| 🗨️ `/api/news` | 30 s | Rockstar Newswire (GraphQL) |
 | 📊 `/api/stats` | 30 s | GA4 if configured; otherwise hidden |
 
 ### 🔐 Environment (Render)
