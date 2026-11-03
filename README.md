@@ -53,7 +53,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - ✨ Smooth tab switch animation; “Open on YouTube” link; Escape / click-outside to close.
 
 ### 🎵 Music (soundtrack) — every released song playable + auto-discovery
-- 🎧 **Play Music** — Compact neon panel (desktop centered, mobile bottom-sheet); larger touch targets + restored tab room; **official Spotify embeds** only (no pirated audio).
+- 🎧 **Play Music** — Compact neon panel centered on every screen (mobile + desktop); larger touch targets; **official Spotify embeds** only (no pirated audio).
 - 🔎 **Auto-check for new tracks** — Server scrapes the official Spotify album embed (`Grand Theft Auto VI: The Album`, id `5BYKG4MHfySZthe2W6r7n4`) every **30 minutes**, merges any newly playable singles into the list, and exposes them via **`/api/music`**. Client also polls every 30 minutes and on tab focus (`visibilitychange`).
 - 💿 Seeded released singles (always present even if discovery fails):
   1. **That’s It** — Yung Lean feat. Future & Metro Boomin

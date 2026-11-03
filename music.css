@@ -1,18 +1,25 @@
-/* Music panel — hybrid smart layout (compact desktop + bottom-sheet mobile)
-   Restores useful prior behaviors: larger touch targets, roomier tab area,
-   safe-areas, focus-visible, reduced-motion, polished neon aesthetic. */
+/* Music panel — always centered (mobile + desktop)
+   Compact neon modal, larger touch targets on phone, safe-areas,
+   focus-visible, reduced-motion. Sits dead-center on every viewport. */
 
 .music-overlay{
   position:fixed;inset:0;
   background:rgba(8,4,18,0);
   z-index:46;
-  display:flex;align-items:center;justify-content:center;
-  padding:max(10px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) max(10px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
-  opacity:0;pointer-events:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+  opacity:0;
+  pointer-events:none;
   transition:background .3s ease,opacity .3s ease;
   -webkit-tap-highlight-color:transparent;
 }
-.music-overlay.open{opacity:1;pointer-events:auto;background:rgba(8,4,18,.78)}
+.music-overlay.open{
+  opacity:1;
+  pointer-events:auto;
+  background:rgba(8,4,18,.78);
+}
 
 .music-panel{
   width:min(520px,92vw);
@@ -35,7 +42,10 @@
   backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);
 }
-.music-overlay.open .music-panel{transform:translateY(0) scale(1);opacity:1}
+.music-overlay.open .music-panel{
+  transform:translateY(0) scale(1);
+  opacity:1;
+}
 
 .music-panel h3{
   margin:0 0 5px;
@@ -162,34 +172,29 @@
   .music-frame-wrap.album iframe{height:min(270px,36vh,36dvh)}
 }
 
-/* ---- Phone — bottom-sheet (native feel, more vertical room) ---- */
+/* ---- Phone — still centered (same as desktop) ---- */
 @media (max-width:600px){
   .music-overlay{
-    align-items:flex-end;
+    align-items:center;
     justify-content:center;
-    padding:0;
+    padding:max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
   }
   .music-panel{
-    width:100%;
-    max-width:100%;
-    max-height:min(88vh,88dvh);
-    border-radius:18px 18px 0 0;
-    border-bottom:none;
-    padding:14px 14px calc(14px + env(safe-area-inset-bottom, 0px));
-    transform:translateY(24px);
-    box-shadow:
-      0 -8px 40px rgba(0,0,0,.45),
-      0 0 28px rgba(255,105,180,.1),
-      inset 0 1px 0 rgba(255,255,255,.05);
+    width:min(520px,94vw);
+    max-width:94vw;
+    max-height:min(86vh,86dvh);
+    border-radius:16px;
+    padding:14px 12px calc(14px + env(safe-area-inset-bottom, 0px));
+    transform:translateY(10px) scale(.97);
   }
-  .music-overlay.open .music-panel{transform:translateY(0)}
+  .music-overlay.open .music-panel{transform:translateY(0) scale(1)}
   .music-tabs{
-    max-height:min(210px,32vh,32dvh);
-    gap:7px;
+    max-height:min(200px,30vh,30dvh);
+    gap:6px;
     margin-bottom:10px;
   }
   .music-tab{
-    padding:9px 13px;
+    padding:9px 12px;
     min-height:40px;
     font-size:.74rem;
     white-space:normal;
