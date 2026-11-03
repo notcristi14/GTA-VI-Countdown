@@ -53,7 +53,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - ✨ Smooth tab switch animation; “Open on YouTube” link; Escape / click-outside to close.
 
 ### 🎵 Music (soundtrack) — every released song playable + auto-discovery
-- 🎧 **Play Music** — Neon panel matching site design; **official Spotify embeds** only (no pirated audio).
+- 🎧 **Play Music** — Compact neon panel (desktop centered, mobile bottom-sheet); larger touch targets + restored tab room; **official Spotify embeds** only (no pirated audio).
 - 🔎 **Auto-check for new tracks** — Server scrapes the official Spotify album embed (`Grand Theft Auto VI: The Album`, id `5BYKG4MHfySZthe2W6r7n4`) every **30 minutes**, merges any newly playable singles into the list, and exposes them via **`/api/music`**. Client also polls every 30 minutes and on tab focus (`visibilitychange`).
 - 💿 Seeded released singles (always present even if discovery fails):
   1. **That’s It** — Yung Lean feat. Future & Metro Boomin
@@ -90,31 +90,26 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 📄 **Footer** — License disclaimer + **“100% vibecoded — built fully with AI.”**
 
 ### 💻 Desktop launcher (C++)
-- 🚪 **Win32 + WebView2** app loads the live site (default **Eastern Europe**).
-- ⬅️ Toolbar: Back · Forward · Home · Refresh (flat owner-draw, purple/pink, **no white system borders**).
-- ⌨️ Keyboard: **F5** refresh · **Alt+Left / Alt+Right** history · **Alt+Home**.
-- 🔗 Links stay **inside** the app (`NewWindowRequested` / `target=_blank` intercepted).
-- 🎨 **GtaLogo.ico** embedded as `.exe` / taskbar icon; dark neon chrome matching the site.
+- 🚪 **Win32 + WebView2** app loads the live site (default Eastern Europe).
+- ⬅️ Toolbar: Back · Forward · Home · Refresh (flat owner-draw, no white borders).
+- 🔗 Links stay **inside** the app (`NewWindowRequested`).
+- 🎨 **GtaLogo.ico** embedded as .exe icon.
 - 🛠️ Build with **Visual Studio 2022** (`launcher/GtaViCountdown.sln`). See [launcher/README.md](launcher/README.md).
 
 ---
 
 ## 📁 Structure
 
-```text
+```
 ├── gta-vi-countdown.html   # Frontend UI (countdown, trailers, music, news, repo)
-├── app.js                  # Express server + API routes + trailer/news/GA hooks
+├── app.js                  # Express server + API routes + music/trailer discovery hooks
 ├── music-discovery.js      # /api/music + 30m Spotify album auto-check + trailer jobs
 ├── music.js / music.css    # Music panel UI
-├── github-api.js           # GitHub API helper + GITHUB_TOKEN auth
-├── bgs/                    # Background images (24 Vice City / Leonida artworks)
+├── github-api.js           # GitHub API + GITHUB_TOKEN auth
+├── bgs/                    # Background images (24 official-style artworks)
 ├── logo.png
 ├── launcher/               # C++ WebView2 desktop shell
-│   ├── GtaViCountdown.sln
-│   ├── src/
-│   └── assets/GtaLogo.ico
 ├── package.json
-├── stats.json
 └── README.md
 ```
 
@@ -127,27 +122,24 @@ npm install
 npm start
 ```
 
-Opens on `http://localhost:3000` (or `PORT` env). Any path that matches a region slug (e.g. `/eastern-europe`) selects that region.
-
 ### 🔌 API endpoints
 
 | Endpoint | Interval | Notes |
-|----------|----------|-------|
-| 🎬 `/api/trailers` | 30 min | Seeded dates + Rockstar discovery; **background refresh**; `publishedAt-desc` |
+| --- | --- | --- |
+| 🎬 `/api/trailers` | 30 min | Seeded dates + Rockstar discovery; **background refresh**; publishedAt-desc |
 | 🎵 `/api/music` | 30 min | Spotify album embed discovery; **background refresh**; seeds + new playable tracks |
-| ⭐ `/api/repo` | 60 s | Background refresh; `checkedAt` |
-| 📜 `/api/commits` | 60 s | Recent commits (up to 15) |
+| ⭐ `/api/repo` | 60 s | Background refresh; checkedAt |
+| 📜 `/api/commits` | 60 s | Recent commits |
 | 📝 `/api/commit` | 60 s | Latest commit |
-| 🗨️ `/api/news` | 30 s | Rockstar Newswire (GraphQL) |
-| 📊 `/api/stats` | 30 s | GA4 if configured; otherwise hidden |
+| 🗨️ `/api/news` | 30 s | Newswire |
+| 📊 `/api/stats` | 30 s | GA4 if configured |
 
 ### 🔐 Environment (Render)
 
 | Variable | Purpose |
-|----------|---------|
-| **`GITHUB_TOKEN`** (or `GH_TOKEN`) | Authenticated GitHub (~5k/hr). Without it: 60/hr per IP → often **403** on shared Render IPs. |
+| --- | --- |
+| **`GITHUB_TOKEN`** (or `GH_TOKEN`) | Authenticated GitHub (~5k/hr). Without it: 60/hr per IP → often **403** on Render. |
 | `GA_PROPERTY_ID` / `GA_CLIENT_EMAIL` / `GA_PRIVATE_KEY` | Optional GA4 panel |
-| `PORT` | Server port (default `3000`) |
 
 ---
 
