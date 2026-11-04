@@ -101,7 +101,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown` · Android 5+ / current iOS (Xcode for device builds).
 - 🔗 **External links open in the system browser** (Safari / Chrome); **same-origin embeds stay in-app**.
 - 🎨 **App icon** — `mobile/assets/logo.png` (committed GTA VI logo); run `dart run flutter_launcher_icons`.
-- 🧱 **Android build** — **Gradle 8.7** wrapper · AGP **8.6.0** · Kotlin **1.9.24** (`mobile/android/`).
+- 🧱 **Android APK** — build with the **Gradle 8.7** wrapper: `mobile\android\gradlew.bat assembleRelease` (Windows) or `./gradlew assembleRelease` (macOS/Linux). See [mobile/README.md](mobile/README.md).
 - 📦 Full site feature set in the WebView (countdown, music, trailers, Newswire, backgrounds, pre-order, repo stats).
 - 📖 Setup & integrity checklist: [mobile/README.md](mobile/README.md).
 
@@ -120,7 +120,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── launcher/               # C++ WebView2 desktop shell
 ├── mobile/                 # VI Countdown Flutter app (iOS + Android)
 │   ├── assets/logo.png     # App icon source (flutter_launcher_icons)
-│   └── android/            # Gradle 8.7 wrapper · AGP 8.6.0
+│   └── android/            # Gradle 8.7 · gradlew.bat / gradlew · AGP 8.6.0
 ├── package.json
 └── README.md
 ```

@@ -9,7 +9,7 @@ Cross-platform (**iOS + Android**) WebView shell for the live GTA VI countdown:
 | **Display name** | **VI Countdown** |
 | **Application ID / Bundle ID** | `com.notcristi.vicountdown` |
 | **Min Android** | API 21 (Android 5.0+) |
-| **Android build** | **Gradle 8.7** (wrapper) · AGP **8.6.0** · Kotlin **1.9.24** |
+| **Android build** | **Gradle 8.7** via `gradlew.bat` / `gradlew` · AGP **8.6.0** · Kotlin **1.9.24** |
 | **Min iOS** | 12.0+ (use latest Xcode for current devices) |
 | **Home URL** | Eastern Europe regional countdown (`kHomeUrl` in `lib/main.dart`) |
 | **App icon** | `assets/logo.png` (GTA VI logo, committed) → `dart run flutter_launcher_icons` |
@@ -23,9 +23,9 @@ Cross-platform (**iOS + Android**) WebView shell for the live GTA VI countdown:
 
 ## Requirements
 
-- [Flutter](https://docs.flutter.dev/get-started/install) 3.22+ (stable)
+- [Flutter](https://docs.flutter.dev/get-started/install) 3.22+ (stable) — needed once for `pub get` / icons / iOS
+- **Android builds:** JDK 17 · Android SDK · **Gradle 8.7** wrapper (`android/gradlew.bat` on Windows, `android/gradlew` on macOS/Linux)
 - **iOS builds:** macOS + Xcode 15/16
-- **Android builds:** Android SDK / Android Studio · **Gradle 8.7** via `android/gradlew`
 
 ## First-time setup
 
@@ -37,17 +37,70 @@ flutter create . --project-name vi_countdown --org com.notcristi --platforms=and
 
 flutter pub get
 dart run flutter_launcher_icons   # uses committed assets/logo.png
-flutter run
 ```
 
-### Android release APK
+Create `android/local.properties` if it does not exist (Gradle needs the SDK path):
 
-Uses the **Gradle 8.7** wrapper under `android/` (`gradlew`).
+```properties
+sdk.dir=C:\\Users\\YOU\\AppData\\Local\\Android\\Sdk
+flutter.sdk=C:\\path\\to\\flutter
+```
+
+(On macOS/Linux use forward-slash paths, e.g. `sdk.dir=/Users/you/Library/Android/sdk`.)
+
+---
+
+## Android — build with the Gradle wrapper (recommended)
+
+APKs are produced with the **included Gradle 8.7 wrapper**, not `flutter build`.
+
+### Windows (`gradlew.bat`)
+
+```bat
+cd mobile\android
+
+REM Debug APK
+gradlew.bat assembleDebug
+
+REM Release APK (signed with the debug keystore in this scaffold)
+gradlew.bat assembleRelease
+```
+
+Outputs:
+
+| Build | APK path |
+|-------|----------|
+| Debug | `mobile\android\app\build\outputs\apk\debug\app-debug.apk` |
+| Release | `mobile\android\app\build\outputs\apk\release\app-release.apk` |
+
+### macOS / Linux (`./gradlew`)
 
 ```bash
-flutter build apk --release
-# → build/app/outputs/flutter-apk/app-release.apk
+cd mobile/android
+chmod +x gradlew   # once, if needed
+
+./gradlew assembleDebug
+./gradlew assembleRelease
 ```
+
+Outputs:
+
+| Build | APK path |
+|-------|----------|
+| Debug | `mobile/android/app/build/outputs/apk/debug/app-debug.apk` |
+| Release | `mobile/android/app/build/outputs/apk/release/app-release.apk` |
+
+### Useful Gradle tasks
+
+```bat
+gradlew.bat tasks
+gradlew.bat clean
+gradlew.bat assembleRelease --stacktrace
+```
+
+> **Note:** The Flutter Gradle plugin still compiles the Dart side. Keep the Flutter SDK installed and `flutter.sdk` set in `local.properties`. You do **not** need `flutter build apk` for everyday Android APKs.
+
+---
 
 ### iOS (Mac only)
 
@@ -64,8 +117,8 @@ Free Apple ID is enough to run on your own device; App Store distribution needs 
 | Requirement | Status |
 |-------------|--------|
 | iOS app | ✅ Flutter `ios/` + `flutter build ios` / `ipa` |
-| Android app | ✅ Flutter `android/` + `flutter build apk` |
-| Gradle | ✅ **8.7** (`distributionUrl` in `android/gradle/wrapper/`) |
+| Android app | ✅ Build with **`gradlew.bat` / `gradlew assembleRelease`** (Gradle 8.7) |
+| Gradle | ✅ **8.7** wrapper committed under `android/` |
 | URL `…/eastern-europe` | ✅ `kHomeUrl` in `lib/main.dart` |
 | App name **VI Countdown** | ✅ `MaterialApp.title` + Android label + iOS display name |
 | External links → system browser | ✅ `LaunchMode.externalApplication` for non-site hosts |
