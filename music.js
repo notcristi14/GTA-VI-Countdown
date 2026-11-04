@@ -135,11 +135,27 @@
 
     // Live countdown to album / game release (UTC midnight 19 Nov 2026)
     const RELEASE_MS = Date.UTC(2026, 10, 19, 0, 0, 0); // month 10 = November
+    let elCd = document.getElementById('musicCountdown');
+    if (!elCd) {
+      const sub = overlay.querySelector('.music-sub');
+      elCd = document.createElement('div');
+      elCd.className = 'music-countdown';
+      elCd.id = 'musicCountdown';
+      elCd.setAttribute('aria-live', 'polite');
+      elCd.innerHTML =
+        '<span class="mc-seg"><b id="mcDays">--</b><small>Days</small></span>' +
+        '<span class="mc-sep">:</span>' +
+        '<span class="mc-seg"><b id="mcHours">--</b><small>Hrs</small></span>' +
+        '<span class="mc-sep">:</span>' +
+        '<span class="mc-seg"><b id="mcMins">--</b><small>Mins</small></span>' +
+        '<span class="mc-sep">:</span>' +
+        '<span class="mc-seg"><b id="mcSecs">--</b><small>Secs</small></span>';
+      if (sub && sub.parentNode) sub.parentNode.insertBefore(elCd, sub.nextSibling);
+    }
     const elDays = document.getElementById('mcDays');
     const elHours = document.getElementById('mcHours');
     const elMins = document.getElementById('mcMins');
     const elSecs = document.getElementById('mcSecs');
-    const elCd = document.getElementById('musicCountdown');
     let cdTimer = null;
 
     function pad2(n) { return n < 10 ? '0' + n : String(n); }
