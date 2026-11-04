@@ -15,6 +15,20 @@ Shared behavior:
 - Home URL: Eastern Europe countdown
 - Same-origin stays in-app; other links open in the system browser
 - Theme `#1A0A2E`
+- **App icon** — GTA VI logo derived from repo `logo.png` (square 1024 canvas, dark `#1A0A2E` padding)
+
+---
+
+## App icon
+
+Source: `logo.png` (or `mobile/assets/logo.png`) resized to a 1024×1024 square on `#1A0A2E`.
+
+| Platform | Location |
+|----------|----------|
+| **iOS** | `mobile/ios/VICountdown/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png` |
+| **Android** | `mobile/android/app/src/main/res/mipmap-*/ic_launcher.png` (+ `_round`) |
+
+Manifest uses `@mipmap/ic_launcher` and `@mipmap/ic_launcher_round`.
 
 ---
 
@@ -77,7 +91,7 @@ mobile/ios/
     SceneDelegate.swift
     ViewController.swift   # WKWebView + link policy
     Info.plist
-    Assets.xcassets/
+    Assets.xcassets/       # AppIcon 1024×1024 from logo.png
 ```
 
 ---

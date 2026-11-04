@@ -31,54 +31,14 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 | `us-canada` | United States, Canada + Colombia, Ecuador, Panama, Peru | 2026-11-19 05:00 |
 | `mexico` | Mexico & Central America | 2026-11-19 06:00 |
 
-- 🎰 **Smooth digit reels** — Rolling numbers via `requestAnimationFrame`, continuous seconds, progress bar under Secs.
+- 🎰 **Smooth digit reels** — Rolling numbers via `requestAnimationFrame`, continuous seconds, progress bare under Secs.
 - ✅ **Available now** — When the timer hits zero (even if you stay on the page), the UI switches to **Available now**, hides pre-order chrome, and makes PS5 / Xbox badges static (no pre-order links) for that region.
-- 💜 **Welcome screen** — GTA VI / Vice City neon wash (pink, magenta, cyan, sunset), continuous CSS pulse, logo, **no audio**.
+- 💜 **Welcome screen** — GTA VI / Vice City neon wash (pink, magenta, cyan, sunset),
 
-### 🎮 Platforms & commerce
-- 🕹️ **PS5 / Xbox Series X|S badges** — Link to official pre-order pages until that region’s countdown reaches zero; become static at zero.
-- 🛒 **Pre-Order button** — Platform picker overlay (PlayStation / Xbox); Escape / click-outside to close.
-- 📺 **Netflix** — Link to *An Extended Look* on Netflix (`netflix.com/GTAVI`).
-
-### 🎬 Trailers
-- ▶️ **Watch Trailers** — In-page YouTube embeds of official Rockstar GTA VI videos.
-- 🆕 Sorted **newest → oldest** by real publish dates (`KNOWN_PUBLISHED_AT` seeds; no per-video watch-page scrape — avoids YouTube **429** log spam).
-- 🔄 Rockstar channel discovery every **30 minutes** (`/api/trailers`) with **server background refresh** + on-demand cache; merges new finds with seeds.
-- 📌 Seeded dates (UTC):
-  - Trailer 1 — `2023-12-04` (`QdBZY2fkU-0`)
-  - Trailer 2 — `2025-05-06` (`VQRLujxTm3c`)
-  - Cover Art Reveal — `2026-06-18` (`EiQEBYDox_k`)
-  - An Extended Look — `2026-08-28` (`tJbzMqJGH4k`)
-  - Launch Trailer — `2026-10-15` (`icy-lhqJhMQ`)
-- ✨ Smooth tab switch animation; “Open on YouTube” link; Escape / click-outside to close.
-
-### 🎵 Music (soundtrack) — every released song playable + auto-discovery
-- 🎧 **Play Music** — Compact neon panel centered on every screen (mobile + desktop); live **Days · Hrs · Mins · Secs** countdown to album unlock (Nov 19) with smooth digit-reel animation + second progress bar (matches main timer style); larger touch targets; **official Spotify embeds** only (no pirated audio).
-- 🔎 **Auto-check for new tracks** — Server scrapes the official Spotify album embed (`Grand Theft Auto VI: The Album`, id `5BYKG4MHfySZthe2W6r7n4`) every **30 minutes**, merges any newly playable singles into the list, and exposes them via **`/api/music`**. Client also polls every 30 minutes and on tab focus (`visibilitychange`).
-- 💿 Seeded released singles (always present even if discovery fails):
-  1. **That’s It** — Yung Lean feat. Future & Metro Boomin
-  2. **RHYNO** — Travis Scott (prod. Guy-Manuel de Homem-Christo)
-  3. **Sexy Magic** — CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.. & Étienne de Crécy
-  4. **Flower in a Hurricane** — Justice feat. Tame Impala, SZA & King Gizzard
-  5. **Last Thing You Need** — Morgan Wallen
-  6. **Suzuki** — Fuerza Regida
-  7. **Macacoa 2000** — Rauw Alejandro
-  8. **Don’t Chart** — Cardi B
-  9. **Bright Lights, Big City** — Keith Richards
-- 🎹 **Score preview** — **Pusher** (Justice feat. Gesaffelstein) from the Original Score.
-- 💿 **Full album embed** — Spotify album player; remaining placeholder tracks unlock when the album releases **Nov 19, 2026** (34 tracks total).
-- 🪄 New playable album tracks discovered after a single drop are added automatically (no redeploy required).
-- 📱 Scrollable tab strip, smooth switch animation, “Open on Spotify” link, Escape / click-outside to close.
-- 📻 Radio station full playlists are not mirrored (licensed in-game only).
-
-### 🐙 GitHub & project meta
-- 📝 **Latest commit card** — Opens that commit on GitHub when pressed.
-- 📜 **Commit history panel** — Recent commits list (scrollable, up to 15).
-- ⭐ **Repo stats** — Stars, forks, watchers, issues, language; **`/api/repo` background refresh every 60s** + client poll; `checkedAt` in response.
-- 🔑 Optional **`GITHUB_TOKEN`** / **`GH_TOKEN`** on the server for authenticated GitHub rate limits (avoids **403** on shared Render IPs).
-
-### 📰 News & analytics
-- 🗨️ **Rockstar Newswire** — Live feed via `/api/news` (GraphQL NewswireList, 30s cache); toggleable panel.
+### 🎥 Trailers, music, news & live data
+- 🎬 **Official trailers** — Seeded + Rockstar discovery; publishedAt-desc; background refresh.
+- 🎵 **Music panel** — Spotify album embed discovery; seeds + new playable tracks; 30m auto-check.
+- 💬 **Rockstar Newswire** — Live feed via `/api/news` (GraphQL NewswireList, 30s cache); toggleable panel.
 - 📊 **GA4 stats** (optional) — `/api/stats` when `GA_PROPERTY_ID`, `GA_CLIENT_EMAIL`, `GA_PRIVATE_KEY` are set; UI hides when unavailable. Site also uses GA measurement ID `G-QPLS07EN95` in the page head.
 
 ### 🖼️ Backgrounds & UX
@@ -100,7 +60,9 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 🤖 **Android** — Kotlin WebView under `mobile/android/` · **Gradle 8.7** only:
   - `cd mobile\android` → `gradlew.bat assembleRelease`
   - Output: `app/build/outputs/apk/release/app-release.apk`
+  - **App icon** — GTA VI logo (`logo.png` → mipmap densities + round icon)
 - 🍎 **iOS** — Swift **WKWebView** under `mobile/ios/` · open **`VICountdown.xcodeproj`** in Xcode → Run / Archive (IPA)
+  - **App icon** — 1024×1024 AppIcon set from `logo.png` (Assets.xcassets)
 - 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown`
 - 🔗 Eastern Europe URL; external links → system browser; site host stays in-app
 - 📖 Full steps: [mobile/README.md](mobile/README.md)
@@ -143,7 +105,7 @@ npm start
 | ⭐ `/api/repo` | 60 s | Background refresh; checkedAt |
 | 📜 `/api/commits` | 60 s | Recent commits |
 | 📝 `/api/commit` | 60 s | Latest commit |
-| 🗨️ `/api/news` | 30 s | Newswire |
+| 💬 `/api/news` | 30 s | Newswire |
 | 📊 `/api/stats` | 30 s | GA4 if configured |
 
 ### 🔐 Environment (Render)
