@@ -11,7 +11,7 @@ Cross-platform (**iOS + Android**) WebView shell for the live GTA VI countdown:
 | **Min Android** | API 21 (Android 5.0+) |
 | **Min iOS** | 12.0+ (use latest Xcode for current devices) |
 | **Home URL** | Eastern Europe regional countdown (`kHomeUrl` in `lib/main.dart`) |
-| **Icon source** | Repo-root `logo.png` → copy to `assets/logo.png`, then `dart run flutter_launcher_icons` |
+| **App icon** | `assets/logo.png` (GTA VI logo, committed) → `dart run flutter_launcher_icons` |
 
 ## Features
 
@@ -34,11 +34,8 @@ cd mobile
 # Regenerate platform folders if ios/ or android/ are incomplete after clone:
 flutter create . --project-name vi_countdown --org com.notcristi --platforms=android,ios
 
-# App icon (GTA VI logo) — required once
-cp ../logo.png assets/logo.png
 flutter pub get
-dart run flutter_launcher_icons
-
+dart run flutter_launcher_icons   # uses committed assets/logo.png
 flutter run
 ```
 
@@ -70,7 +67,7 @@ Free Apple ID is enough to run on your own device; App Store distribution needs 
 | External links → system browser | ✅ `LaunchMode.externalApplication` for non-site hosts |
 | Site embeds stay in-app | ✅ Only `gta-vi-countdown.onrender.com` stays in WebView |
 | Current iPhones / OS | ✅ Current Flutter + Xcode; raise `MinimumOSVersion` in Xcode if desired |
-| GTA VI logo as icon | ⚠️ Run `cp ../logo.png assets/logo.png` then `dart run flutter_launcher_icons` |
+| GTA VI logo as icon | ✅ `mobile/assets/logo.png` committed; run `dart run flutter_launcher_icons` |
 | Build IPA | ⚠️ On macOS + Xcode only |
 
 ## Legal

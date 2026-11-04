@@ -100,7 +100,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 📲 **Flutter** WebView app for **iOS + Android** (`mobile/`) loading **Eastern Europe**: `https://gta-vi-countdown.onrender.com/eastern-europe`.
 - 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown` · Android 5+ / current iOS (Xcode for device builds).
 - 🔗 **External links open in the system browser** (Safari / Chrome); **same-origin embeds stay in-app**.
-- 🎨 **App icon** — copy repo-root `logo.png` → `mobile/assets/logo.png`, then `dart run flutter_launcher_icons`.
+- 🎨 **App icon** — `mobile/assets/logo.png` (committed GTA VI logo); run `dart run flutter_launcher_icons`.
 - 📦 Full site feature set in the WebView (countdown, music, trailers, Newswire, backgrounds, pre-order, repo stats).
 - 📖 Setup & integrity checklist: [mobile/README.md](mobile/README.md).
 
@@ -115,9 +115,10 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── music.js / music.css    # Music panel UI
 ├── github-api.js           # GitHub API + GITHUB_TOKEN auth
 ├── bgs/                    # Background images (24 official-style artworks)
-├── logo.png
+├── logo.png                # Site / launcher logo
 ├── launcher/               # C++ WebView2 desktop shell
 ├── mobile/                 # VI Countdown Flutter app (iOS + Android)
+│   └── assets/logo.png     # App icon source (flutter_launcher_icons)
 ├── package.json
 └── README.md
 ```
