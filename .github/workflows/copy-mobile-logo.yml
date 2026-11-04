@@ -1,0 +1,35 @@
+name: Copy logo to mobile assets
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/copy-mobile-logo.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  copy-logo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy logo.png into mobile/assets
+        run: |
+          mkdir -p mobile/assets
+          cp -f logo.png mobile/assets/logo.png
+          ls -la mobile/assets/logo.png
+          sha256sum logo.png mobile/assets/logo.png
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mobile/assets/logo.png
+          if git diff --staged --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "feat(mobile): add GTA VI logo.png under mobile/assets for flutter_launcher_icons"
+          git push
