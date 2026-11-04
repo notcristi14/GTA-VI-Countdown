@@ -1,26 +1,4 @@
 pluginManagement {
-    def flutterSdkPath = {
-        def localPropertiesFile = new File(settingsDir, "local.properties")
-        if (!localPropertiesFile.exists()) {
-            throw new GradleException(
-                "Missing local.properties in mobile/android/.\n" +
-                "Create mobile/android/local.properties with:\n" +
-                "  sdk.dir=C:\\Users\\User\\AppData\\Local\\Android\\Sdk\n" +
-                "  flutter.sdk=C:\\src\\flutter\n" +
-                "Edit the paths to match your PC."
-            )
-        }
-        def properties = new Properties()
-        localPropertiesFile.withInputStream { properties.load(it) }
-        def flutterSdkPath = properties.getProperty("flutter.sdk")
-        assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
-        def flutterDir = new File(flutterSdkPath)
-        assert flutterDir.exists(), "flutter.sdk path does not exist: ${flutterSdkPath} — edit mobile/android/local.properties"
-        return flutterSdkPath
-    }()
-
-    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
-
     repositories {
         google()
         mavenCentral()
@@ -29,10 +7,9 @@ pluginManagement {
 }
 
 plugins {
-    id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-    // AGP 8.6 requires Gradle 8.7+
     id "com.android.application" version "8.6.0" apply false
     id "org.jetbrains.kotlin.android" version "1.9.24" apply false
 }
 
+rootProject.name = "VICountdown"
 include ":app"

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
-        <item name="android:windowBackground">@android:color/black</item>
-    </style>
-    <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
-        <item name="android:windowBackground">@android:color/black</item>
+    <style name="Theme.VICountdown" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:statusBarColor">#1A0A2E</item>
+        <item name="android:navigationBarColor">#1A0A2E</item>
+        <item name="android:windowBackground">#1A0A2E</item>
+        <item name="colorPrimary">#E0B0FF</item>
     </style>
 </resources>

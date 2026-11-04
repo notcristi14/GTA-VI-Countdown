@@ -1,13 +1,19 @@
 plugins {
     id "com.android.application"
-    id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
+    id "org.jetbrains.kotlin.android"
 }
 
 android {
     namespace = "com.notcristi.vicountdown"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.notcristi.vicountdown"
+        minSdk = 21
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0.0"
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -18,21 +24,15 @@ android {
         jvmTarget = "17"
     }
 
-    defaultConfig {
-        applicationId = "com.notcristi.vicountdown"
-        minSdk = 21
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
-
     buildTypes {
         release {
+            minifyEnabled false
             signingConfig = signingConfigs.debug
         }
     }
 }
 
-flutter {
-    source = "../.."
+dependencies {
+    implementation "androidx.core:core-ktx:1.13.1"
+    implementation "androidx.appcompat:appcompat:1.7.0"
 }

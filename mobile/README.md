@@ -1,6 +1,6 @@
-# VI Countdown — mobile app
+# VI Countdown — Android app (Gradle only)
 
-WebView shell for the live GTA VI countdown:
+Pure **Android / Kotlin / Gradle** WebView shell — **no Flutter**.
 
 **https://gta-vi-countdown.onrender.com/eastern-europe**
 
@@ -9,42 +9,36 @@ WebView shell for the live GTA VI countdown:
 | **Display name** | **VI Countdown** |
 | **Application ID** | `com.notcristi.vicountdown` |
 | **Min Android** | API 21 |
-| **Android build** | **Gradle 8.7** — **`gradlew.bat`** (Windows) / **`gradlew`** (macOS/Linux) |
-| **Config** | `mobile/android/settings.gradle` + `mobile/android/local.properties` |
+| **Build** | **Gradle 8.7** via `gradlew.bat` / `gradlew` |
+| **AGP / Kotlin** | 8.6.0 / 1.9.24 |
 
-## Files you need under `mobile/android/`
+## Requirements
 
-| File | Purpose |
-|------|--------|
-| `settings.gradle` | Gradle project settings (committed) |
-| `local.properties` | **SDK paths on your PC** (committed with Windows defaults — edit if needed) |
-| `gradlew.bat` | Windows build entry point |
-| `gradlew` | macOS/Linux build entry point |
+- **JDK 17**
+- **Android SDK** (path in `local.properties`)
+- **No Flutter SDK**
 
-### `local.properties` (already in the repo)
-
-Default Windows paths:
+### `local.properties`
 
 ```properties
 sdk.dir=C:\\Users\\User\\AppData\\Local\\Android\\Sdk
-flutter.sdk=C:\\src\\flutter
 ```
 
-If your Android SDK or Flutter SDK is elsewhere, edit `mobile\android\local.properties` before building.
+Edit if your SDK is elsewhere. There is **no** `flutter.sdk` line.
 
 ---
 
-## Build the APK (Windows)
+## Build APK (Windows)
 
 ```bat
-cd C:\Users\User\Downloads\GTA-VI-Countdown\mobile\android
+cd mobile\android
 
 gradlew.bat assembleDebug
 gradlew.bat assembleRelease
 ```
 
-| Build | Output |
-|-------|--------|
+| Build | APK |
+|-------|-----|
 | Debug | `app\build\outputs\apk\debug\app-debug.apk` |
 | Release | `app\build\outputs\apk\release\app-release.apk` |
 
@@ -53,7 +47,7 @@ gradlew.bat clean
 gradlew.bat assembleRelease --stacktrace
 ```
 
-## Build the APK (macOS / Linux)
+## Build APK (macOS / Linux)
 
 ```bash
 cd mobile/android
@@ -61,15 +55,24 @@ chmod +x gradlew
 ./gradlew assembleRelease
 ```
 
-## iOS IPA
+## Features
 
-Not built with `gradlew.bat`. Use **Xcode on macOS** (open `mobile/ios/`, Archive).
+- Full-screen WebView of the live site
+- Same-origin (`gta-vi-countdown.onrender.com`) stays in-app
+- Other links open in the system browser
+- Dark theme `#1A0A2E`
 
-## Requirements
+## Project layout
 
-- JDK 17
-- Android SDK at the path in `local.properties` → `sdk.dir`
-- Flutter SDK at the path in `local.properties` → `flutter.sdk` (used by the Android Gradle plugin)
+```
+mobile/android/
+  settings.gradle          # pure Gradle (no Flutter plugins)
+  local.properties         # sdk.dir only
+  gradlew.bat / gradlew
+  app/
+    build.gradle
+    src/main/kotlin/.../MainActivity.kt
+```
 
 ## Legal
 
