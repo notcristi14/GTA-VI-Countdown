@@ -97,11 +97,12 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 🛠️ Build with **Visual Studio 2022** (`launcher/GtaViCountdown.sln`). See [launcher/README.md](launcher/README.md).
 
 ### 📱 Mobile app (Flutter) — VI Countdown
-- 📲 **Flutter** WebView app for **iOS + Android** (`mobile/`) loading the Eastern Europe countdown.
-- 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown` · Android 5+ / current iOS.
-- 🔗 **External links open in the system browser**; site embeds stay in-app.
-- 🎨 Icon from `mobile/assets/logo.png` (run `flutter_launcher_icons`).
-- 📖 Build steps: [mobile/README.md](mobile/README.md).
+- 📲 **Flutter** WebView app for **iOS + Android** (`mobile/`) loading **Eastern Europe**: `https://gta-vi-countdown.onrender.com/eastern-europe`.
+- 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown` · Android 5+ / current iOS (Xcode for device builds).
+- 🔗 **External links open in the system browser** (Safari / Chrome); **same-origin embeds stay in-app**.
+- 🎨 **App icon** — copy repo-root `logo.png` → `mobile/assets/logo.png`, then `dart run flutter_launcher_icons`.
+- 📦 Full site feature set in the WebView (countdown, music, trailers, Newswire, backgrounds, pre-order, repo stats).
+- 📖 Setup & integrity checklist: [mobile/README.md](mobile/README.md).
 
 ---
 
