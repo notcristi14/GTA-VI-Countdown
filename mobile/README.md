@@ -9,6 +9,7 @@ Cross-platform (**iOS + Android**) WebView shell for the live GTA VI countdown:
 | **Display name** | **VI Countdown** |
 | **Application ID / Bundle ID** | `com.notcristi.vicountdown` |
 | **Min Android** | API 21 (Android 5.0+) |
+| **Android build** | **Gradle 8.7** (wrapper) · AGP **8.6.0** · Kotlin **1.9.24** |
 | **Min iOS** | 12.0+ (use latest Xcode for current devices) |
 | **Home URL** | Eastern Europe regional countdown (`kHomeUrl` in `lib/main.dart`) |
 | **App icon** | `assets/logo.png` (GTA VI logo, committed) → `dart run flutter_launcher_icons` |
@@ -24,7 +25,7 @@ Cross-platform (**iOS + Android**) WebView shell for the live GTA VI countdown:
 
 - [Flutter](https://docs.flutter.dev/get-started/install) 3.22+ (stable)
 - **iOS builds:** macOS + Xcode 15/16
-- **Android builds:** Android SDK / Android Studio
+- **Android builds:** Android SDK / Android Studio · **Gradle 8.7** via `android/gradlew`
 
 ## First-time setup
 
@@ -40,6 +41,8 @@ flutter run
 ```
 
 ### Android release APK
+
+Uses the **Gradle 8.7** wrapper under `android/` (`gradlew`).
 
 ```bash
 flutter build apk --release
@@ -62,6 +65,7 @@ Free Apple ID is enough to run on your own device; App Store distribution needs 
 |-------------|--------|
 | iOS app | ✅ Flutter `ios/` + `flutter build ios` / `ipa` |
 | Android app | ✅ Flutter `android/` + `flutter build apk` |
+| Gradle | ✅ **8.7** (`distributionUrl` in `android/gradle/wrapper/`) |
 | URL `…/eastern-europe` | ✅ `kHomeUrl` in `lib/main.dart` |
 | App name **VI Countdown** | ✅ `MaterialApp.title` + Android label + iOS display name |
 | External links → system browser | ✅ `LaunchMode.externalApplication` for non-site hosts |

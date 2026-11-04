@@ -1,0 +1,34 @@
+name: Ensure Gradle wrapper jar
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/ensure-gradle-wrapper.yml'
+      - 'mobile/android/gradle/wrapper/gradle-wrapper.properties'
+
+permissions:
+  contents: write
+
+jobs:
+  wrapper-jar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download gradle-wrapper.jar for 8.7
+        run: |
+          mkdir -p mobile/android/gradle/wrapper
+          curl -fsSL -o mobile/android/gradle/wrapper/gradle-wrapper.jar \
+            "https://raw.githubusercontent.com/gradle/gradle/v8.7.0/gradle/wrapper/gradle-wrapper.jar"
+          ls -la mobile/android/gradle/wrapper/
+          python3 -c "d=open('mobile/android/gradle/wrapper/gradle-wrapper.jar','rb').read(4); assert d[:2]==b'PK', d"
+      - name: Commit jar if new
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mobile/android/gradle/wrapper/gradle-wrapper.jar
+          if git diff --staged --quiet; then
+            echo "No jar change"
+            exit 0
+          fi
+          git commit -m "build(android): add gradle-wrapper.jar for Gradle 8.7"
+          git push
