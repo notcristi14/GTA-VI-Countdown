@@ -96,16 +96,14 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 🎨 **GtaLogo.ico** embedded as .exe icon.
 - 🛠️ Build with **Visual Studio 2022** (`launcher/GtaViCountdown.sln`). See [launcher/README.md](launcher/README.md).
 
-### 📱 Android app — VI Countdown (Gradle only)
-- 📲 **Pure Android / Kotlin** WebView app under `mobile/android/` — **no Flutter**.
-- 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown`.
-- 🔗 Eastern Europe URL; external links → system browser; site host stays in-app.
-- 🧱 **Build APK with Gradle 8.7 only:**
-  - Windows: `cd mobile\android` → `gradlew.bat assembleRelease`
-  - macOS/Linux: `cd mobile/android` → `./gradlew assembleRelease`
+### 📱 Mobile apps — VI Countdown (native, no Flutter)
+- 🤖 **Android** — Kotlin WebView under `mobile/android/` · **Gradle 8.7** only:
+  - `cd mobile\android` → `gradlew.bat assembleRelease`
   - Output: `app/build/outputs/apk/release/app-release.apk`
-- 📄 `local.properties` needs only `sdk.dir` (Android SDK) — no Flutter path.
-- 📖 Details: [mobile/README.md](mobile/README.md).
+- 🍎 **iOS** — Swift **WKWebView** under `mobile/ios/` · open **`VICountdown.xcodeproj`** in Xcode → Run / Archive (IPA)
+- 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown`
+- 🔗 Eastern Europe URL; external links → system browser; site host stays in-app
+- 📖 Full steps: [mobile/README.md](mobile/README.md)
 
 ---
 
@@ -120,10 +118,9 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── bgs/                    # Background images (24 official-style artworks)
 ├── logo.png                # Site / launcher logo
 ├── launcher/               # C++ WebView2 desktop shell
-├── mobile/android/         # Pure Gradle/Kotlin WebView app (no Flutter)
-│   ├── gradlew.bat         # Windows build
-│   ├── local.properties    # sdk.dir only
-│   └── app/src/main/kotlin/.../MainActivity.kt
+├── mobile/
+│   ├── android/            # Gradle/Kotlin WebView (gradlew.bat)
+│   └── ios/                # Native Swift WKWebView (VICountdown.xcodeproj)
 ├── package.json
 └── README.md
 ```
