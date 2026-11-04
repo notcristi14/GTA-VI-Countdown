@@ -63,6 +63,48 @@
   opacity:.92;
 }
 
+.music-countdown{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  margin:0 0 12px;
+  padding:8px 10px;
+  border-radius:10px;
+  background:rgba(30,215,96,.07);
+  border:1px solid rgba(30,215,96,.22);
+  font-variant-numeric:tabular-nums;
+}
+.music-countdown .mc-seg{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-width:2.4em;
+}
+.music-countdown .mc-seg b{
+  font-size:clamp(.95rem,2.2vw,1.15rem);
+  font-weight:700;
+  color:#86efac;
+  line-height:1.15;
+  letter-spacing:.02em;
+}
+.music-countdown .mc-seg small{
+  font-size:clamp(.55rem,1.2vw,.62rem);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#a7f3d0;
+  opacity:.85;
+  margin-top:1px;
+}
+.music-countdown .mc-sep{
+  color:rgba(134,239,172,.45);
+  font-size:1rem;
+  font-weight:600;
+  padding-bottom:12px;
+}
+.music-countdown.is-live .mc-seg b{color:#bbf7d0}
+.music-countdown.is-done .mc-seg b{color:#e0b0ff}
+
 .music-tabs{
   display:flex;
   flex-wrap:wrap;
@@ -209,6 +251,9 @@
   }
   .music-sub{margin-bottom:9px}
   .music-panel h3{margin-bottom:4px}
+  .music-countdown{padding:7px 8px;margin-bottom:10px;gap:3px}
+  .music-countdown .mc-seg b{font-size:.92rem}
+  .music-countdown .mc-seg small{font-size:.55rem}
 }
 
 /* ---- Very small / short screens ---- */

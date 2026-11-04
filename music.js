@@ -133,6 +133,54 @@
       if (frame) frame.src = '';
     }
 
+    // Live countdown to album / game release (UTC midnight 19 Nov 2026)
+    const RELEASE_MS = Date.UTC(2026, 10, 19, 0, 0, 0); // month 10 = November
+    const elDays = document.getElementById('mcDays');
+    const elHours = document.getElementById('mcHours');
+    const elMins = document.getElementById('mcMins');
+    const elSecs = document.getElementById('mcSecs');
+    const elCd = document.getElementById('musicCountdown');
+    let cdTimer = null;
+
+    function pad2(n) { return n < 10 ? '0' + n : String(n); }
+
+    function tickMusicCountdown() {
+      if (!elDays || !elHours || !elMins || !elSecs) return;
+      const now = Date.now();
+      let left = RELEASE_MS - now;
+      if (left <= 0) {
+        elDays.textContent = '00';
+        elHours.textContent = '00';
+        elMins.textContent = '00';
+        elSecs.textContent = '00';
+        if (elCd) {
+          elCd.classList.add('is-done');
+          elCd.classList.remove('is-live');
+        }
+        if (cdTimer) { clearInterval(cdTimer); cdTimer = null; }
+        return;
+      }
+      const days = Math.floor(left / 86400000);
+      left -= days * 86400000;
+      const hours = Math.floor(left / 3600000);
+      left -= hours * 3600000;
+      const mins = Math.floor(left / 60000);
+      left -= mins * 60000;
+      const secs = Math.floor(left / 1000);
+      elDays.textContent = days < 100 ? pad2(days) : String(days);
+      elHours.textContent = pad2(hours);
+      elMins.textContent = pad2(mins);
+      elSecs.textContent = pad2(secs);
+      if (elCd) elCd.classList.add('is-live');
+    }
+
+    function startMusicCountdown() {
+      tickMusicCountdown();
+      if (cdTimer) clearInterval(cdTimer);
+      cdTimer = setInterval(tickMusicCountdown, 1000);
+    }
+
+
     openBtn.addEventListener('click', openMusic);
     if (closeBtn) closeBtn.addEventListener('click', closeMusic);
     overlay.addEventListener('click', function (e) {
@@ -145,6 +193,7 @@
     buildTabs();
     setActive(songs[0], false);
     loadMusic();
+    startMusicCountdown();
     // Client poll every 30 minutes (server also refreshes in the background)
     pollTimer = setInterval(loadMusic, 30 * 60 * 1000);
     document.addEventListener('visibilitychange', function () {
