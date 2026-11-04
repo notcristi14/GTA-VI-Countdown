@@ -1,0 +1,11 @@
+## Copy this file to local.properties and edit the paths for YOUR machine.
+## local.properties is gitignored / not committed (machine-specific).
+##
+## Windows example (use double backslashes or forward slashes):
+
+sdk.dir=C:\\Users\\User\\AppData\\Local\\Android\\Sdk
+flutter.sdk=C:\\src\\flutter
+
+## macOS / Linux example:
+## sdk.dir=/Users/you/Library/Android/sdk
+## flutter.sdk=/Users/you/development/flutter

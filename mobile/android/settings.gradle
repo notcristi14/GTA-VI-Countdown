@@ -1,9 +1,23 @@
 pluginManagement {
     def flutterSdkPath = {
+        def localPropertiesFile = new File(settingsDir, "local.properties")
+        if (!localPropertiesFile.exists()) {
+            throw new GradleException(
+                "Missing local.properties in mobile/android/.\n" +
+                "Copy local.properties.example to local.properties and set:\n" +
+                "  sdk.dir=...path to Android SDK...\n" +
+                "  flutter.sdk=...path to Flutter SDK...\n" +
+                "Windows example:\n" +
+                "  sdk.dir=C:\\Users\\User\\AppData\\Local\\Android\\Sdk\n" +
+                "  flutter.sdk=C:\\src\\flutter"
+            )
+        }
         def properties = new Properties()
-        file("local.properties").withInputStream { properties.load(it) }
+        localPropertiesFile.withInputStream { properties.load(it) }
         def flutterSdkPath = properties.getProperty("flutter.sdk")
         assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
+        def flutterDir = new File(flutterSdkPath)
+        assert flutterDir.exists(), "flutter.sdk path does not exist: ${flutterSdkPath}"
         return flutterSdkPath
     }()
 

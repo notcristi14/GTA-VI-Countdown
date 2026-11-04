@@ -25,31 +25,61 @@ Native-shell WebView app for the live GTA VI countdown (Android + iOS packaging)
 
 - **JDK 17**
 - **Android SDK** (API 21+)
-- **Gradle 8.7 wrapper** (committed under `android/` — do not install Gradle separately)
+- Path to the **Flutter SDK** (required by the Android Gradle plugin in this project)
+- **Gradle 8.7 wrapper** (committed under `android/`)
 
-Create `android/local.properties` before the first build:
+---
 
-```properties
-sdk.dir=C:\\Users\\YOU\\AppData\\Local\\Android\\Sdk
+## Fix: `local.properties` (required before first build)
+
+If you see:
+
+```text
+local.properties (The system cannot find the file specified)
 ```
 
-(On macOS/Linux: `sdk.dir=/Users/you/Library/Android/sdk`.)
+the project is missing machine-specific paths. Create the file once:
+
+### Windows
+
+1. Open folder: `GTA-VI-Countdown\mobile\android\`
+2. Copy `local.properties.example` → rename copy to **`local.properties`**
+3. Edit `local.properties` (use your real paths):
+
+```properties
+sdk.dir=C:\\Users\\User\\AppData\\Local\\Android\\Sdk
+flutter.sdk=C:\\src\\flutter
+```
+
+Or from **cmd** in `mobile\android`:
+
+```bat
+copy local.properties.example local.properties
+notepad local.properties
+```
+
+Typical Android SDK location on Windows:
+
+`C:\Users\User\AppData\Local\Android\Sdk`
+
+### macOS / Linux
+
+```bash
+cd mobile/android
+cp local.properties.example local.properties
+# edit sdk.dir and flutter.sdk
+```
 
 ---
 
 ## Build the APK — Gradle wrapper only
-
-**Do not use other CLI build tools for the APK.** Use the included wrapper.
 
 ### Windows — `gradlew.bat`
 
 ```bat
 cd mobile\android
 
-REM Debug APK
 gradlew.bat assembleDebug
-
-REM Release APK
 gradlew.bat assembleRelease
 ```
 
@@ -58,11 +88,8 @@ gradlew.bat assembleRelease
 | Debug | `mobile\android\app\build\outputs\apk\debug\app-debug.apk` |
 | Release | `mobile\android\app\build\outputs\apk\release\app-release.apk` |
 
-Useful:
-
 ```bat
 gradlew.bat clean
-gradlew.bat tasks
 gradlew.bat assembleRelease --stacktrace
 ```
 
@@ -71,23 +98,15 @@ gradlew.bat assembleRelease --stacktrace
 ```bash
 cd mobile/android
 chmod +x gradlew
-
 ./gradlew assembleDebug
 ./gradlew assembleRelease
 ```
-
-| Build | Output |
-|-------|--------|
-| Debug | `mobile/android/app/build/outputs/apk/debug/app-debug.apk` |
-| Release | `mobile/android/app/build/outputs/apk/release/app-release.apk` |
 
 ---
 
 ## iOS IPA — not built with `gradlew.bat`
 
-`gradlew.bat` / Gradle only build **Android**. An **IPA** is an Apple package and must be produced on **macOS with Xcode** (Product → Archive → Distribute, or `xcodebuild`). There is no Gradle task that outputs an IPA.
-
-Open the iOS project under `mobile/ios/` in Xcode, set your Team under Signing, then Archive.
+Gradle only builds **Android**. An **IPA** needs **macOS + Xcode** (Product → Archive). Open `mobile/ios/` in Xcode, set Signing Team, then Archive.
 
 ---
 
@@ -95,10 +114,10 @@ Open the iOS project under `mobile/ios/` in Xcode, set your Team under Signing, 
 
 | Requirement | Status |
 |-------------|--------|
-| Android APK | ✅ **`gradlew.bat assembleRelease`** (or `./gradlew` on Unix) |
+| Android APK | ✅ `gradlew.bat assembleRelease` after `local.properties` exists |
 | Gradle | ✅ **8.7** wrapper under `android/` |
 | URL `…/eastern-europe` | ✅ home URL in app |
-| App name **VI Countdown** | ✅ Android label + iOS display name |
+| App name **VI Countdown** | ✅ |
 | External links → system browser | ✅ |
 | Site embeds stay in-app | ✅ |
 | GTA VI logo | ✅ `mobile/assets/logo.png` |
