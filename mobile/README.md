@@ -21,14 +21,22 @@ Shared behavior:
 
 ## App icon
 
-Source: `logo.png` (or `mobile/assets/logo.png`) resized to a 1024×1024 square on `#1A0A2E`.
+Source: repo root `logo.png`, resized to a 1024×1024 square on `#1A0A2E`.
+
+Generate (requires ImageMagick):
+
+```bash
+cd mobile
+./generate_icons.sh
+```
 
 | Platform | Location |
 |----------|----------|
 | **iOS** | `mobile/ios/VICountdown/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png` |
 | **Android** | `mobile/android/app/src/main/res/mipmap-*/ic_launcher.png` (+ `_round`) |
 
-Manifest uses `@mipmap/ic_launcher` and `@mipmap/ic_launcher_round`.
+Manifest already uses `@mipmap/ic_launcher` and `@mipmap/ic_launcher_round`.  
+`Contents.json` already references `AppIcon-1024.png`.
 
 ---
 
