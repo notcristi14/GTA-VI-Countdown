@@ -1,78 +1,86 @@
-# VI Countdown — Android app (Gradle only)
+# VI Countdown — mobile apps
 
-Pure **Android / Kotlin / Gradle** WebView shell — **no Flutter**.
+Native WebView shells for the live GTA VI countdown. **No Flutter.**
 
 **https://gta-vi-countdown.onrender.com/eastern-europe**
 
-| | |
-|---|---|
-| **Display name** | **VI Countdown** |
-| **Application ID** | `com.notcristi.vicountdown` |
-| **Min Android** | API 21 |
-| **Build** | **Gradle 8.7** via `gradlew.bat` / `gradlew` |
-| **AGP / Kotlin** | 8.6.0 / 1.9.24 |
+| Platform | Stack | Build |
+|----------|--------|--------|
+| **Android** | Kotlin + WebView + **Gradle 8.7** | `gradlew.bat assembleRelease` |
+| **iOS** | Swift + **WKWebView** + Xcode | Open `VICountdown.xcodeproj` → Archive |
 
-## Requirements
+Shared behavior:
 
-- **JDK 17**
-- **Android SDK** (path in `local.properties`)
-- **No Flutter SDK**
-
-### `local.properties`
-
-```properties
-sdk.dir=C:\\Users\\User\\AppData\\Local\\Android\\Sdk
-```
-
-Edit if your SDK is elsewhere. There is **no** `flutter.sdk` line.
+- Display name **VI Countdown** · ID `com.notcristi.vicountdown`
+- Home URL: Eastern Europe countdown
+- Same-origin stays in-app; other links open in the system browser
+- Theme `#1A0A2E`
 
 ---
 
-## Build APK (Windows)
+## Android (Gradle only)
+
+### Requirements
+
+- JDK 17 · Android SDK
+- `mobile/android/local.properties` → `sdk.dir=...` only
+
+### Build APK (Windows)
 
 ```bat
 cd mobile\android
-
 gradlew.bat assembleDebug
 gradlew.bat assembleRelease
 ```
 
-| Build | APK |
-|-------|-----|
+| Build | Output |
+|-------|--------|
 | Debug | `app\build\outputs\apk\debug\app-debug.apk` |
 | Release | `app\build\outputs\apk\release\app-release.apk` |
 
-```bat
-gradlew.bat clean
-gradlew.bat assembleRelease --stacktrace
-```
-
-## Build APK (macOS / Linux)
+### Build APK (macOS / Linux)
 
 ```bash
 cd mobile/android
-chmod +x gradlew
 ./gradlew assembleRelease
 ```
 
-## Features
+---
 
-- Full-screen WebView of the live site
-- Same-origin (`gta-vi-countdown.onrender.com`) stays in-app
-- Other links open in the system browser
-- Dark theme `#1A0A2E`
+## iOS (native Swift / Xcode)
 
-## Project layout
+### Requirements
+
+- **macOS** + **Xcode 15+**
+- Apple ID (free for device install; paid team for App Store)
+
+### Open & run
+
+1. Open **`mobile/ios/VICountdown.xcodeproj`** in Xcode  
+2. Select target **VICountdown**  
+3. **Signing & Capabilities** → choose your **Team**  
+4. Pick a simulator or device → **Run** (▶)
+
+### Build IPA (Archive)
+
+1. Product → **Destination** → **Any iOS Device**  
+2. Product → **Archive**  
+3. Organizer → **Distribute App** (Ad Hoc / Development / App Store)
+
+### Sources
 
 ```
-mobile/android/
-  settings.gradle          # pure Gradle (no Flutter plugins)
-  local.properties         # sdk.dir only
-  gradlew.bat / gradlew
-  app/
-    build.gradle
-    src/main/kotlin/.../MainActivity.kt
+mobile/ios/
+  VICountdown.xcodeproj/
+  VICountdown/
+    AppDelegate.swift
+    SceneDelegate.swift
+    ViewController.swift   # WKWebView + link policy
+    Info.plist
+    Assets.xcassets/
 ```
+
+---
 
 ## Legal
 
