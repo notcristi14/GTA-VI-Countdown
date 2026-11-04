@@ -96,17 +96,16 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 🎨 **GtaLogo.ico** embedded as .exe icon.
 - 🛠️ Build with **Visual Studio 2022** (`launcher/GtaViCountdown.sln`). See [launcher/README.md](launcher/README.md).
 
-### 📱 Mobile app — VI Countdown
-- 📲 WebView shell for **Android + iOS** (`mobile/`) loading **Eastern Europe**: `https://gta-vi-countdown.onrender.com/eastern-europe`.
+### 📱 Android app — VI Countdown (Gradle only)
+- 📲 **Pure Android / Kotlin** WebView app under `mobile/android/` — **no Flutter**.
 - 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown`.
-- 🔗 **External links open in the system browser**; **same-origin embeds stay in-app**.
-- 🎨 **App icon** — `mobile/assets/logo.png`.
-- 🧱 **Android APK** — build **only** with the Gradle 8.7 wrapper:
-  - Windows: `cd mobile\android` then `gradlew.bat assembleRelease`
-  - macOS/Linux: `cd mobile/android` then `./gradlew assembleRelease`
+- 🔗 Eastern Europe URL; external links → system browser; site host stays in-app.
+- 🧱 **Build APK with Gradle 8.7 only:**
+  - Windows: `cd mobile\android` → `gradlew.bat assembleRelease`
+  - macOS/Linux: `cd mobile/android` → `./gradlew assembleRelease`
   - Output: `app/build/outputs/apk/release/app-release.apk`
-- 🍎 **iOS IPA** — **not** produced by `gradlew.bat` (Gradle is Android-only). Use **Xcode on macOS** (Archive / Distribute).
-- 📖 Full steps: [mobile/README.md](mobile/README.md).
+- 📄 `local.properties` needs only `sdk.dir` (Android SDK) — no Flutter path.
+- 📖 Details: [mobile/README.md](mobile/README.md).
 
 ---
 
@@ -121,9 +120,10 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── bgs/                    # Background images (24 official-style artworks)
 ├── logo.png                # Site / launcher logo
 ├── launcher/               # C++ WebView2 desktop shell
-├── mobile/                 # VI Countdown mobile app
-│   ├── assets/logo.png     # App icon
-│   └── android/            # Gradle 8.7 · gradlew.bat · gradlew · AGP 8.6.0
+├── mobile/android/         # Pure Gradle/Kotlin WebView app (no Flutter)
+│   ├── gradlew.bat         # Windows build
+│   ├── local.properties    # sdk.dir only
+│   └── app/src/main/kotlin/.../MainActivity.kt
 ├── package.json
 └── README.md
 ```
