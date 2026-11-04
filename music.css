@@ -67,26 +67,77 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:4px;
+  gap:6px;
   margin:0 0 12px;
-  padding:8px 10px;
-  border-radius:10px;
-  background:rgba(30,215,96,.07);
-  border:1px solid rgba(30,215,96,.22);
+  padding:10px 12px 8px;
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(30,215,96,.10),rgba(30,215,96,.04));
+  border:1px solid rgba(30,215,96,.28);
+  box-shadow:0 0 18px rgba(30,215,96,.08), inset 0 1px 0 rgba(255,255,255,.04);
   font-variant-numeric:tabular-nums;
+  position:relative;
+  overflow:hidden;
+}
+.music-countdown::after{
+  content:'';
+  position:absolute;
+  left:8%;
+  right:8%;
+  bottom:0;
+  height:2px;
+  border-radius:99px;
+  background:rgba(30,215,96,.18);
+  overflow:hidden;
+}
+.music-countdown .mc-sec-fill{
+  position:absolute;
+  left:8%;
+  bottom:0;
+  height:2px;
+  width:0%;
+  border-radius:99px;
+  background:linear-gradient(90deg,#1ed760,#86efac);
+  box-shadow:0 0 8px rgba(30,215,96,.55);
+  transition:width 1s linear;
+  pointer-events:none;
+  z-index:1;
 }
 .music-countdown .mc-seg{
   display:flex;
   flex-direction:column;
   align-items:center;
-  min-width:2.4em;
+  min-width:2.6em;
+  position:relative;
+  z-index:2;
 }
-.music-countdown .mc-seg b{
+.music-countdown .mc-num{
+  display:inline-flex;
+  justify-content:center;
+  height:1.15em;
+  overflow:hidden;
   font-size:clamp(.95rem,2.2vw,1.15rem);
   font-weight:700;
   color:#86efac;
   line-height:1.15;
   letter-spacing:.02em;
+  text-shadow:0 0 10px rgba(30,215,96,.35);
+}
+.music-countdown .mc-digit{
+  display:block;
+  height:1.15em;
+  width:.62em;
+  overflow:hidden;
+}
+.music-countdown .mc-reel{
+  display:block;
+  transition:transform .55s cubic-bezier(0.22, 0.82, 0.24, 1);
+  will-change:transform;
+}
+.music-countdown .mc-reel span{
+  display:block;
+  height:1.15em;
+  line-height:1.15;
+  text-align:center;
 }
 .music-countdown .mc-seg small{
   font-size:clamp(.55rem,1.2vw,.62rem);
@@ -94,16 +145,26 @@
   letter-spacing:.08em;
   color:#a7f3d0;
   opacity:.85;
-  margin-top:1px;
+  margin-top:3px;
 }
 .music-countdown .mc-sep{
-  color:rgba(134,239,172,.45);
+  color:rgba(134,239,172,.4);
   font-size:1rem;
   font-weight:600;
-  padding-bottom:12px;
+  padding-bottom:14px;
+  position:relative;
+  z-index:2;
 }
-.music-countdown.is-live .mc-seg b{color:#bbf7d0}
-.music-countdown.is-done .mc-seg b{color:#e0b0ff}
+.music-countdown.is-live .mc-num{color:#bbf7d0}
+.music-countdown.is-done .mc-num{
+  color:#e0b0ff;
+  text-shadow:0 0 10px rgba(224,176,255,.35);
+}
+.music-countdown.is-done .mc-sec-fill{width:0!important;opacity:0}
+@media (prefers-reduced-motion:reduce){
+  .music-countdown .mc-reel{transition:none}
+  .music-countdown .mc-sec-fill{transition:none}
+}
 
 .music-tabs{
   display:flex;
@@ -251,8 +312,8 @@
   }
   .music-sub{margin-bottom:9px}
   .music-panel h3{margin-bottom:4px}
-  .music-countdown{padding:7px 8px;margin-bottom:10px;gap:3px}
-  .music-countdown .mc-seg b{font-size:.92rem}
+  .music-countdown{padding:9px 10px 7px;margin-bottom:10px;gap:4px}
+  .music-countdown .mc-num{font-size:.92rem}
   .music-countdown .mc-seg small{font-size:.55rem}
 }
 

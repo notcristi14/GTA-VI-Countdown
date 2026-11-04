@@ -143,13 +143,14 @@
       elCd.id = 'musicCountdown';
       elCd.setAttribute('aria-live', 'polite');
       elCd.innerHTML =
-        '<span class="mc-seg"><b id="mcDays">--</b><small>Days</small></span>' +
+        '<span class="mc-seg"><span class="mc-num" id="mcDays" data-val=""></span><small>Days</small></span>' +
         '<span class="mc-sep">:</span>' +
-        '<span class="mc-seg"><b id="mcHours">--</b><small>Hrs</small></span>' +
+        '<span class="mc-seg"><span class="mc-num" id="mcHours" data-val=""></span><small>Hrs</small></span>' +
         '<span class="mc-sep">:</span>' +
-        '<span class="mc-seg"><b id="mcMins">--</b><small>Mins</small></span>' +
+        '<span class="mc-seg"><span class="mc-num" id="mcMins" data-val=""></span><small>Mins</small></span>' +
         '<span class="mc-sep">:</span>' +
-        '<span class="mc-seg"><b id="mcSecs">--</b><small>Secs</small></span>';
+        '<span class="mc-seg"><span class="mc-num" id="mcSecs" data-val=""></span><small>Secs</small></span>' +
+        '<span class="mc-sec-fill" id="mcSecFill"></span>';
       if (sub && sub.parentNode) sub.parentNode.insertBefore(elCd, sub.nextSibling);
     }
     const elDays = document.getElementById('mcDays');
@@ -160,15 +161,67 @@
 
     function pad2(n) { return n < 10 ? '0' + n : String(n); }
 
+    function buildReel(digits) {
+      const frag = document.createDocumentFragment();
+      String(digits).split('').forEach(function (ch) {
+        const slot = document.createElement('span');
+        slot.className = 'mc-digit';
+        const reel = document.createElement('span');
+        reel.className = 'mc-reel';
+        for (let i = 0; i < 10; i++) {
+          const s = document.createElement('span');
+          s.textContent = String(i);
+          reel.appendChild(s);
+        }
+        // non-digit (e.g. long day count) — single static cell
+        if (ch < '0' || ch > '9') {
+          reel.innerHTML = '';
+          const s = document.createElement('span');
+          s.textContent = ch;
+          reel.appendChild(s);
+          reel.style.transform = 'translateY(0)';
+        } else {
+          reel.style.transform = 'translateY(-' + (parseInt(ch, 10) * 1.15) + 'em)';
+        }
+        slot.appendChild(reel);
+        frag.appendChild(slot);
+      });
+      return frag;
+    }
+
+    function setAnimatedValue(el, next) {
+      if (!el) return;
+      const prev = el.getAttribute('data-val');
+      if (prev === next) return;
+      el.setAttribute('data-val', next);
+      // rebuild structure if digit count changed
+      if (!el.querySelector('.mc-reel') || String(prev || '').length !== String(next).length) {
+        el.innerHTML = '';
+        el.appendChild(buildReel(next));
+        return;
+      }
+      const reels = el.querySelectorAll('.mc-reel');
+      String(next).split('').forEach(function (ch, i) {
+        const reel = reels[i];
+        if (!reel) return;
+        if (ch >= '0' && ch <= '9') {
+          reel.style.transform = 'translateY(-' + (parseInt(ch, 10) * 1.15) + 'em)';
+        }
+      });
+    }
+
+    const elSecFill = document.getElementById('mcSecFill');
+
     function tickMusicCountdown() {
       if (!elDays || !elHours || !elMins || !elSecs) return;
       const now = Date.now();
       let left = RELEASE_MS - now;
       if (left <= 0) {
-        elDays.textContent = '00';
-        elHours.textContent = '00';
-        elMins.textContent = '00';
-        elSecs.textContent = '00';
+        setAnimatedValue(elDays, '00');
+        setAnimatedValue(elHours, '00');
+        setAnimatedValue(elMins, '00');
+        setAnimatedValue(elSecs, '00');
+        if (elSecFill) elSecFill.style.width = '0%';
         if (elCd) {
           elCd.classList.add('is-done');
           elCd.classList.remove('is-live');
@@ -183,10 +236,21 @@
       const mins = Math.floor(left / 60000);
       left -= mins * 60000;
       const secs = Math.floor(left / 1000);
-      elDays.textContent = days < 100 ? pad2(days) : String(days);
-      elHours.textContent = pad2(hours);
-      elMins.textContent = pad2(mins);
-      elSecs.textContent = pad2(secs);
+      const msInSec = left - secs * 1000;
+      setAnimatedValue(elDays, days < 100 ? pad2(days) : String(days));
+      setAnimatedValue(elHours, pad2(hours));
+      setAnimatedValue(elMins, pad2(mins));
+      setAnimatedValue(elSecs, pad2(secs));
+      if (elSecFill) {
+        // progress through the current second (smooth bar)
+        const pct = Math.max(0, Math.min(100, ((1000 - msInSec) / 1000) * 100));
+        elSecFill.style.transition = 'none';
+        elSecFill.style.width = pct + '%';
+        // force reflow then animate to 100% over remaining ms
+        void elSecFill.offsetWidth;
+        elSecFill.style.transition = 'width ' + Math.max(50, 1000 - msInSec) + 'ms linear';
+        elSecFill.style.width = '100%';
+      }
       if (elCd) elCd.classList.add('is-live');
     }
 
