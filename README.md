@@ -96,6 +96,13 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 🎨 **GtaLogo.ico** embedded as .exe icon.
 - 🛠️ Build with **Visual Studio 2022** (`launcher/GtaViCountdown.sln`). See [launcher/README.md](launcher/README.md).
 
+### 📱 iOS app (VI Countdown)
+- 📲 Native **WKWebView** wrapper for the Eastern Europe countdown (`ios/`).
+- 🏷️ Display name **VI Countdown** · Bundle ID `com.notcristi.vicountdown` · **iOS 16+** · iPhone + iPad · arm64.
+- 🔗 **External links open in Safari** (Spotify, YouTube, Rockstar, etc.); embeds stay in-app.
+- 🤖 **GitHub Actions** workflow builds a signed **IPA** when App Store Connect API secrets are set (see [ios/README.md](ios/README.md)).
+- 🎨 App icon: GTA VI–style logo on Vice City neon gradient.
+
 ---
 
 ## 📁 Structure
@@ -109,6 +116,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── bgs/                    # Background images (24 official-style artworks)
 ├── logo.png
 ├── launcher/               # C++ WebView2 desktop shell
+├── ios/                    # VI Countdown iOS app (WKWebView) + IPA workflow
+├── .github/workflows/      # build-ipa.yml (macOS runner)
 ├── package.json
 └── README.md
 ```
