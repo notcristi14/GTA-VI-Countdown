@@ -1,0 +1,180 @@
+name: Build IPA
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'ios/**'
+      - '.github/workflows/build-ipa.yml'
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate AppIcon from logo.png
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          try:
+              from PIL import Image, ImageDraw, ImageFilter
+          except ImportError:
+              import subprocess, sys
+              subprocess.check_call([sys.executable, "-m", "pip", "install", "pillow", "-q"])
+              from PIL import Image, ImageDraw, ImageFilter
+
+          root = Path("ios/VICountdown/Assets.xcassets/AppIcon.appiconset")
+          root.mkdir(parents=True, exist_ok=True)
+          src_path = Path("logo.png")
+          if not src_path.exists():
+              raise SystemExit("logo.png missing at repo root")
+          src = Image.open(src_path).convert("RGBA")
+          size = 1024
+          icon = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+          draw = ImageDraw.Draw(icon)
+          for y in range(size):
+              t = y / (size - 1)
+              r = int(26 + (255 - 26) * t * 0.55)
+              g = int(10 + (105 - 10) * t * 0.45)
+              b = int(46 + (180 - 46) * t * 0.7)
+              draw.line([(0, y), (size, y)], fill=(r, g, b, 255))
+          pad = 90
+          ratio = min((size - 2 * pad) / src.width, (size - 2 * pad) / src.height)
+          nw, nh = int(src.width * ratio), int(src.height * ratio)
+          logo = src.resize((nw, nh), Image.Resampling.LANCZOS)
+          gx, gy = (size - nw) // 2, (size - nh) // 2
+          icon.paste(logo, (gx, gy), logo)
+          master = icon.convert("RGB")
+          sizes = {
+              "icon-20.png": 20, "icon-29.png": 29, "icon-40.png": 40, "icon-58.png": 58,
+              "icon-60.png": 60, "icon-76.png": 76, "icon-80.png": 80, "icon-87.png": 87,
+              "icon-120.png": 120, "icon-152.png": 152, "icon-167.png": 167,
+              "icon-180.png": 180, "icon-1024.png": 1024,
+          }
+          for name, s in sizes.items():
+              master.resize((s, s), Image.Resampling.LANCZOS).save(root / name, "PNG")
+          print("icons written", len(sizes))
+          PY
+
+      - name: Select Xcode
+        run: |
+          if [ -d /Applications/Xcode_16.2.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          elif [ -d /Applications/Xcode_16.1.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
+          else
+            sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          fi
+          xcodebuild -version
+
+      - name: Check signing secrets
+        id: secrets
+        run: |
+          if [ -n "${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}" ] && [ -n "${{ secrets.APP_STORE_CONNECT_API_KEY_P8 }}" ] && [ -n "${{ secrets.APPLE_TEAM_ID }}" ]; then
+            echo "mode=signed" >> "$GITHUB_OUTPUT"
+            echo "Signing secrets present — will produce a signed IPA"
+          else
+            echo "mode=unsigned" >> "$GITHUB_OUTPUT"
+            echo "No API key / team secrets — producing unsigned archive artifact (sideload tools may still need a Mac sign)"
+          fi
+
+      - name: Install App Store Connect API key
+        if: steps.secrets.outputs.mode == 'signed'
+        env:
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          P8: ${{ secrets.APP_STORE_CONNECT_API_KEY_P8 }}
+        run: |
+          mkdir -p "$HOME/private_keys"
+          printf '%s\n' "$P8" > "$HOME/private_keys/AuthKey_${KEY_ID}.p8"
+          echo "API_PRIVATE_KEYS_DIR=$HOME/private_keys" >> "$GITHUB_ENV"
+
+      - name: Archive (signed, automatic)
+        if: steps.secrets.outputs.mode == 'signed'
+        working-directory: ios
+        env:
+          TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          xcodebuild \
+            -project VICountdown.xcodeproj \
+            -scheme VICountdown \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/VICountdown.xcarchive" \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            CODE_SIGN_STYLE=Automatic \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$HOME/private_keys/AuthKey_${KEY_ID}.p8" \
+            -authenticationKeyID "$KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            archive
+
+      - name: Export IPA (signed)
+        if: steps.secrets.outputs.mode == 'signed'
+        working-directory: ios
+        env:
+          TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          python3 - <<'PY'
+          import plistlib, os
+          from pathlib import Path
+          p = Path("ExportOptions.plist")
+          d = plistlib.loads(p.read_bytes())
+          d["teamID"] = os.environ["TEAM_ID"]
+          d["method"] = "development"
+          d["signingStyle"] = "automatic"
+          p.write_bytes(plistlib.dumps(d))
+          print("ExportOptions:", d)
+          PY
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/VICountdown.xcarchive" \
+            -exportPath "$RUNNER_TEMP/ipa" \
+            -exportOptionsPlist ExportOptions.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$HOME/private_keys/AuthKey_${KEY_ID}.p8" \
+            -authenticationKeyID "$KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID"
+
+      - name: Archive (unsigned fallback)
+        if: steps.secrets.outputs.mode == 'unsigned'
+        working-directory: ios
+        run: |
+          xcodebuild \
+            -project VICountdown.xcodeproj \
+            -scheme VICountdown \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/VICountdown.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            archive || {
+              echo "Unsigned archive failed (expected on some Xcode versions)."
+              echo "Add APP_STORE_CONNECT_* and APPLE_TEAM_ID secrets for a signed IPA."
+              exit 1
+            }
+
+      - name: Upload IPA
+        if: steps.secrets.outputs.mode == 'signed'
+        uses: actions/upload-artifact@v4
+        with:
+          name: VICountdown-ipa
+          path: ${{ runner.temp }}/ipa/*.ipa
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload xcarchive
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: VICountdown-xcarchive
+          path: ${{ runner.temp }}/VICountdown.xcarchive
+          if-no-files-found: ignore
+          retention-days: 7
