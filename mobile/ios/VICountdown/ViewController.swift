@@ -2,7 +2,8 @@ import UIKit
 import WebKit
 
 /// Native WKWebView shell — same behavior as the Android app.
-/// Home: Eastern Europe countdown; only the site host stays in-app; every other link opens externally.
+/// Home: Eastern Europe countdown; same-origin and official embeds stay in-app;
+/// other main-frame links open in Safari. Iframe loads never open externally.
 final class ViewController: UIViewController, WKNavigationDelegate {
 
     private let homeURL = URL(string: "https://gta-vi-countdown.onrender.com/eastern-europe")!
@@ -55,6 +56,13 @@ final class ViewController: UIViewController, WKNavigationDelegate {
             return
         }
 
+        // Iframe / subframe loads (Spotify embed, YouTube embed) stay inside the WebView.
+        // Opening them externally is what caused Spotify to launch on app start.
+        if let frame = navigationAction.targetFrame, !frame.isMainFrame {
+            decisionHandler(.allow)
+            return
+        }
+
         if scheme != "http" && scheme != "https" {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
             decisionHandler(.cancel)
@@ -62,9 +70,19 @@ final class ViewController: UIViewController, WKNavigationDelegate {
         }
 
         let host = (url.host ?? "").lowercased()
+        let path = url.path.lowercased()
 
-        // Only the main site stays in-app. Every other link (embeds, social, etc.) opens in Safari.
+        // Main site stays in-app
         if host == allowedHost || host.hasSuffix(".\(allowedHost)") {
+            decisionHandler(.allow)
+            return
+        }
+
+        // Official embeds (music + trailers) stay in-app — same as Android.
+        // Full album/track pages and other external links open in Safari.
+        let isSpotifyEmbed = host == "open.spotify.com" && path.hasPrefix("/embed")
+        let isYouTubeEmbed = (host == "www.youtube.com" || host == "youtube.com" || host == "www.youtube-nocookie.com" || host == "youtube-nocookie.com") && path.contains("/embed")
+        if isSpotifyEmbed || isYouTubeEmbed {
             decisionHandler(.allow)
             return
         }

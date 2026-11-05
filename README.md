@@ -64,7 +64,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 🍎 **iOS** — Swift **WKWebView** under `mobile/ios/` · open **`VICountdown.xcodeproj`** in Xcode → Run / Archive (IPA)
   - **App icon** — 1024×1024 AppIcon via `mobile/generate_icons.sh` (Assets.xcassets)
 - 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown`
-- 🔗 Eastern Europe URL; **iOS**: only site host in-app, every other link → Safari · **Android**: site + embeds in-app, other links → browser
+- 🔗 Eastern Europe URL; site host + official embeds stay in-app on both platforms; other links → system browser
 - 📖 Full steps: [mobile/README.md](mobile/README.md)
 
 ---

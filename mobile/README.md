@@ -13,8 +13,8 @@ Shared behavior:
 
 - Display name **VI Countdown** · ID `com.notcristi.vicountdown`
 - Home URL: Eastern Europe countdown
-- **iOS**: only the site host stays in-app; every other link (including embeds) opens in Safari
-- **Android**: site host + official embeds stay in-app; other links open in the browser
+- Site host + official embeds (Spotify `/embed`, YouTube `/embed`) stay in-app; other links open in the system browser
+- iOS ignores iframe navigations so Spotify/YouTube embeds do not open Safari on launch
 - Theme `#1A0A2E`
 - **App icon** — GTA VI logo derived from repo `logo.png` (square 1024 canvas, dark `#1A0A2E` padding)
 
