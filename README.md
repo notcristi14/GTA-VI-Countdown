@@ -3,7 +3,7 @@
 Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock times — plus official trailers, auto-updating soundtrack, live GitHub data, Rockstar Newswire, Vice City backgrounds, and a **C++ desktop shell** that embeds the live site.
 
 🚀 **Live Demo:** [gta-vi-countdown.onrender.com](https://gta-vi-countdown.onrender.com/)  
-🌍 **Eastern Europe:** [gta-vi-countdown.onrender.com/eastern-europe](https://gta-vi-countdown.onrender.com/)
+🌍 **Eastern Europe:** [gta-vi-countdown.onrender.com/eastern-europe](https://gta-vi-countdown.onrender.com/eastern-europe)
 
 ---
 
@@ -60,11 +60,13 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 🤖 **Android** — Kotlin WebView under `mobile/android/` · **Gradle 8.7** only:
   - `cd mobile\android` → `gradlew.bat assembleRelease`
   - Output: `app/build/outputs/apk/release/app-release.apk`
-  - **App icon** — GTA VI logo via `mobile/generate_icons.sh` (mipmap densities + round icon)
+  - **App icon** — GTA VI logo already in `mipmap-*` (regenerate with `mobile/generate_icons.sh` if needed)
 - 🍎 **iOS** — Swift **WKWebView** under `mobile/ios/` · open **`VICountdown.xcodeproj`** in Xcode → Run / Archive (IPA)
-  - **App icon** — 1024×1024 AppIcon via `mobile/generate_icons.sh` (Assets.xcassets)
+  - **App icon** — 1024×1024 `AppIcon-1024.png` already in Assets.xcassets
 - 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown`
-- 🔗 Eastern Europe URL; site host + official embeds stay in-app on both platforms; other links → system browser
+- 🏠 Home URL: [gta-vi-countdown.onrender.com](https://gta-vi-countdown.onrender.com/) (region picker on the site)
+- 🔗 Site host + official embeds (Spotify `/embed`, YouTube `/embed`) stay in-app; other links → system browser
+- 🍎 **iOS**: iframe loads stay in-app (embeds do not open Safari on launch); `window.open` / Latest update card opens in Safari
 - 📖 Full steps: [mobile/README.md](mobile/README.md)
 
 ---

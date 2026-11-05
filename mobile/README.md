@@ -12,11 +12,13 @@ Native WebView shells for the live GTA VI countdown. **No Flutter.**
 Shared behavior:
 
 - Display name **VI Countdown** · ID `com.notcristi.vicountdown`
-- Home URL: Eastern Europe countdown
-- Site host + official embeds (Spotify `/embed`, YouTube `/embed`) stay in-app; other links open in the system browser
-- iOS ignores iframe navigations so Spotify/YouTube embeds do not open Safari on launch
+- Home URL: site root (region is chosen on the page)
+- Site host + official embeds (Spotify `/embed`, YouTube `/embed`) stay in-app
+- Other links open in the system browser
+- **iOS**: iframe/subframe loads stay in-app (Spotify embed does not open Safari on launch)
+- **iOS**: `window.open` / `target="_blank"` (Latest update card, social links) open in Safari
 - Theme `#1A0A2E`
-- **App icon** — GTA VI logo derived from repo `logo.png` (square 1024 canvas, dark `#1A0A2E` padding)
+- **App icon** — GTA VI logo from `logo.png` (committed; regenerate with `generate_icons.sh` if needed)
 
 ---
 
@@ -24,7 +26,7 @@ Shared behavior:
 
 Source: repo root `logo.png`, resized to a 1024×1024 square on `#1A0A2E`.
 
-Generate (requires ImageMagick):
+Icons are already in the repo. To regenerate (requires ImageMagick):
 
 ```bash
 cd mobile
@@ -36,8 +38,8 @@ cd mobile
 | **iOS** | `mobile/ios/VICountdown/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png` |
 | **Android** | `mobile/android/app/src/main/res/mipmap-*/ic_launcher.png` (+ `_round`) |
 
-Manifest already uses `@mipmap/ic_launcher` and `@mipmap/ic_launcher_round`.  
-`Contents.json` already references `AppIcon-1024.png`.
+Manifest uses `@mipmap/ic_launcher` and `@mipmap/ic_launcher_round`.  
+`Contents.json` references `AppIcon-1024.png`.
 
 ---
 
