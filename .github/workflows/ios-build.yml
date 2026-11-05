@@ -18,21 +18,21 @@ jobs:
         node-version: '22'
 
     - name: Install Project Dependencies
-      working-directory: mobile/ios
+      working-directory: mobile
       run: |
         npm install
 
     - name: Clean and Export Static Production Bundle
-      working-directory: mobile/ios
+      working-directory: mobile
       run: |
         npx expo export --platform ios
 
     - name: Create App Payload Archive
-      working-directory: mobile/ios
+      working-directory: mobile
       run: |
         mkdir -p Payload
         cp -R dist/ Payload/gta-countdown.app
-        zip -r ../../gta-countdown.ipa Payload
+        zip -r ../gta-countdown.ipa Payload
 
     - name: Upload Finished IPA Artifact
       uses: actions/upload-artifact@v4
