@@ -92,6 +92,29 @@ cd mobile/android
 2. Product → **Archive**  
 3. Organizer → **Distribute App** (Ad Hoc / Development / App Store)
 
+### Install with Sideloadly (Windows / macOS)
+
+Use the release IPA ([`ios-v1.0.0` / gta-countdown.ipa](https://github.com/notcristi14/GTA-VI-Countdown/releases/download/ios-v1.0.0/gta-countdown.ipa)) or one you built in Xcode.
+
+1. Download **Sideloadly** from [sideloadly.io](https://sideloadly.io/) and install it.
+2. Connect your iPhone with a USB cable. Unlock the phone and tap **Trust**.
+3. Open Sideloadly. Your device should appear in the device dropdown.
+4. Drag **gta-countdown.ipa** into Sideloadly (or click the IPA icon and pick the file).
+5. Enter the **Apple ID** you want to sign with (free Apple ID is fine).
+6. Click **Start**. Enter the Apple ID password when asked, then the 2FA code if prompted.
+7. Wait until Sideloadly says the install finished.
+8. On the iPhone:
+   - Open **Settings → General → VPN & Device Management** (or **Profiles & Device Management**)
+   - Tap your Apple ID under **Developer App**
+   - Tap **Trust** → **Trust**
+9. Open **VI Countdown** from the home screen.
+
+Notes:
+
+- Free Apple ID signing lasts about **7 days**, then you must re-sign with Sideloadly.
+- If Sideloadly reports “maximum number of apps”, remove other free-signed apps first.
+- Keep the phone unlocked and connected until the install completes.
+
 ### Sources
 
 ```

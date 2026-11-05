@@ -61,7 +61,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
   - `cd mobile\android` → `gradlew.bat assembleRelease`
   - Output: `app/build/outputs/apk/release/app-release.apk`
   - **App icon** — GTA VI logo already in `mipmap-*` (regenerate with `mobile/generate_icons.sh` if needed)
-- 🍎 **iOS** — Swift **WKWebView** under `mobile/ios/` · open **`VICountdown.xcodeproj`** in Xcode → Run / Archive (IPA)
+- 🍎 **iOS** — Swift **WKWebView** under `mobile/ios/` · open **`VICountdown.xcodeproj`** in Xcode → Run / Archive (IPA) · install with [Sideloadly](https://sideloadly.io/) (see [mobile/README.md](mobile/README.md))
   - **App icon** — 1024×1024 `AppIcon-1024.png` already in Assets.xcassets
 - 🏷️ Display name **VI Countdown** · ID `com.notcristi.vicountdown`
 - 🏠 Home URL: [gta-vi-countdown.onrender.com](https://gta-vi-countdown.onrender.com/) (region picker on the site)
