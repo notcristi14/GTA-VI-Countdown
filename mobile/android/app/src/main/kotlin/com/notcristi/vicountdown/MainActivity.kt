@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
 
     companion object {
-        private const val HOME_URL = "https://gta-vi-countdown.onrender.com/eastern-europe"
+        private const val HOME_URL = "https://gta-vi-countdown.onrender.com/"
         private const val ALLOWED_HOST = "gta-vi-countdown.onrender.com"
         private val BG = Color.parseColor("#1A0A2E")
     }

@@ -7,7 +7,7 @@ import WebKit
 /// window.open / target=_blank (e.g. Latest update card) open in Safari.
 final class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
-    private let homeURL = URL(string: "https://gta-vi-countdown.onrender.com/eastern-europe")!
+    private let homeURL = URL(string: "https://gta-vi-countdown.onrender.com/")!
     private let allowedHost = "gta-vi-countdown.onrender.com"
     private let bgColor = UIColor(red: 26 / 255, green: 10 / 255, blue: 46 / 255, alpha: 1)
 
@@ -101,7 +101,7 @@ final class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate
         guard let url = navigationAction.request.url else { return nil }
 
         if isAllowedInApp(url) {
-            webView.load(url)
+            webView.load(URLRequest(url: url))
         } else {
             openExternal(url)
         }

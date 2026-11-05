@@ -2,7 +2,7 @@
 
 Native WebView shells for the live GTA VI countdown. **No Flutter.**
 
-**https://gta-vi-countdown.onrender.com/eastern-europe**
+**https://gta-vi-countdown.onrender.com/**
 
 | Platform | Stack | Build |
 |----------|--------|--------|
