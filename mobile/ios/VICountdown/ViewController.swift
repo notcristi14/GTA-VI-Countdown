@@ -4,7 +4,8 @@ import WebKit
 /// Native WKWebView shell — same behavior as the Android app.
 /// Home: Eastern Europe countdown; same-origin and official embeds stay in-app;
 /// other main-frame links open in Safari. Iframe loads never open externally.
-final class ViewController: UIViewController, WKNavigationDelegate {
+/// window.open / target=_blank (e.g. Latest update card) open in Safari.
+final class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
     private let homeURL = URL(string: "https://gta-vi-countdown.onrender.com/eastern-europe")!
     private let allowedHost = "gta-vi-countdown.onrender.com"
@@ -14,8 +15,10 @@ final class ViewController: UIViewController, WKNavigationDelegate {
         let config = WKWebViewConfiguration()
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = []
+        config.preferences.javaScriptCanOpenWindowsAutomatically = true
         let wv = WKWebView(frame: .zero, configuration: config)
         wv.navigationDelegate = self
+        wv.uiDelegate = self
         wv.backgroundColor = bgColor
         wv.isOpaque = false
         wv.scrollView.backgroundColor = bgColor
@@ -38,6 +41,27 @@ final class ViewController: UIViewController, WKNavigationDelegate {
         webView.load(URLRequest(url: homeURL))
     }
 
+    // MARK: - Helpers
+
+    private func isAllowedInApp(_ url: URL) -> Bool {
+        let scheme = (url.scheme ?? "").lowercased()
+        if scheme == "about" || scheme == "data" || scheme == "blob" { return true }
+        if scheme != "http" && scheme != "https" { return false }
+
+        let host = (url.host ?? "").lowercased()
+        let path = url.path.lowercased()
+
+        if host == allowedHost || host.hasSuffix(".\(allowedHost)") { return true }
+
+        let isSpotifyEmbed = host == "open.spotify.com" && path.hasPrefix("/embed")
+        let isYouTubeEmbed = (host == "www.youtube.com" || host == "youtube.com" || host == "www.youtube-nocookie.com" || host == "youtube-nocookie.com") && path.contains("/embed")
+        return isSpotifyEmbed || isYouTubeEmbed
+    }
+
+    private func openExternal(_ url: URL) {
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+
     // MARK: - WKNavigationDelegate
 
     func webView(
@@ -50,44 +74,37 @@ final class ViewController: UIViewController, WKNavigationDelegate {
             return
         }
 
-        let scheme = (url.scheme ?? "").lowercased()
-        if scheme == "about" || scheme == "data" || scheme == "blob" {
-            decisionHandler(.allow)
-            return
-        }
-
-        // Iframe / subframe loads (Spotify embed, YouTube embed) stay inside the WebView.
-        // Opening them externally is what caused Spotify to launch on app start.
+        // Iframe / subframe loads stay inside the WebView (Spotify/YouTube embeds).
         if let frame = navigationAction.targetFrame, !frame.isMainFrame {
             decisionHandler(.allow)
             return
         }
 
-        if scheme != "http" && scheme != "https" {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            decisionHandler(.cancel)
-            return
-        }
-
-        let host = (url.host ?? "").lowercased()
-        let path = url.path.lowercased()
-
-        // Main site stays in-app
-        if host == allowedHost || host.hasSuffix(".\(allowedHost)") {
+        if isAllowedInApp(url) {
             decisionHandler(.allow)
             return
         }
 
-        // Official embeds (music + trailers) stay in-app — same as Android.
-        // Full album/track pages and other external links open in Safari.
-        let isSpotifyEmbed = host == "open.spotify.com" && path.hasPrefix("/embed")
-        let isYouTubeEmbed = (host == "www.youtube.com" || host == "youtube.com" || host == "www.youtube-nocookie.com" || host == "youtube-nocookie.com") && path.contains("/embed")
-        if isSpotifyEmbed || isYouTubeEmbed {
-            decisionHandler(.allow)
-            return
-        }
-
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        openExternal(url)
         decisionHandler(.cancel)
+    }
+
+    // MARK: - WKUIDelegate
+
+    /// Handles window.open() and target="_blank" (Latest update card, social links, etc.).
+    func webView(
+        _ webView: WKWebView,
+        createWebViewWith configuration: WKWebViewConfiguration,
+        for navigationAction: WKNavigationAction,
+        windowFeatures: WKWindowFeatures
+    ) -> WKWebView? {
+        guard let url = navigationAction.request.url else { return nil }
+
+        if isAllowedInApp(url) {
+            webView.load(url)
+        } else {
+            openExternal(url)
+        }
+        return nil
     }
 }
