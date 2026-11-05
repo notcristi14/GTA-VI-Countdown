@@ -62,7 +62,19 @@ final class ViewController: UIViewController, WKNavigationDelegate {
         }
 
         let host = (url.host ?? "").lowercased()
+        let path = url.path.lowercased()
+
+        // Main site stays in-app
         if host == allowedHost || host.hasSuffix(".\(allowedHost)") {
+            decisionHandler(.allow)
+            return
+        }
+
+        // Official embeds (music + trailers) stay in-app so the WebView can play them.
+        // Full album/track pages and other external links still open in Safari.
+        let isSpotifyEmbed = host == "open.spotify.com" && path.hasPrefix("/embed")
+        let isYouTubeEmbed = (host == "www.youtube.com" || host == "youtube.com" || host == "www.youtube-nocookie.com" || host == "youtube-nocookie.com") && path.contains("/embed")
+        if isSpotifyEmbed || isYouTubeEmbed {
             decisionHandler(.allow)
             return
         }

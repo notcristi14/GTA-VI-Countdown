@@ -56,8 +56,19 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     val host = uri.host?.lowercase() ?: return true
+                    val path = uri.path?.lowercase() ?: ""
+
+                    // Main site stays in-app
                     if (host == ALLOWED_HOST || host.endsWith(".$ALLOWED_HOST")) {
                         return false // stay in WebView
+                    }
+
+                    // Official embeds (music + trailers) stay in-app.
+                    // Full album/track pages and other external links still open in the browser.
+                    val isSpotifyEmbed = host == "open.spotify.com" && path.startsWith("/embed")
+                    val isYouTubeEmbed = (host == "www.youtube.com" || host == "youtube.com" || host == "www.youtube-nocookie.com" || host == "youtube-nocookie.com") && path.contains("/embed")
+                    if (isSpotifyEmbed || isYouTubeEmbed) {
+                        return false
                     }
 
                     openExternal(uri.toString())
