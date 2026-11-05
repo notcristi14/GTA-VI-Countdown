@@ -2,7 +2,7 @@ import UIKit
 import WebKit
 
 /// Native WKWebView shell — same behavior as the Android app.
-/// Home: Eastern Europe countdown; same-origin stays in-app; other links open externally.
+/// Home: Eastern Europe countdown; only the site host stays in-app; every other link opens externally.
 final class ViewController: UIViewController, WKNavigationDelegate {
 
     private let homeURL = URL(string: "https://gta-vi-countdown.onrender.com/eastern-europe")!
@@ -62,19 +62,9 @@ final class ViewController: UIViewController, WKNavigationDelegate {
         }
 
         let host = (url.host ?? "").lowercased()
-        let path = url.path.lowercased()
 
-        // Main site stays in-app
+        // Only the main site stays in-app. Every other link (embeds, social, etc.) opens in Safari.
         if host == allowedHost || host.hasSuffix(".\(allowedHost)") {
-            decisionHandler(.allow)
-            return
-        }
-
-        // Official embeds (music + trailers) stay in-app so the WebView can play them.
-        // Full album/track pages and other external links still open in Safari.
-        let isSpotifyEmbed = host == "open.spotify.com" && path.hasPrefix("/embed")
-        let isYouTubeEmbed = (host == "www.youtube.com" || host == "youtube.com" || host == "www.youtube-nocookie.com" || host == "youtube-nocookie.com") && path.contains("/embed")
-        if isSpotifyEmbed || isYouTubeEmbed {
             decisionHandler(.allow)
             return
         }
