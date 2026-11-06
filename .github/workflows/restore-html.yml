@@ -1,0 +1,28 @@
+name: Restore HTML
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/html.b64.part1'
+      - 'tools/html.b64.part2'
+      - '.github/workflows/restore-html.yml'
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode and write gta-vi-countdown.html
+        run: |
+          cat tools/html.b64.part1 tools/html.b64.part2 | base64 -d > gta-vi-countdown.html
+          grep -q 'Available now!' gta-vi-countdown.html
+          grep -q '<!DOCTYPE html>' gta-vi-countdown.html
+          wc -c gta-vi-countdown.html
+      - name: Commit restored HTML
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gta-vi-countdown.html
+          git diff --staged --quiet || git commit -m "fix(ui): restore gta-vi-countdown.html; Available now!"
+          git push
