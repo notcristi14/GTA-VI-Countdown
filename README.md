@@ -32,7 +32,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 | `mexico` | Mexico & Central America | 2026-11-19 06:00 |
 
 - 🎰 **Smooth digit reels** — Rolling numbers via `requestAnimationFrame`, continuous seconds, progress bar under Secs.
-- ✅ **Available now** — When the timer hits zero (even if you stay on the page), the UI switches to **Available now**, hides pre-order chrome, and makes PS5 / Xbox badges static (no pre-order links) for that region.
+- ✅ **Available now!** — When the timer hits zero (even if you stay on the page), the UI switches to **Available now!**, hides pre-order chrome, and makes PS5 / Xbox badges static (no pre-order links) for that region.
 - 💜 **Welcome screen** — GTA VI / Vice City neon wash (pink, magenta, cyan, sunset), continuous CSS pulse, logo, **no audio**.
 
 ### 🎮 Platforms & commerce
