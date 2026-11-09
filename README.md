@@ -82,8 +82,9 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 📊 **GA4 stats** (optional) — `/api/stats` when `GA_PROPERTY_ID`, `GA_CLIENT_EMAIL`, `GA_PRIVATE_KEY` are set; UI hides when unavailable. Site also uses GA measurement ID `G-QPLS07EN95` in the page head.
 
 ### 🖼️ Backgrounds & UX
-- 🌆 **Background gallery** — **26** official Rockstar Artwork & Wallpapers landscapes in `bgs/` (postcards, Jason & Lucia key art including Lock & Load, characters, cover art, album art). Manual cycle, reset, and **auto-rotate** option (persisted in `localStorage`).
-- 🔄 **Auto-check for new backgrounds** — Server `HEAD`s the official [Rockstar Artwork & Wallpapers zip](https://media-rockstargames-com.akamaized.net/VI/downloads/artwork_wallpapers/GTAVI_Artwork_Wallpapers.zip) every **6 hours**; status on `/api/backgrounds` (`rockstar.lastModified`, `changed`). Client polls the file list hourly so new files in `bgs/` appear without a full reload.
+- 🌆 **Background gallery** — **26** images in `bgs/` (official Rockstar Artwork & Wallpapers landscapes + `main.jpeg`). Includes postcards, Jason & Lucia key art (**Lock & Load** + logos variants), characters, cover art, and album art. Manual cycle, reset, and **auto-rotate** (persisted in `localStorage`).
+- 🔄 **Auto-check for new backgrounds** — Server `HEAD`s the official [Rockstar Artwork & Wallpapers zip](https://media-rockstargames-com.akamaized.net/VI/downloads/artwork_wallpapers/GTAVI_Artwork_Wallpapers.zip) every **6 hours**; status on **`/api/backgrounds`** (`rockstar.lastModified`, `contentLength`, `changed`, `checkedAt`). Client polls the live file list **hourly** so newly added files in `bgs/` appear without a full page reload.
+- ➕ **Adding art** — Drop landscape JPGs into `bgs/` and redeploy (or push to `main`). No hard-coded server list required; the client seed list is a fallback until `/api/backgrounds` responds.
 - 📈 **FPS counter** toggle (persisted).
 - 👆 **Shared button press** — Opacity/scale pulse on controls (buttons, badges, social links).
 - 🔗 **Social links** — Rockstar site, Support, X, Instagram, Facebook, YouTube (plus Rockstar Support on X).
@@ -115,7 +116,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 
 ```
 ├── gta-vi-countdown.html   # Frontend UI (countdown, trailers, music, news, repo)
-├── app.js                  # Express server + API routes + music/trailer discovery hooks
+├── app.js                  # Express server + API routes; loads music-discovery + backgrounds-api
 ├── music-discovery.js      # /api/music + 30m Spotify album auto-check + trailer jobs
 ├── music.js / music.css    # Music panel UI
 ├── github-api.js           # GitHub API + GITHUB_TOKEN auth
@@ -153,7 +154,7 @@ npm start
 | 📝 `/api/commit` | 60 s | Latest commit |
 | 🗨️ `/api/news` | 30 s | Newswire |
 | 📊 `/api/stats` | 30 s | GA4 if configured |
-| 🖼️ `/api/backgrounds` | 6 h (pack) / live list | Files in `bgs/` + Rockstar zip HEAD metadata |
+| 🖼️ `/api/backgrounds` | 6 h pack check / live list | `files[]` from `bgs/` + Rockstar zip HEAD (`checkedAt`, `lastModified`, `changed`) |
 
 ### 🔐 Environment (Render)
 
