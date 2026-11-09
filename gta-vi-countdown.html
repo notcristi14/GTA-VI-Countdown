@@ -1690,7 +1690,8 @@
 
   
 
-  const backgrounds = ['main.jpeg', 'Ambrosia_Postcard_landscape.jpg', 'Boobie_Ike_landscape.jpg', 'Brian_Heder_landscape.jpg', 'Cal_Hampton_landscape.jpg', 'DreQuan_Priest_landscape.jpg', 'Grassrivers_Postcard_landscape.jpg', 'Jason_and_Lucia_01_With_Logos_landscape.jpg', 'Jason_and_Lucia_01_landscape.jpg', 'Jason_and_Lucia_02_With_Logos_landscape.jpg', 'Jason_and_Lucia_02_landscape.jpg', 'Jason_and_Lucia_Beach_With_Logos_landscape.jpg', 'Jason_and_Lucia_Beach_landscape.jpg', 'Jason_and_Lucia_Motel_landscape.jpg', 'Jason_and_Lucia_Robbery_With_Logo_landscape.jpg', 'Jason_and_Lucia_Robbery_landscape.jpg', 'Leonida_Keys_Postcard_landscape.jpg', 'Mount_Kalaga_National_Park_Postcard_landscape.jpg', 'Official_Cover_Art_landscape.jpg', 'Port_Gellhorn_Postcard_landscape.jpg', 'Raul_Bautista_landscape.jpg', 'Real_Dimez_landscape.jpg', 'The_Album_Cover_Art_landscape.jpg', 'Vice_City_Postcard_landscape.jpg'];
+  // Seed list until /api/backgrounds responds; kept in sync with bgs/ on deploy
+  let backgrounds = ['main.jpeg', 'Ambrosia_Postcard_landscape.jpg', 'Boobie_Ike_landscape.jpg', 'Brian_Heder_landscape.jpg', 'Cal_Hampton_landscape.jpg', 'DreQuan_Priest_landscape.jpg', 'Grassrivers_Postcard_landscape.jpg', 'Jason_Lucia_Lock_And_Load_With_Logos_landscape.jpg', 'Jason_Lucia_Lock_And_Load_landscape.jpg', 'Jason_and_Lucia_01_With_Logos_landscape.jpg', 'Jason_and_Lucia_01_landscape.jpg', 'Jason_and_Lucia_02_With_Logos_landscape.jpg', 'Jason_and_Lucia_02_landscape.jpg', 'Jason_and_Lucia_Beach_With_Logos_landscape.jpg', 'Jason_and_Lucia_Beach_landscape.jpg', 'Jason_and_Lucia_Motel_landscape.jpg', 'Jason_and_Lucia_Robbery_With_Logo_landscape.jpg', 'Jason_and_Lucia_Robbery_landscape.jpg', 'Leonida_Keys_Postcard_landscape.jpg', 'Mount_Kalaga_National_Park_Postcard_landscape.jpg', 'Official_Cover_Art_landscape.jpg', 'Port_Gellhorn_Postcard_landscape.jpg', 'Raul_Bautista_landscape.jpg', 'Real_Dimez_landscape.jpg', 'The_Album_Cover_Art_landscape.jpg', 'Vice_City_Postcard_landscape.jpg'];
   let bgIndex = 0;
   const layers = [
     document.getElementById('bgA'),
@@ -1701,8 +1702,10 @@
   let zCounter = 2;
   const bgBtn = document.getElementById('bgCycleBtn');
   const bgResetBtn = document.getElementById('bgResetBtn');
+  const BG_LIST_POLL_MS = 60 * 60 * 1000;
 
   function setBg(i, animate) {
+    if (!backgrounds.length) return;
     bgIndex = ((i % backgrounds.length) + backgrounds.length) % backgrounds.length;
     const url = '/bgs/' + backgrounds[bgIndex];
     localStorage.setItem('gtaBgIndex', bgIndex);
@@ -1723,7 +1726,6 @@
           if (idx !== next) layer.classList.remove('show');
         });
       } else {
-        const current = next;
         setTimeout(() => {
           layers.forEach((layer, idx) => {
             if (idx !== topLayer && parseInt(layer.style.zIndex || '0', 10) < zCounter - 1) {
@@ -1783,6 +1785,31 @@
     else stopAuto();
   }
 
+  function applyBackgroundList(files) {
+    if (!Array.isArray(files) || !files.length) return;
+    const prev = backgrounds[bgIndex];
+    backgrounds = files.slice();
+    let nextIdx = prev ? backgrounds.indexOf(prev) : -1;
+    if (nextIdx < 0) {
+      const saved = localStorage.getItem('gtaBgIndex');
+      nextIdx = saved !== null ? parseInt(saved, 10) : 0;
+    }
+    if (isNaN(nextIdx) || nextIdx < 0 || nextIdx >= backgrounds.length) nextIdx = 0;
+    bgIndex = nextIdx;
+    localStorage.setItem('gtaBgIndex', bgIndex);
+  }
+
+  async function refreshBackgroundList() {
+    try {
+      const res = await fetch('/api/backgrounds', { cache: 'no-store' });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data && Array.isArray(data.files) && data.files.length) {
+        applyBackgroundList(data.files);
+      }
+    } catch (_) {}
+  }
+
   document.addEventListener('click', (event) => {
     const btn = event.target.closest('button, .bg-btn, .welcome-btn, .preorder-btn, .preorder-choice, .preorder-close, .social-link, .platform-badge');
     if (btn) pulseBtn(btn);
@@ -1806,6 +1833,8 @@
   if (savedIdx !== null) setBg(parseInt(savedIdx, 10), false);
   updateAutoBtn();
   if (autoOn) startAuto();
+  refreshBackgroundList();
+  setInterval(refreshBackgroundList, BG_LIST_POLL_MS);
 
 
 

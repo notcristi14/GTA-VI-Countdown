@@ -82,7 +82,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 📊 **GA4 stats** (optional) — `/api/stats` when `GA_PROPERTY_ID`, `GA_CLIENT_EMAIL`, `GA_PRIVATE_KEY` are set; UI hides when unavailable. Site also uses GA measurement ID `G-QPLS07EN95` in the page head.
 
 ### 🖼️ Backgrounds & UX
-- 🌆 **Background gallery** — **24** Vice City / Leonida official artworks in `bgs/` (postcards, Jason & Lucia key art, characters, cover art, album art). Manual cycle, reset, and **auto-rotate** option (persisted in `localStorage`).
+- 🌆 **Background gallery** — **26** official Rockstar Artwork & Wallpapers landscapes in `bgs/` (postcards, Jason & Lucia key art including Lock & Load, characters, cover art, album art). Manual cycle, reset, and **auto-rotate** option (persisted in `localStorage`).
+- 🔄 **Auto-check for new backgrounds** — Server `HEAD`s the official [Rockstar Artwork & Wallpapers zip](https://media-rockstargames-com.akamaized.net/VI/downloads/artwork_wallpapers/GTAVI_Artwork_Wallpapers.zip) every **6 hours**; status on `/api/backgrounds` (`rockstar.lastModified`, `changed`). Client polls the file list hourly so new files in `bgs/` appear without a full reload.
 - 📈 **FPS counter** toggle (persisted).
 - 👆 **Shared button press** — Opacity/scale pulse on controls (buttons, badges, social links).
 - 🔗 **Social links** — Rockstar site, Support, X, Instagram, Facebook, YouTube (plus Rockstar Support on X).
@@ -118,7 +119,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── music-discovery.js      # /api/music + 30m Spotify album auto-check + trailer jobs
 ├── music.js / music.css    # Music panel UI
 ├── github-api.js           # GitHub API + GITHUB_TOKEN auth
-├── bgs/                    # Background images (24 official-style artworks)
+├── backgrounds-api.js      # /api/backgrounds + Rockstar pack HEAD check
+├── bgs/                    # Background images (26 official Rockstar landscapes)
 ├── logo.png                # Site / launcher logo
 ├── launcher/               # C++ WebView2 desktop shell
 ├── mobile/
@@ -151,6 +153,7 @@ npm start
 | 📝 `/api/commit` | 60 s | Latest commit |
 | 🗨️ `/api/news` | 30 s | Newswire |
 | 📊 `/api/stats` | 30 s | GA4 if configured |
+| 🖼️ `/api/backgrounds` | 6 h (pack) / live list | Files in `bgs/` + Rockstar zip HEAD metadata |
 
 ### 🔐 Environment (Render)
 
