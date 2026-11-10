@@ -30,7 +30,7 @@ See [root README](../README.md). Assets: [launcher/assets/README.md](assets/READ
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last run: **2026-11-10T13:32:49.641Z** · **13/13 passed** · Background images: **26** · launcher
+Last run: **2026-11-10T13:33:40.466Z** · **13/13 passed** · Background images: **26** · launcher
 
 | Check | Status | Detail |
 |-------|--------|--------|
