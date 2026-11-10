@@ -82,7 +82,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 📊 **GA4 stats** (optional) — `/api/stats` when `GA_PROPERTY_ID`, `GA_CLIENT_EMAIL`, `GA_PRIVATE_KEY` are set; UI hides when unavailable. Site also uses GA measurement ID `G-QPLS07EN95` in the page head.
 
 ### 🖼️ Backgrounds & UX
-- 🌆 **Background gallery** — **26** images in `bgs/` (official Rockstar Artwork & Wallpapers landscapes + `main.jpeg`). Includes postcards, Jason & Lucia key art (**Lock & Load** + logos variants), characters, cover art, and album art. Manual cycle, reset, and **auto-rotate** (persisted in `localStorage`).
+- 🌆 **Background gallery** — **26** Vice City / Leonida official artworks in `bgs/` (postcards, Jason & Lucia key art, characters, cover art, album art). Manual cycle, reset, and **auto-rotate** option (persisted in `localStorage`). Live list from **`/api/backgrounds`**. **GitHub Action** `sync-backgrounds` checks the Rockstar Artwork & Wallpapers pack every **4 hours**; if the pack changed, new images are downloaded into `bgs/`, the HTML seed list is updated, and changes are committed automatically.
 - 🔄 **Auto-check for new backgrounds** — Server `HEAD`s the official [Rockstar Artwork & Wallpapers zip](https://media-rockstargames-com.akamaized.net/VI/downloads/artwork_wallpapers/GTAVI_Artwork_Wallpapers.zip) every **6 hours**; status on **`/api/backgrounds`** (`rockstar.lastModified`, `contentLength`, `changed`, `checkedAt`). Client polls the live file list **hourly** so newly added files in `bgs/` appear without a full page reload.
 - ➕ **Adding art** — Drop landscape JPGs into `bgs/` and redeploy (or push to `main`). No hard-coded server list required; the client seed list is a fallback until `/api/backgrounds` responds.
 - 📈 **FPS counter** toggle (persisted).
@@ -129,7 +129,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   ├── ios/                # Swift WKWebView (VICountdown.xcodeproj)
 │   ├── generate_icons.sh   # App icons from logo.png
 │   └── README.md
-├── .github/workflows/      # ensure-gradle-wrapper · ios-build
+├── scripts/sync-backgrounds.js  # CI: download new pack art into bgs/
+├── .github/workflows/      # ensure-gradle-wrapper · ios-build · sync-backgrounds
 ├── package.json
 └── README.md
 ```
