@@ -2,20 +2,18 @@
 
 Native WebView shells for the live GTA VI countdown. **No Flutter.**
 
-**https://gta-vi-countdown.onrender.com/** (site root; regional paths available on the web UI)
+| Platform | Stack | Home URL | Build |
+|----------|--------|----------|--------|
+| **Android** | Kotlin + WebView + **Gradle 8.7** (AGP 8.6.0, Kotlin 1.9.24) | `https://gta-vi-countdown.onrender.com/` | `gradlew.bat assembleRelease` |
+| **iOS** | Swift + **WKWebView** + Xcode | `https://gta-vi-countdown.onrender.com/` | Open `VICountdown.xcodeproj` → Archive |
 
-| Platform | Stack | Build |
-|----------|--------|--------|
-| **Android** | Kotlin + WebView + **Gradle 8.7** | `gradlew.bat assembleRelease` |
-| **iOS** | Swift + **WKWebView** + Xcode | Open `VICountdown.xcodeproj` → Archive |
+Shared behavior (from source):
 
-Shared behavior:
-
-- Display name **VI Countdown** · ID `com.notcristi.vicountdown`
-- Home URL: live countdown site (`gta-vi-countdown.onrender.com`)
-- Same-origin stays in-app; other links open in the system browser
-- Theme `#1A0A2E`
-- **iOS app icon**: `AppIcon-1024.png` in the asset catalog
+- Display name **VI Countdown** · Application ID / bundle **`com.notcristi.vicountdown`**
+- Allowed in-app host: **`gta-vi-countdown.onrender.com`**
+- Other http(s) hosts and non-http schemes open in the **system browser**
+- Theme background **#1A0A2E**
+- iOS app icon asset: **AppIcon-1024.png present**
 
 ---
 
@@ -24,7 +22,7 @@ Shared behavior:
 ### Requirements
 
 - JDK 17 · Android SDK
-- `mobile/android/local.properties` → `sdk.dir=...` only
+- `mobile/android/local.properties` → `sdk.dir=...` only (no Flutter SDK)
 
 ### Build APK (Windows)
 
@@ -46,6 +44,8 @@ cd mobile/android
 ./gradlew assembleRelease
 ```
 
+**Source:** `mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt`
+
 ---
 
 ## iOS (native Swift / Xcode)
@@ -57,43 +57,26 @@ cd mobile/android
 
 ### Open & run
 
-1. Open **`mobile/ios/VICountdown.xcodeproj`** in Xcode  
-2. Select target **VICountdown**  
-3. **Signing & Capabilities** → choose your **Team**  
-4. Pick a simulator or device → **Run** (▶)
+1. Open **`mobile/ios/VICountdown.xcodeproj`** in Xcode
+2. Select target **VICountdown**
+3. **Signing & Capabilities** → choose your **Team**
+4. Run on a simulator or device
 
-### Build IPA (Archive)
+### Build IPA
 
-1. Product → **Destination** → **Any iOS Device**  
-2. Product → **Archive**  
-3. Organizer → **Distribute App** (Ad Hoc / Development / App Store)
+Product → **Archive** → Organizer → **Distribute App**
 
-### Sources
-
-```
-mobile/ios/
-  VICountdown.xcodeproj/
-  VICountdown/
-    AppDelegate.swift
-    SceneDelegate.swift
-    ViewController.swift   # WKWebView + link policy
-    Info.plist
-    Assets.xcassets/       # includes AppIcon-1024.png
-```
-
-<!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
-## 🔍 Automated integrity status
-
-Last run: **2026-11-10T13:19:37.063Z** · Failed mobile checks: **2**
-
-- ❌ **Android home /eastern-europe** — home is site root
-- ❌ **iOS home /eastern-europe** — home is site root
-
-*From `scripts/readme-integrity-check.js`.*
-<!-- END AUTO-GENERATED -->
+**Source:** `mobile/ios/VICountdown/ViewController.swift`
 
 ---
 
 ## Legal
 
 Fan-made companion. Not affiliated with Rockstar Games / Take-Two.
+
+<!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
+## 🔍 Automated integrity status
+
+*Full table written on each CI run of `scripts/readme-integrity-check.js`.*
+
+<!-- END AUTO-GENERATED -->

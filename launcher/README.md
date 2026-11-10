@@ -1,30 +1,15 @@
-# GTA VI Countdown — C++ Desktop Launcher
+# GTA VI Countdown — desktop launcher (C++)
 
-Native **Windows C++** shell for the live countdown site. **WebView2** with a compact navigation toolbar. Links open inside the app.
-
-**App name:** `GTA VI Countdown`  
-**Home URL:** https://gta-vi-countdown.onrender.com/eastern-europe  
-**Exe icon:** [`assets/GtaLogo.ico`](assets/GtaLogo.ico)
+Win32 + **WebView2** shell that embeds the live countdown site.
 
 ## Features
 
-- Toolbar: **Back** · **Forward** · **Home** · **Refresh**
-- Flat owner-drawn buttons (purple/pink, **no white system border**)
-- Back/Forward enable only when history allows
-- All links stay **in the app** (`target=_blank` / `window.open`)
-- Keyboard: F5 refresh · Alt+Left/Right · Alt+Home
-- **GTA VI logo** as `.exe` / taskbar icon
-- Dark neon window chrome matching the site
+- Loads the live site in WebView2
+- Toolbar: Back · Forward · Home · Refresh
+- Links can stay inside the app
+- **GTA VI logo** as `.exe` / taskbar icon when `GtaLogo.ico` is embedded via `src/app.rc`
 
-Site content (countdown, trailers, repo stats) is served by the **live web app** on Render — not by this executable.
-
-See the [root README](../README.md) for:
-
-- Trailers (seeded publish dates, no watch-page scrape; 30 min background refresh)
-- Music tracks auto-discovery via `/api/music` (30 min background refresh from Spotify album)
-- `/api/repo` 60s auto-check
-- **`GITHUB_TOKEN`** on the server (required to avoid GitHub **403** on shared Render IPs)
-- Optional GA4 env vars
+Site content comes from the **live web app**. See [root README](../README.md).
 
 ## Requirements
 
@@ -39,11 +24,13 @@ See the [root README](../README.md) for:
 3. **Release | x64** → Build Solution
 4. Run: `bin\x64\Release\GtaViCountdown.exe`
 
+## Assets
+
+See [launcher/assets/README.md](assets/README.md).
+
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-Last run: **2026-11-10T13:19:37.063Z** · Launcher files: **✅**
+*Updated by CI from current repo files.*
 
-*From `scripts/readme-integrity-check.js`.*
 <!-- END AUTO-GENERATED -->
-

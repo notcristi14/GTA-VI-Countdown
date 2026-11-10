@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Compare code ↔ README feature claims
+      - name: Scan code and regenerate all README.md files
         id: check
         run: |
           set -euo pipefail
@@ -67,5 +67,5 @@ jobs:
             echo "Nothing staged"
             exit 0
           fi
-          git commit -m "chore(docs): sync README integrity status with current code"
+          git commit -m "chore(docs): regenerate READMEs from current code (integrity check)"
           git push
