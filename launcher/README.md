@@ -42,7 +42,7 @@ See the [root README](../README.md) for:
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-Last run: **2026-11-10T13:10:29.194Z** · Launcher files: **✅**
+Last run: **2026-11-10T13:19:07.606Z** · Launcher files: **✅**
 
 *From `scripts/readme-integrity-check.js`.*
 <!-- END AUTO-GENERATED -->
