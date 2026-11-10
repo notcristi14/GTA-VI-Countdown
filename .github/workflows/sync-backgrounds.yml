@@ -1,0 +1,52 @@
+name: Sync backgrounds
+
+on:
+  schedule:
+    # Every 4 hours
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-backgrounds
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check endpoint + sync from Rockstar pack
+        env:
+          BACKGROUNDS_API_URL: https://gta-vi-countdown.onrender.com/api/backgrounds
+        run: |
+          set -euo pipefail
+          # Probe live API (informational — no-op if down)
+          curl -fsS -o /tmp/bgs-api.json "$BACKGROUNDS_API_URL" || echo '{}' > /tmp/bgs-api.json
+          echo "Live /api/backgrounds:"
+          head -c 500 /tmp/bgs-api.json; echo
+          node scripts/sync-backgrounds.js
+
+      - name: Commit if backgrounds changed
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bgs/ gta-vi-countdown.html bgs/.rockstar-meta.json || true
+          if git diff --staged --quiet; then
+            echo "No file changes — nothing to commit."
+          else
+            git commit -m "chore(bgs): sync new Rockstar artwork backgrounds"
+            git push
+          fi

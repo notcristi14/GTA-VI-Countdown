@@ -1,0 +1,7 @@
+{
+  "lastModified": "Thu, 15 Oct 2026 00:01:14 GMT",
+  "contentLength": "235479862",
+  "etag": "\"572eec8c096b580184f02d8fd854bce1:1792069288.476521\"",
+  "updatedAt": null,
+  "note": "Used by scripts/sync-backgrounds.js and GitHub Actions to detect Rockstar pack changes"
+}
