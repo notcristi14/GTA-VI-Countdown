@@ -71,7 +71,7 @@ Product → Archive → Distribute App
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last run: **2026-11-10T13:25:54.115Z** · **13/13 passed** · Background images: **26**
+Last run: **2026-11-10T13:32:49.641Z** · **13/13 passed** · Background images: **26**
 
 | Check | Status | Detail |
 |-------|--------|--------|
