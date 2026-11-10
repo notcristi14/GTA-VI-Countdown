@@ -39,12 +39,16 @@ on:
       - 'bgs/**'
       - 'mobile/android/**'
       - 'mobile/ios/**'
+      - 'mobile/README.md'
       - 'launcher/src/**'
       - 'launcher/*.sln'
       - 'launcher/*.vcxproj'
       - 'launcher/assets/**'
+      - 'launcher/README.md'
+      - 'launcher/assets/README.md'
       - 'scripts/readme-integrity-check.js'
       - 'package.json'
+      - 'README.md'
 
 permissions:
   contents: write
@@ -55,6 +59,9 @@ concurrency:
 
 jobs:
   integrity:
+    # Avoid re-entry when this workflow commits README integrity sections.
+    # schedule / workflow_dispatch still run; human pushes still run.
+    if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
