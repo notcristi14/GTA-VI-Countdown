@@ -1,6 +1,8 @@
 /**
  * Official Rockstar Artwork & Wallpapers backgrounds
- * registerBackgrounds(app) — mounts /api/backgrounds and starts 6h pack check
+ * registerBackgrounds(app) — mounts /api/backgrounds and starts 6h pack check.
+ * GitHub Actions (sync-backgrounds.yml) polls this endpoint + the ZIP every few hours;
+ * when the pack changes, CI downloads new images into bgs/ and updates the HTML seed list.
  */
 const path = require('path');
 const fs = require('fs');
