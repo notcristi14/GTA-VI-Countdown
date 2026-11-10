@@ -22,9 +22,7 @@ on:
       - 'launcher/*.vcxproj'
       - 'launcher/assets/**'
       - 'scripts/readme-integrity-check.js'
-      - 'scripts/_part0.txt'
-      - 'scripts/_part1.txt'
-      - 'scripts/_part2.txt'
+      - 'scripts/ric.b64.*'
       - 'package.json'
 
 permissions:
@@ -46,14 +44,15 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Assemble integrity script from parts if present
+      - name: Decode integrity script from base64 parts
         run: |
           set -euo pipefail
-          if [ -f scripts/_part0.txt ] && [ -f scripts/_part1.txt ] && [ -f scripts/_part2.txt ]; then
-            cat scripts/_part0.txt scripts/_part1.txt scripts/_part2.txt > scripts/readme-integrity-check.js
-            echo "Assembled scripts/readme-integrity-check.js ($(wc -c < scripts/readme-integrity-check.js) bytes)"
+          if ls scripts/ric.b64.* >/dev/null 2>&1; then
+            cat scripts/ric.b64.0 scripts/ric.b64.1 scripts/ric.b64.2 scripts/ric.b64.3 2>/dev/null | base64 -d > scripts/readme-integrity-check.js
+            echo "Decoded $(wc -c < scripts/readme-integrity-check.js) bytes"
           fi
-          test -f scripts/readme-integrity-check.js
+          test -s scripts/readme-integrity-check.js
+          node --check scripts/readme-integrity-check.js
 
       - name: Scan implementation and regenerate all READMEs
         id: check
@@ -66,7 +65,7 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
           if grep -q '^FAIL ' /tmp/integrity-out.txt; then
-            echo "::warning::Integrity checks reported FAIL lines — see scripts/integrity-report.json"
+            echo "::warning::Integrity checks reported FAIL lines"
           fi
           tail -30 /tmp/integrity-out.txt
 
@@ -82,7 +81,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md mobile/README.md launcher/README.md launcher/assets/README.md scripts/integrity-report.json scripts/readme-integrity-check.js || true
+          git add README.md mobile/README.md launcher/README.md launcher/assets/README.md scripts/integrity-report.json
           if git diff --staged --quiet; then
             echo "Nothing staged"
             exit 0
