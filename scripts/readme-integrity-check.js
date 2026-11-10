@@ -13,8 +13,8 @@ const ROOT = path.resolve(__dirname, '..');
 const now = new Date().toISOString();
 const commitSha = process.env.GITHUB_SHA || 'local';
 
-/** Intended mobile shell home (regional Eastern Europe countdown). */
-const EXPECTED_MOBILE_HOME = 'https://gta-vi-countdown.onrender.com/eastern-europe';
+/** Intended mobile shell home (site root landing page). */
+const EXPECTED_MOBILE_HOME = 'https://gta-vi-countdown.onrender.com/';
 const EXPECTED_MOBILE_HOST = 'gta-vi-countdown.onrender.com';
 
 const EXPECTED_REGIONS = [
@@ -111,7 +111,7 @@ function urlsMatchExpected(actual) {
 }
 function routeRegistered(source, apiPath) {
   const esc = apiPath.replace(/\//g, '\\/');
-  return new RegExp('app\\.get\\(\\s*[\'"]' + esc + '[\'"]').test(source);
+  return new RegExp('app\\.get\\(\\s*[\'\"]' + esc + '[\'\\"]').test(source);
 }
 function upsertGenerated(content, generatedBody) {
   const block = MARKER_START + '\n' + generatedBody.trim() + '\n' + MARKER_END;
@@ -136,12 +136,12 @@ const mainKt = read(MAIN_KT);
 const iosVc = read(IOS_VC);
 const appWindowCpp = read(APP_WINDOW);
 
-const androidHomeMatch = mainKt.match(/HOME_URL\s*=\s*"([^"]*)"/);
-const iosHomeMatch = iosVc.match(/homeURL\s*=\s*URL\(string:\s*"([^"]*)"\)/);
+const androidHomeMatch = mainKt.match(/HOME_URL\s*=\s*\"([^\"]*)\"/);
+const iosHomeMatch = iosVc.match(/homeURL\s*=\s*URL\(string:\s*\"([^\"]*)\"\)/);
 const androidHome = androidHomeMatch ? androidHomeMatch[1] : null;
 const iosHome = iosHomeMatch ? iosHomeMatch[1] : null;
-const androidHostMatch = mainKt.match(/ALLOWED_HOST\s*=\s*"([^"]*)"/);
-const iosHostMatch = iosVc.match(/allowedHost\s*=\s*"([^"]*)"/);
+const androidHostMatch = mainKt.match(/ALLOWED_HOST\s*=\s*\"([^\"]*)\"/);
+const iosHostMatch = iosVc.match(/allowedHost\s*=\s*\"([^\"]*)\"/);
 const androidHost = androidHostMatch ? androidHostMatch[1] : null;
 const iosHost = iosHostMatch ? iosHostMatch[1] : null;
 
@@ -149,9 +149,9 @@ const bgsCount = countImgs('bgs');
 const gradleProps = read('mobile/android/gradle/wrapper/gradle-wrapper.properties');
 const gradleVer = (gradleProps.match(/gradle-(\d+\.\d+(?:\.\d+)?)/) || [])[1] || null;
 const settingsG = read('mobile/android/settings.gradle');
-const agpVer = (settingsG.match(/com\.android\.application"\s+version\s+"([^"]+)"/) || [])[1] || null;
-const kotlinVer = (settingsG.match(/kotlin\.android"\s+version\s+"([^"]+)"/) || [])[1] || null;
-const appId = (read('mobile/android/app/build.gradle').match(/applicationId\s*=\s*"([^"]+)"/) || [])[1] || null;
+const agpVer = (settingsG.match(/com\.android\.application\"\s+version\s+\"([^\"]+)\"/) || [])[1] || null;
+const kotlinVer = (settingsG.match(/kotlin\.android\"\s+version\s+\"([^\"]+)\"/) || [])[1] || null;
+const appId = (read('mobile/android/app/build.gradle').match(/applicationId\s*=\s*\"([^\"]+)\"/) || [])[1] || null;
 const pureAndroid = settingsG.length > 0 && !settingsG.includes('flutter.sdk') && !settingsG.includes('flutter-plugin');
 const iosIcon = exists('mobile/ios/VICountdown/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png');
 const launcherIco = exists('launcher/assets/GtaLogo.ico');
@@ -171,7 +171,7 @@ const apis = {
 
 const regionImpl = {};
 for (const [slug, name, target] of EXPECTED_REGIONS) {
-  const hasSlug = html.includes("'" + slug + "'");
+  const hasSlug = html.includes(\"'\" + slug + \"'\");
   const hasTarget = html.includes(target);
   regionImpl[slug] = { expectedName: name, expectedTarget: target, slugPresent: hasSlug, targetPresent: hasTarget, implemented: hasSlug && hasTarget };
 }
@@ -179,25 +179,25 @@ const regionsOkCount = Object.values(regionImpl).filter((r) => r.implemented).le
 
 const features = {
   regions15: regionsOkCount === 15,
-  defaultEurope: /let\s+activeSlug\s*=\s*'europe'/.test(html),
-  pathPersist: /localStorage\.getItem\(\s*'gtaRegion'\s*\)/.test(html),
+  defaultEurope: /let\\s+activeSlug\\s*=\\s*'europe'/.test(html),
+  pathPersist: /localStorage\\.getItem\\(\\s*'gtaRegion'\\s*\\)/.test(html),
   digitReels: html.includes('requestAnimationFrame'),
   availableNow: /Available now/i.test(html),
   preorder: html.includes('preorder'),
   musicPanel: exists('music.js') && exists('music.css'),
-  musicCentered: /align-items:\s*center/.test(musicCss),
+  musicCentered: /align-items:\\s*center/.test(musicCss),
   musicDiscoveryJob: /fetchSpotifyAlbumTracks|SPOTIFY_ALBUM/.test(musicDisc) && /registerMusic/.test(musicDisc),
-  musicCache30m: /30\s*\*\s*60\s*\*\s*1000/.test(musicDisc),
-  trailersCache30m: /TRAILERS_CACHE_MS\s*=\s*30\s*\*\s*60\s*\*\s*1000/.test(appJs),
-  backgroundsJob: /registerBackgrounds/.test(bgsApi) && /6\s*\*\s*60\s*\*\s*60\s*\*\s*1000/.test(bgsApi),
+  musicCache30m: /30\\s*\\*\\s*60\\s*\\*\\s*1000/.test(musicDisc),
+  trailersCache30m: /TRAILERS_CACHE_MS\\s*=\\s*30\\s*\\*\\s*60\\s*\\*\\s*1000/.test(appJs),
+  backgroundsJob: /registerBackgrounds/.test(bgsApi) && /6\\s*\\*\\s*60\\s*\\*\\s*60\\s*\\*\\s*1000/.test(bgsApi),
   pwaManifest: html.includes('manifest') && html.includes('standalone'),
-  serviceWorker: /serviceWorker|navigator\.serviceWorker/.test(html),
+  serviceWorker: /serviceWorker|navigator\\.serviceWorker/.test(html),
   androidWebViewClass: /WebView/.test(mainKt),
-  androidLoadsHome: /loadUrl\(\s*HOME_URL\s*\)/.test(mainKt),
+  androidLoadsHome: /loadUrl\\(\\s*HOME_URL\\s*\\)/.test(mainKt),
   androidExternal: /ACTION_VIEW/.test(mainKt),
   iosWebViewClass: /WKWebView/.test(iosVc),
-  iosLoadsHome: /webView\.load\(\s*URLRequest\(\s*url:\s*homeURL/.test(iosVc),
-  iosExternal: /UIApplication\.shared\.open/.test(iosVc),
+  iosLoadsHome: /webView\\.load\\(\\s*URLRequest\\(\\s*url:\\s*homeURL/.test(iosVc),
+  iosExternal: /UIApplication\\.shared\\.open/.test(iosVc),
   launcherWebView2: /ICoreWebView2|WebView2|CreateCoreWebView2Environment/i.test(appWindowCpp),
   launcherNav: /GoBack|GoForward|Navigate|Back|Forward|Home|Refresh/i.test(appWindowCpp),
 };
@@ -214,7 +214,7 @@ for (const [slug, , target] of EXPECTED_REGIONS) {
   const r = regionImpl[slug];
   check('region-' + slug, 'Region ' + slug + ' configured', r.implemented, r.implemented ? target : 'slugPresent=' + r.slugPresent + ' targetPresent=' + r.targetPresent, true);
 }
-check('default-europe', "Default activeSlug is 'europe'", features.defaultEurope, features.defaultEurope ? "activeSlug = 'europe'" : 'not found', false);
+check('default-europe', \"Default activeSlug is 'europe'\", features.defaultEurope, features.defaultEurope ? \"activeSlug = 'europe'\" : 'not found', false);
 check('region-persist', 'Region path + localStorage gtaRegion', features.pathPersist, features.pathPersist ? 'ok' : 'missing', false);
 check('digit-reels', 'requestAnimationFrame countdown', features.digitReels, features.digitReels ? 'HTML' : 'missing', false);
 check('available-now', 'Available now UI string', features.availableNow, features.availableNow ? 'present' : 'missing', false);
@@ -226,27 +226,27 @@ check('music-cache', 'Music cache ~30 minutes', features.musicCache30m, features
 check('trailers-cache', 'Trailers cache ~30 minutes', features.trailersCache30m, features.trailersCache30m ? 'TRAILERS_CACHE_MS' : 'not detected', false);
 check('bgs-job', 'Backgrounds register + 6h check', features.backgroundsJob, features.backgroundsJob ? 'backgrounds-api.js' : 'missing job', true);
 Object.keys(apis).forEach((k) => {
-  check('api-' + k.replace(/\W/g, ''), 'Route registered ' + k, apis[k], apis[k] ? 'app.get found' : 'NOT registered in backend sources', true);
+  check('api-' + k.replace(/\\W/g, ''), 'Route registered ' + k, apis[k], apis[k] ? 'app.get found' : 'NOT registered in backend sources', true);
 });
 check('bgs-disk', 'Background images on disk (bgs/)', bgsCount >= 20, bgsCount + ' image files', false);
 check('pwa-manifest', 'Web App Manifest standalone', features.pwaManifest, features.pwaManifest ? 'HTML' : 'missing', false);
 check('no-service-worker', 'No service worker (document honestly)', !features.serviceWorker, features.serviceWorker ? 'serviceWorker found' : 'manifest-only PWA', false);
 
 const androidHomeOk = urlsMatchExpected(androidHome);
-check('android-home-url', 'Android HOME_URL is ' + EXPECTED_MOBILE_HOME, androidHomeOk, androidHome == null ? 'HOME_URL constant not found in MainActivity.kt' : 'actual="' + androidHome + '" expected="' + EXPECTED_MOBILE_HOME + '"', true);
+check('android-home-url', 'Android HOME_URL is ' + EXPECTED_MOBILE_HOME, androidHomeOk, androidHome == null ? 'HOME_URL constant not found in MainActivity.kt' : 'actual=\"' + androidHome + '\" expected=\"' + EXPECTED_MOBILE_HOME + '\"', true);
 check('android-webview', 'Android uses android.webkit WebView', features.androidWebViewClass && exists(MAIN_KT), features.androidWebViewClass ? MAIN_KT : 'WebView not found', true);
 check('android-loadurl', 'Android loadUrl(HOME_URL)', features.androidLoadsHome, features.androidLoadsHome ? 'loadUrl(HOME_URL)' : 'loadUrl(HOME_URL) not found', true);
 check('android-external', 'Android external links ACTION_VIEW', features.androidExternal, features.androidExternal ? 'Intent.ACTION_VIEW' : 'missing', true);
-check('android-host', 'Android ALLOWED_HOST is site host', androidHost === EXPECTED_MOBILE_HOST, androidHost == null ? 'ALLOWED_HOST missing' : 'actual="' + androidHost + '"', true);
+check('android-host', 'Android ALLOWED_HOST is site host', androidHost === EXPECTED_MOBILE_HOST, androidHost == null ? 'ALLOWED_HOST missing' : 'actual=\"' + androidHost + '\"', true);
 check('android-pure-gradle', 'Android Gradle has no Flutter plugin', pureAndroid, pureAndroid ? 'pure Gradle' : 'flutter references remain', true);
 check('android-gradle-ver', 'Gradle wrapper 8.7', gradleVer === '8.7', gradleVer == null ? 'wrapper properties missing' : 'actual=' + gradleVer, false);
 
 const iosHomeOk = urlsMatchExpected(iosHome);
-check('ios-home-url', 'iOS homeURL is ' + EXPECTED_MOBILE_HOME, iosHomeOk, iosHome == null ? 'homeURL not found in ViewController.swift' : 'actual="' + iosHome + '" expected="' + EXPECTED_MOBILE_HOME + '"', true);
+check('ios-home-url', 'iOS homeURL is ' + EXPECTED_MOBILE_HOME, iosHomeOk, iosHome == null ? 'homeURL not found in ViewController.swift' : 'actual=\"' + iosHome + '\" expected=\"' + EXPECTED_MOBILE_HOME + '\"', true);
 check('ios-webview', 'iOS uses WKWebView', features.iosWebViewClass && exists(IOS_VC), features.iosWebViewClass ? IOS_VC : 'WKWebView not found', true);
 check('ios-load', 'iOS loads homeURL into WKWebView', features.iosLoadsHome, features.iosLoadsHome ? 'webView.load(URLRequest(url: homeURL))' : 'load pattern not found', true);
 check('ios-external', 'iOS external UIApplication.shared.open', features.iosExternal, features.iosExternal ? 'present' : 'missing', true);
-check('ios-host', 'iOS allowedHost is site host', iosHost === EXPECTED_MOBILE_HOST, iosHost == null ? 'allowedHost missing' : 'actual="' + iosHost + '"', true);
+check('ios-host', 'iOS allowedHost is site host', iosHost === EXPECTED_MOBILE_HOST, iosHost == null ? 'allowedHost missing' : 'actual=\"' + iosHost + '\"', true);
 check('ios-icon', 'iOS AppIcon-1024.png present', iosIcon, iosIcon ? 'present' : 'MISSING asset', false);
 
 check('launcher-sln', 'launcher/GtaViCountdown.sln exists', launcherSln, launcherSln ? 'present' : 'MISSING', true);
@@ -255,7 +255,7 @@ check('launcher-nav', 'Launcher navigation chrome in AppWindow', features.launch
 check('launcher-ico', 'launcher/assets/GtaLogo.ico exists', launcherIco, launcherIco ? 'present' : 'MISSING', false);
 
 ['README.md', 'mobile/README.md', 'launcher/README.md', 'launcher/assets/README.md'].forEach((r) => {
-  check('readme-' + r.replace(/\W/g, '_'), r + ' exists', exists(r), exists(r) ? 'present' : 'MISSING', r === 'README.md');
+  check('readme-' + r.replace(/\\W/g, '_'), r + ' exists', exists(r), exists(r) ? 'present' : 'MISSING', r === 'README.md');
 });
 check('readme-discovery', 'At least one README.md discovered', readmeFiles.length >= 1, readmeFiles.length + ' files: ' + readmeFiles.join(', '), true);
 
@@ -302,21 +302,21 @@ writeIfChanged('scripts/integrity-report.json', JSON.stringify(report, null, 2))
 
 function statusTable() {
   return (
-    '| ID | Claim | Status | Detail |\n|----|-------|--------|--------|\n' +
-    checks.map((c) => '| `' + c.id + '` | ' + c.claim.replace(/\|/g, '/') + ' | ' + (c.ok ? 'PASS' : 'FAIL') + ' | ' + c.detail.replace(/\|/g, '/') + ' |').join('\n')
+    '| ID | Claim | Status | Detail |\\n|----|-------|--------|--------|\\n' +
+    checks.map((c) => '| `' + c.id + '` | ' + c.claim.replace(/\\|/g, '/') + ' | ' + (c.ok ? 'PASS' : 'FAIL') + ' | ' + c.detail.replace(/\\|/g, '/') + ' |').join('\\n')
   );
 }
 function integritySection(scope) {
   return (
-    '## Automated integrity status\n\n' +
+    '## Automated integrity status\\n\\n' +
     'Last run: **' + now + '** · commit `' + commitSha.slice(0, 7) + '` · **' + passed + '/' + checks.length + ' passed**' +
     (criticalFailed.length ? ' · **' + criticalFailed.length + ' critical failures**' : '') +
     (scope ? ' · ' + scope : '') +
-    '\n\n' +
-    'Expected mobile home URL: `' + EXPECTED_MOBILE_HOME + '`  \n' +
-    'Android actual: `' + (androidHome || '(not found)') + '` · iOS actual: `' + (iosHome || '(not found)') + '`\n\n' +
+    '\\n\\n' +
+    'Expected mobile home URL: `' + EXPECTED_MOBILE_HOME + '`  \\n' +
+    'Android actual: `' + (androidHome || '(not found)') + '` · iOS actual: `' + (iosHome || '(not found)') + '`\\n\\n' +
     statusTable() +
-    '\n\n*Static analysis only (`scripts/readme-integrity-check.js`). Failures remain until source or expectations are fixed.*\n'
+    '\\n\\n*Static analysis only (`scripts/readme-integrity-check.js`). Failures remain until source or expectations are fixed.*\\n'
   );
 }
 
@@ -342,21 +342,21 @@ if (exists('mobile/README.md')) {
   const mobileFactsEnd = '<!-- END AUTO-GENERATED: mobile-config-facts -->';
   const facts =
     mobileFactsStart +
-    '\n### Mobile home URL (integrity)\n\n' +
-    '| Shell | Expected | Actual (source) | Match |\n|-------|----------|-----------------|-------|\n' +
-    '| Android `HOME_URL` | `' + EXPECTED_MOBILE_HOME + '` | `' + (androidHome || 'NOT FOUND') + '` | ' + (androidHomeOk ? 'yes' : '**NO**') + ' |\n' +
-    '| iOS `homeURL` | `' + EXPECTED_MOBILE_HOME + '` | `' + (iosHome || 'NOT FOUND') + '` | ' + (iosHomeOk ? 'yes' : '**NO**') + ' |\n\n' +
-    'If Match is **NO**, the native apps open the site root (or another path) instead of the Eastern Europe regional countdown. ' +
-    'This integrity check **fails** until `MainActivity.kt` / `ViewController.swift` use the expected URL.\n' +
+    '\\n### Mobile home URL (integrity)\\n\\n' +
+    '| Shell | Expected | Actual (source) | Match |\\n|-------|----------|-----------------|-------|\\n' +
+    '| Android `HOME_URL` | `' + EXPECTED_MOBILE_HOME + '` | `' + (androidHome || 'NOT FOUND') + '` | ' + (androidHomeOk ? 'yes' : '**NO**') + ' |\\n' +
+    '| iOS `homeURL` | `' + EXPECTED_MOBILE_HOME + '` | `' + (iosHome || 'NOT FOUND') + '` | ' + (iosHomeOk ? 'yes' : '**NO**') + ' |\\n\\n' +
+    'Intended mobile landing page is the **site root** (`/`). Regional paths such as `/eastern-europe` remain available in the web UI for all 15 countdown regions; they are not required as the native shell home URL.\\n' +
+    'If Match is **NO**, the native shell home URL does not match the intended root URL.\\n' +
     mobileFactsEnd;
   const fi = m.indexOf(mobileFactsStart);
   const fj = m.indexOf(mobileFactsEnd);
   let next;
-  if (fi !== -1 && fj !== -1 && fj > fi) next = m.slice(0, fi) + facts + m.slice(fj + mobileFactsEnd.length).replace(/^\n+/, '\n');
+  if (fi !== -1 && fj !== -1 && fj > fi) next = m.slice(0, fi) + facts + m.slice(fj + mobileFactsEnd.length).replace(/^\\n+/, '\\n');
   else {
     const gi = m.indexOf(MARKER_START);
-    if (gi !== -1) next = m.slice(0, gi) + facts + '\n\n' + m.slice(gi);
-    else next = m.trimEnd() + '\n\n' + facts + '\n';
+    if (gi !== -1) next = m.slice(0, gi) + facts + '\\n\\n' + m.slice(gi);
+    else next = m.trimEnd() + '\\n\\n' + facts + '\\n';
   }
   if (writeIfChanged('mobile/README.md', next)) changed = true;
 }
