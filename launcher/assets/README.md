@@ -14,6 +14,8 @@ Related docs:
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-*Updated by CI — checks `GtaLogo.ico` presence from disk.*
+Last run: **2026-11-10T13:24:53.813Z** · GtaLogo.ico: **✅** · Launcher project: **✅**
 
+*From `scripts/readme-integrity-check.js`.*
 <!-- END AUTO-GENERATED -->
+

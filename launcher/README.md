@@ -31,6 +31,8 @@ See [launcher/assets/README.md](assets/README.md).
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-*Updated by CI from current repo files.*
+Last run: **2026-11-10T13:24:53.813Z** · Launcher files: **✅**
 
+*From `scripts/readme-integrity-check.js`.*
 <!-- END AUTO-GENERATED -->
+

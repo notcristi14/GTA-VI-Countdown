@@ -77,6 +77,11 @@ Fan-made companion. Not affiliated with Rockstar Games / Take-Two.
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-*Full table written on each CI run of `scripts/readme-integrity-check.js`.*
+Last run: **2026-11-10T13:24:53.813Z** · Failed mobile checks: **2**
 
+- ❌ **Android home /eastern-europe** — home is site root
+- ❌ **iOS home /eastern-europe** — home is site root
+
+*From `scripts/readme-integrity-check.js`.*
 <!-- END AUTO-GENERATED -->
+

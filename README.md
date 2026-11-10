@@ -169,7 +169,7 @@ npm start
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-Last run: **2026-11-10T13:19:37.063Z** · **26/28 passed** · Background images: **26**
+Last run: **2026-11-10T13:24:53.813Z** · **26/28 passed** · Background images: **26**
 
 | Check | Status | Detail |
 |-------|--------|--------|
