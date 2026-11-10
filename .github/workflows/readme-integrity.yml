@@ -1,5 +1,27 @@
 name: README integrity check
 
+# Layout policy
+# -------------
+# README design/layout is owned by the hand-written templates in:
+#   README.md
+#   mobile/README.md
+#   launcher/README.md
+#   launcher/assets/README.md
+#
+# Structure (mirrored across those files):
+#   1. Title + short pitch
+#   2. Key facts / links (tables where useful)
+#   3. Feature or build sections with emoji headings where the root doc uses them
+#   4. Requirements / Build
+#   5. Legal (where applicable)
+#   6. AUTO-GENERATED integrity block at the end only
+#
+# scripts/readme-integrity-check.js must NOT rewrite the hand-written layout.
+# It only upserts content between:
+#   <!-- AUTO-GENERATED: readme-integrity-check -->
+#   <!-- END AUTO-GENERATED -->
+# and the mobile facts markers on mobile/README.md.
+
 on:
   schedule:
     - cron: '15 */4 * * *'
@@ -43,7 +65,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Scan implementation and regenerate README integrity sections
+      - name: Scan source and update integrity sections only
         id: check
         run: |
           set -uo pipefail
@@ -69,7 +91,7 @@ jobs:
           path: scripts/integrity-report.json
           if-no-files-found: warn
 
-      - name: Commit documentation when it changed
+      - name: Commit integrity sections when they changed
         if: steps.check.outputs.changed == 'true'
         run: |
           set -euo pipefail
