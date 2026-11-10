@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+/**
+ * README integrity checker — static analysis of source vs docs.
+ * Does not execute apps or hit production APIs.
+ * Critical check failures → process.exit(1) after writing report/docs.
+ */
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+const ROOT = path.resolve(__dirname, '..');
+const now = new Date().toISOString();
+const commitSha = process.env.GITHUB_SHA || 'local';
+
+/** Intended mobile shell home (site root landing page). */
+const EXPECTED_MOBILE_HOME = 'https://gta-vi-countdown.onrender.com/';
+const EXPECTED_MOBILE_HOST = 'gta-vi-countdown.onrender.com';
