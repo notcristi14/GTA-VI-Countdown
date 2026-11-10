@@ -1,114 +1,84 @@
 {
-  "generatedAt": "2026-11-10T13:24:53.813Z",
-  "commit": "85b28255d7ae1f330c46b0d830e809bd70fb6bef",
+  "generatedAt": "2026-11-10T13:25:54.115Z",
+  "commit": "19202374ed8e9a51a4a859a24790f0e93eb802d7",
   "summary": {
-    "total": 28,
-    "passed": 26,
-    "failed": 2
+    "total": 13,
+    "passed": 13,
+    "failed": 0
   },
-  "backgroundImageCount": 26,
+  "facts": {
+    "androidHome": "https://gta-vi-countdown.onrender.com/",
+    "iosHome": "https://gta-vi-countdown.onrender.com/",
+    "androidHost": "gta-vi-countdown.onrender.com",
+    "iosHost": "gta-vi-countdown.onrender.com",
+    "bgsCount": 26,
+    "gradleVer": "8.7",
+    "agpVer": "8.6.0",
+    "kotlinVer": "1.9.24",
+    "appId": "com.notcristi.vicountdown",
+    "regionsFound": 15,
+    "apis": {
+      "trailers": true,
+      "music": true,
+      "repo": true,
+      "news": true,
+      "backgrounds": true,
+      "commits": true,
+      "commit": true,
+      "stats": true
+    },
+    "pureAndroid": true,
+    "iosIcon": true,
+    "launcherIco": true
+  },
   "checks": [
     {
-      "id": "html-main",
-      "readmeClaim": "gta-vi-countdown.html frontend",
+      "id": "html",
+      "readmeClaim": "gta-vi-countdown.html",
       "ok": true,
       "detail": "file"
     },
     {
       "id": "app-js",
-      "readmeClaim": "Express app.js",
+      "readmeClaim": "app.js",
       "ok": true,
       "detail": "file"
     },
     {
-      "id": "regions-15",
-      "readmeClaim": "15 regional unlock targets",
+      "id": "regions",
+      "readmeClaim": "15 region slugs",
       "ok": true,
-      "detail": "slugs in HTML/JS"
+      "detail": "15 found"
     },
     {
-      "id": "digit-reels",
-      "readmeClaim": "requestAnimationFrame digit reels",
-      "ok": true,
-      "detail": "rAF"
-    },
-    {
-      "id": "api-trailers",
-      "readmeClaim": "/api/trailers",
-      "ok": true,
-      "detail": "API"
-    },
-    {
-      "id": "api-music",
-      "readmeClaim": "/api/music",
-      "ok": true,
-      "detail": "API"
-    },
-    {
-      "id": "api-repo",
-      "readmeClaim": "/api/repo",
-      "ok": true,
-      "detail": "API"
-    },
-    {
-      "id": "api-news",
-      "readmeClaim": "/api/news",
-      "ok": true,
-      "detail": "API"
-    },
-    {
-      "id": "api-backgrounds",
-      "readmeClaim": "/api/backgrounds",
-      "ok": true,
-      "detail": "API"
-    },
-    {
-      "id": "music-files",
-      "readmeClaim": "music.js + music.css",
+      "id": "music",
+      "readmeClaim": "music.js/css",
       "ok": true,
       "detail": "files"
     },
     {
-      "id": "bgs-count",
-      "readmeClaim": "Background images in bgs/",
+      "id": "bgs",
+      "readmeClaim": "bgs/ images (26)",
       "ok": true,
       "detail": "26 images"
     },
     {
-      "id": "sync-bgs",
-      "readmeClaim": "scripts/sync-backgrounds.js",
-      "ok": true,
-      "detail": "script"
-    },
-    {
       "id": "android-gradle",
-      "readmeClaim": "Gradle 8.7 wrapper",
+      "readmeClaim": "Gradle 8.7",
       "ok": true,
-      "detail": "wrapper"
+      "detail": "8.7"
     },
     {
       "id": "android-main",
-      "readmeClaim": "Kotlin MainActivity WebView",
+      "readmeClaim": "MainActivity WebView",
       "ok": true,
-      "detail": "MainActivity"
+      "detail": "https://gta-vi-countdown.onrender.com/"
     },
     {
-      "id": "android-no-flutter",
-      "readmeClaim": "Android without Flutter plugin",
+      "id": "android-pure",
+      "readmeClaim": "No Flutter in Android Gradle",
       "ok": true,
-      "detail": "pure Gradle"
-    },
-    {
-      "id": "android-label",
-      "readmeClaim": "Android label VI Countdown",
-      "ok": true,
-      "detail": "manifest"
-    },
-    {
-      "id": "android-ee",
-      "readmeClaim": "Android home /eastern-europe",
-      "ok": false,
-      "detail": "home is site root"
+      "detail": "pure"
     },
     {
       "id": "ios-xcode",
@@ -118,63 +88,27 @@
     },
     {
       "id": "ios-webview",
-      "readmeClaim": "Swift WKWebView",
+      "readmeClaim": "WKWebView",
       "ok": true,
-      "detail": "ViewController"
-    },
-    {
-      "id": "ios-ee",
-      "readmeClaim": "iOS home /eastern-europe",
-      "ok": false,
-      "detail": "home is site root"
+      "detail": "https://gta-vi-countdown.onrender.com/"
     },
     {
       "id": "ios-icon",
-      "readmeClaim": "iOS AppIcon-1024.png",
+      "readmeClaim": "AppIcon-1024.png",
       "ok": true,
-      "detail": "icon"
-    },
-    {
-      "id": "ios-name",
-      "readmeClaim": "iOS display name VI Countdown",
-      "ok": true,
-      "detail": "Info.plist"
+      "detail": "present"
     },
     {
       "id": "launcher",
-      "readmeClaim": "C++ launcher solution",
+      "readmeClaim": "Launcher project",
       "ok": true,
-      "detail": "launcher"
+      "detail": "present"
     },
     {
       "id": "launcher-ico",
-      "readmeClaim": "launcher/assets/GtaLogo.ico",
+      "readmeClaim": "GtaLogo.ico",
       "ok": true,
-      "detail": "exe icon"
-    },
-    {
-      "id": "readme-launcher-assets",
-      "readmeClaim": "launcher/assets/README.md",
-      "ok": true,
-      "detail": "doc"
-    },
-    {
-      "id": "readme-root",
-      "readmeClaim": "README.md",
-      "ok": true,
-      "detail": "doc"
-    },
-    {
-      "id": "readme-mobile",
-      "readmeClaim": "mobile/README.md",
-      "ok": true,
-      "detail": "doc"
-    },
-    {
-      "id": "readme-launcher",
-      "readmeClaim": "launcher/README.md",
-      "ok": true,
-      "detail": "doc"
+      "detail": "present"
     }
   ]
 }
