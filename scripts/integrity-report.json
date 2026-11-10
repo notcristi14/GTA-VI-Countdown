@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-10T14:07:37.728Z",
-  "commit": "0f900393a8459dd332119c7f09f0fcfb79a33ccc",
+  "generatedAt": "2026-11-10T16:41:43.353Z",
+  "commit": "4c8d7ac3c1ab3e9b4223c3255d07c82a589c5ff6",
   "analysisType": "static-source-only",
   "expectedMobileHome": "https://gta-vi-countdown.onrender.com/",
   "readmeFilesScanned": [
@@ -158,7 +158,7 @@
     }
   },
   "regionsImplemented": 15,
-  "backgroundImageCount": 26,
+  "backgroundImageCount": 143,
   "mobile": {
     "expectedHome": "https://gta-vi-countdown.onrender.com/",
     "androidHome": "https://gta-vi-countdown.onrender.com/",
@@ -450,7 +450,7 @@
       "id": "bgs-disk",
       "claim": "Background images on disk (bgs/)",
       "ok": true,
-      "detail": "26 image files",
+      "detail": "143 image files",
       "critical": false
     },
     {

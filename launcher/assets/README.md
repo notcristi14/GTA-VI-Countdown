@@ -14,7 +14,7 @@ Related docs:
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last run: **2026-11-10T14:43:04.848Z** · commit `0c6ff99` · **62/62 passed** · launcher/assets
+Last run: **2026-11-10T16:41:43.353Z** · commit `4c8d7ac` · **62/62 passed** · launcher/assets
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -58,7 +58,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `api-apinews` | Route registered /api/news | PASS | app.get found |
 | `api-apistats` | Route registered /api/stats | PASS | app.get found |
 | `api-apibackgrounds` | Route registered /api/backgrounds | PASS | app.get found |
-| `bgs-disk` | Background images on disk (bgs/) | PASS | 26 image files |
+| `bgs-disk` | Background images on disk (bgs/) | PASS | 143 image files |
 | `pwa-manifest` | Web App Manifest standalone | PASS | HTML |
 | `no-service-worker` | No service worker (document honestly) | PASS | manifest-only PWA |
 | `android-home-url` | Android HOME_URL is https://gta-vi-countdown.onrender.com/ | PASS | actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/" |
