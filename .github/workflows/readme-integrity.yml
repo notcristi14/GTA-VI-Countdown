@@ -1,0 +1,70 @@
+name: README integrity check
+
+on:
+  schedule:
+    # Every 4 hours
+    - cron: '15 */4 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'gta-vi-countdown.html'
+      - 'app.js'
+      - 'music.js'
+      - 'music.css'
+      - 'music-discovery.js'
+      - 'github-api.js'
+      - 'bgs/**'
+      - 'mobile/**'
+      - 'launcher/**'
+      - 'scripts/readme-integrity-check.js'
+      - 'README.md'
+      - 'mobile/README.md'
+      - 'launcher/README.md'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: readme-integrity
+  cancel-in-progress: true
+
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Compare code ↔ README feature claims
+        id: check
+        run: |
+          set -euo pipefail
+          node scripts/readme-integrity-check.js | tee /tmp/integrity-out.txt
+          if grep -q 'README_CHANGED=1' /tmp/integrity-out.txt; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Summary:" && tail -5 /tmp/integrity-out.txt
+
+      - name: Commit README + report if updated
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md mobile/README.md launcher/README.md scripts/integrity-report.json || true
+          if git diff --staged --quiet; then
+            echo "Nothing staged"
+            exit 0
+          fi
+          git commit -m "chore(docs): sync README integrity status with current code"
+          git push
