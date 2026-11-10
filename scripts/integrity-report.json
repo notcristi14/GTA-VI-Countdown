@@ -1,114 +1,638 @@
 {
-  "generatedAt": "2026-11-10T13:34:24.988Z",
-  "commit": "0d2abdef78892a32b496c012195d9e986258f656",
+  "generatedAt": "2026-11-10T13:46:50.999Z",
+  "commit": "907f0d07d1da11fb2edc9b213e7d41d0f2ac6e25",
+  "analysisType": "static-source-only",
+  "expectedMobileHome": "https://gta-vi-countdown.onrender.com/eastern-europe",
+  "readmeFilesScanned": [
+    "README.md",
+    "launcher/README.md",
+    "launcher/assets/README.md",
+    "mobile/README.md"
+  ],
+  "readmeFileCount": 4,
   "summary": {
-    "total": 13,
-    "passed": 13,
-    "failed": 0
+    "total": 62,
+    "passed": 60,
+    "failed": 2,
+    "criticalFailed": 2
   },
-  "facts": {
+  "detectedFeatures": {
+    "regions15": true,
+    "defaultEurope": true,
+    "pathPersist": true,
+    "digitReels": true,
+    "availableNow": true,
+    "preorder": true,
+    "musicPanel": true,
+    "musicCentered": true,
+    "musicDiscoveryJob": true,
+    "musicCache30m": true,
+    "trailersCache30m": true,
+    "backgroundsJob": true,
+    "pwaManifest": true,
+    "serviceWorker": false,
+    "androidWebViewClass": true,
+    "androidLoadsHome": true,
+    "androidExternal": true,
+    "iosWebViewClass": true,
+    "iosLoadsHome": true,
+    "iosExternal": true,
+    "launcherWebView2": true,
+    "launcherNav": true
+  },
+  "apiEndpoints": {
+    "/api/trailers": true,
+    "/api/music": true,
+    "/api/repo": true,
+    "/api/commits": true,
+    "/api/commit": true,
+    "/api/news": true,
+    "/api/stats": true,
+    "/api/backgrounds": true
+  },
+  "countdownRegions": {
+    "new-zealand": {
+      "expectedName": "New Zealand",
+      "expectedTarget": "2026-11-18T11:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "australia": {
+      "expectedName": "Australia",
+      "expectedTarget": "2026-11-18T13:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "japan-korea": {
+      "expectedName": "Japan & South Korea",
+      "expectedTarget": "2026-11-18T15:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "asia-pacific": {
+      "expectedName": "Hong Kong, Taiwan, Singapore, Malaysia",
+      "expectedTarget": "2026-11-18T16:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "indonesia-thailand": {
+      "expectedName": "Indonesia & Thailand",
+      "expectedTarget": "2026-11-18T17:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "india": {
+      "expectedName": "India",
+      "expectedTarget": "2026-11-18T18:30:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "uae": {
+      "expectedName": "United Arab Emirates",
+      "expectedTarget": "2026-11-18T20:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "saudi-turkey": {
+      "expectedName": "Saudi Arabia & Turkey",
+      "expectedTarget": "2026-11-18T21:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "eastern-europe": {
+      "expectedName": "Eastern Europe / UTC+2 (Greece, Romania, Finland, Israel, South Africa, etc.)",
+      "expectedTarget": "2026-11-18T22:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "europe": {
+      "expectedName": "Central Europe (CET)",
+      "expectedTarget": "2026-11-18T23:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "uk": {
+      "expectedName": "United Kingdom, Ireland, Iceland, Portugal",
+      "expectedTarget": "2026-11-19T00:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "south-america": {
+      "expectedName": "Brazil, Argentina, Chile, Paraguay, Uruguay",
+      "expectedTarget": "2026-11-19T03:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "bolivia": {
+      "expectedName": "Bolivia",
+      "expectedTarget": "2026-11-19T04:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "us-canada": {
+      "expectedName": "United States, Canada + Colombia, Ecuador, Panama, Peru",
+      "expectedTarget": "2026-11-19T05:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    },
+    "mexico": {
+      "expectedName": "Mexico & Central America",
+      "expectedTarget": "2026-11-19T06:00:00Z",
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
+    }
+  },
+  "regionsImplemented": 15,
+  "backgroundImageCount": 26,
+  "mobile": {
+    "expectedHome": "https://gta-vi-countdown.onrender.com/eastern-europe",
     "androidHome": "https://gta-vi-countdown.onrender.com/",
+    "androidHomeMatchesExpected": false,
     "iosHome": "https://gta-vi-countdown.onrender.com/",
+    "iosHomeMatchesExpected": false,
     "androidHost": "gta-vi-countdown.onrender.com",
     "iosHost": "gta-vi-countdown.onrender.com",
-    "bgsCount": 26,
+    "appId": "com.notcristi.vicountdown",
     "gradleVer": "8.7",
     "agpVer": "8.6.0",
     "kotlinVer": "1.9.24",
-    "appId": "com.notcristi.vicountdown",
-    "regionsFound": 15,
-    "apis": {
-      "trailers": true,
-      "music": true,
-      "repo": true,
-      "news": true,
-      "backgrounds": true,
-      "commits": true,
-      "commit": true,
-      "stats": true
-    },
     "pureAndroid": true,
     "iosIcon": true,
-    "launcherIco": true
+    "sources": {
+      "android": "mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt",
+      "ios": "mobile/ios/VICountdown/ViewController.swift"
+    }
   },
+  "launcher": {
+    "solution": true,
+    "gtaLogoIco": true,
+    "webView2": true,
+    "source": "launcher/src/AppWindow.cpp"
+  },
+  "missingOrOutdatedDocumentation": [],
+  "failedChecks": [
+    {
+      "id": "android-home-url",
+      "claim": "Android HOME_URL is https://gta-vi-countdown.onrender.com/eastern-europe",
+      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/eastern-europe\"",
+      "critical": true
+    },
+    {
+      "id": "ios-home-url",
+      "claim": "iOS homeURL is https://gta-vi-countdown.onrender.com/eastern-europe",
+      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/eastern-europe\"",
+      "critical": true
+    }
+  ],
   "checks": [
     {
-      "id": "html",
-      "readmeClaim": "gta-vi-countdown.html",
+      "id": "file-html",
+      "claim": "gta-vi-countdown.html exists",
       "ok": true,
-      "detail": "file"
+      "detail": "present",
+      "critical": true
     },
     {
-      "id": "app-js",
-      "readmeClaim": "app.js",
+      "id": "file-app",
+      "claim": "app.js Express entry exists",
       "ok": true,
-      "detail": "file"
+      "detail": "present",
+      "critical": true
     },
     {
-      "id": "regions",
-      "readmeClaim": "15 region slugs",
+      "id": "regions-count",
+      "claim": "All 15 region slug+UTC pairs in HTML",
       "ok": true,
-      "detail": "15 found"
+      "detail": "15/15 implemented",
+      "critical": true
     },
     {
-      "id": "music",
-      "readmeClaim": "music.js/css",
+      "id": "region-new-zealand",
+      "claim": "Region new-zealand configured",
       "ok": true,
-      "detail": "files"
+      "detail": "2026-11-18T11:00:00Z",
+      "critical": true
     },
     {
-      "id": "bgs",
-      "readmeClaim": "bgs/ images (26)",
+      "id": "region-australia",
+      "claim": "Region australia configured",
       "ok": true,
-      "detail": "26 images"
+      "detail": "2026-11-18T13:00:00Z",
+      "critical": true
     },
     {
-      "id": "android-gradle",
-      "readmeClaim": "Gradle 8.7",
+      "id": "region-japan-korea",
+      "claim": "Region japan-korea configured",
       "ok": true,
-      "detail": "8.7"
+      "detail": "2026-11-18T15:00:00Z",
+      "critical": true
     },
     {
-      "id": "android-main",
-      "readmeClaim": "MainActivity WebView",
+      "id": "region-asia-pacific",
+      "claim": "Region asia-pacific configured",
       "ok": true,
-      "detail": "https://gta-vi-countdown.onrender.com/"
+      "detail": "2026-11-18T16:00:00Z",
+      "critical": true
     },
     {
-      "id": "android-pure",
-      "readmeClaim": "No Flutter in Android Gradle",
+      "id": "region-indonesia-thailand",
+      "claim": "Region indonesia-thailand configured",
       "ok": true,
-      "detail": "pure"
+      "detail": "2026-11-18T17:00:00Z",
+      "critical": true
     },
     {
-      "id": "ios-xcode",
-      "readmeClaim": "VICountdown.xcodeproj",
+      "id": "region-india",
+      "claim": "Region india configured",
       "ok": true,
-      "detail": "project"
+      "detail": "2026-11-18T18:30:00Z",
+      "critical": true
+    },
+    {
+      "id": "region-uae",
+      "claim": "Region uae configured",
+      "ok": true,
+      "detail": "2026-11-18T20:00:00Z",
+      "critical": true
+    },
+    {
+      "id": "region-saudi-turkey",
+      "claim": "Region saudi-turkey configured",
+      "ok": true,
+      "detail": "2026-11-18T21:00:00Z",
+      "critical": true
+    },
+    {
+      "id": "region-eastern-europe",
+      "claim": "Region eastern-europe configured",
+      "ok": true,
+      "detail": "2026-11-18T22:00:00Z",
+      "critical": true
+    },
+    {
+      "id": "region-europe",
+      "claim": "Region europe configured",
+      "ok": true,
+      "detail": "2026-11-18T23:00:00Z",
+      "critical": true
+    },
+    {
+      "id": "region-uk",
+      "claim": "Region uk configured",
+      "ok": true,
+      "detail": "2026-11-19T00:00:00Z",
+      "critical": true
+    },
+    {
+      "id": "region-south-america",
+      "claim": "Region south-america configured",
+      "ok": true,
+      "detail": "2026-11-19T03:00:00Z",
+      "critical": true
+    },
+    {
+      "id": "region-bolivia",
+      "claim": "Region bolivia configured",
+      "ok": true,
+      "detail": "2026-11-19T04:00:00Z",
+      "critical": true
+    },
+    {
+      "id": "region-us-canada",
+      "claim": "Region us-canada configured",
+      "ok": true,
+      "detail": "2026-11-19T05:00:00Z",
+      "critical": true
+    },
+    {
+      "id": "region-mexico",
+      "claim": "Region mexico configured",
+      "ok": true,
+      "detail": "2026-11-19T06:00:00Z",
+      "critical": true
+    },
+    {
+      "id": "default-europe",
+      "claim": "Default activeSlug is 'europe'",
+      "ok": true,
+      "detail": "activeSlug = 'europe'",
+      "critical": false
+    },
+    {
+      "id": "region-persist",
+      "claim": "Region path + localStorage gtaRegion",
+      "ok": true,
+      "detail": "ok",
+      "critical": false
+    },
+    {
+      "id": "digit-reels",
+      "claim": "requestAnimationFrame countdown",
+      "ok": true,
+      "detail": "HTML",
+      "critical": false
+    },
+    {
+      "id": "available-now",
+      "claim": "Available now UI string",
+      "ok": true,
+      "detail": "present",
+      "critical": false
+    },
+    {
+      "id": "preorder",
+      "claim": "Pre-order UI in HTML",
+      "ok": true,
+      "detail": "present",
+      "critical": false
+    },
+    {
+      "id": "music-files",
+      "claim": "music.js + music.css",
+      "ok": true,
+      "detail": "files",
+      "critical": true
+    },
+    {
+      "id": "music-center",
+      "claim": "Music panel CSS align-items:center",
+      "ok": true,
+      "detail": "music.css",
+      "critical": false
+    },
+    {
+      "id": "music-discovery",
+      "claim": "Spotify album discovery registered",
+      "ok": true,
+      "detail": "music-discovery.js",
+      "critical": true
+    },
+    {
+      "id": "music-cache",
+      "claim": "Music cache ~30 minutes",
+      "ok": true,
+      "detail": "MUSIC_CACHE_MS",
+      "critical": false
+    },
+    {
+      "id": "trailers-cache",
+      "claim": "Trailers cache ~30 minutes",
+      "ok": true,
+      "detail": "TRAILERS_CACHE_MS",
+      "critical": false
+    },
+    {
+      "id": "bgs-job",
+      "claim": "Backgrounds register + 6h check",
+      "ok": true,
+      "detail": "backgrounds-api.js",
+      "critical": true
+    },
+    {
+      "id": "api-apitrailers",
+      "claim": "Route registered /api/trailers",
+      "ok": true,
+      "detail": "app.get found",
+      "critical": true
+    },
+    {
+      "id": "api-apimusic",
+      "claim": "Route registered /api/music",
+      "ok": true,
+      "detail": "app.get found",
+      "critical": true
+    },
+    {
+      "id": "api-apirepo",
+      "claim": "Route registered /api/repo",
+      "ok": true,
+      "detail": "app.get found",
+      "critical": true
+    },
+    {
+      "id": "api-apicommits",
+      "claim": "Route registered /api/commits",
+      "ok": true,
+      "detail": "app.get found",
+      "critical": true
+    },
+    {
+      "id": "api-apicommit",
+      "claim": "Route registered /api/commit",
+      "ok": true,
+      "detail": "app.get found",
+      "critical": true
+    },
+    {
+      "id": "api-apinews",
+      "claim": "Route registered /api/news",
+      "ok": true,
+      "detail": "app.get found",
+      "critical": true
+    },
+    {
+      "id": "api-apistats",
+      "claim": "Route registered /api/stats",
+      "ok": true,
+      "detail": "app.get found",
+      "critical": true
+    },
+    {
+      "id": "api-apibackgrounds",
+      "claim": "Route registered /api/backgrounds",
+      "ok": true,
+      "detail": "app.get found",
+      "critical": true
+    },
+    {
+      "id": "bgs-disk",
+      "claim": "Background images on disk (bgs/)",
+      "ok": true,
+      "detail": "26 image files",
+      "critical": false
+    },
+    {
+      "id": "pwa-manifest",
+      "claim": "Web App Manifest standalone",
+      "ok": true,
+      "detail": "HTML",
+      "critical": false
+    },
+    {
+      "id": "no-service-worker",
+      "claim": "No service worker (document honestly)",
+      "ok": true,
+      "detail": "manifest-only PWA",
+      "critical": false
+    },
+    {
+      "id": "android-home-url",
+      "claim": "Android HOME_URL is https://gta-vi-countdown.onrender.com/eastern-europe",
+      "ok": false,
+      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/eastern-europe\"",
+      "critical": true
+    },
+    {
+      "id": "android-webview",
+      "claim": "Android uses android.webkit WebView",
+      "ok": true,
+      "detail": "mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt",
+      "critical": true
+    },
+    {
+      "id": "android-loadurl",
+      "claim": "Android loadUrl(HOME_URL)",
+      "ok": true,
+      "detail": "loadUrl(HOME_URL)",
+      "critical": true
+    },
+    {
+      "id": "android-external",
+      "claim": "Android external links ACTION_VIEW",
+      "ok": true,
+      "detail": "Intent.ACTION_VIEW",
+      "critical": true
+    },
+    {
+      "id": "android-host",
+      "claim": "Android ALLOWED_HOST is site host",
+      "ok": true,
+      "detail": "actual=\"gta-vi-countdown.onrender.com\"",
+      "critical": true
+    },
+    {
+      "id": "android-pure-gradle",
+      "claim": "Android Gradle has no Flutter plugin",
+      "ok": true,
+      "detail": "pure Gradle",
+      "critical": true
+    },
+    {
+      "id": "android-gradle-ver",
+      "claim": "Gradle wrapper 8.7",
+      "ok": true,
+      "detail": "actual=8.7",
+      "critical": false
+    },
+    {
+      "id": "ios-home-url",
+      "claim": "iOS homeURL is https://gta-vi-countdown.onrender.com/eastern-europe",
+      "ok": false,
+      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/eastern-europe\"",
+      "critical": true
     },
     {
       "id": "ios-webview",
-      "readmeClaim": "WKWebView",
+      "claim": "iOS uses WKWebView",
       "ok": true,
-      "detail": "https://gta-vi-countdown.onrender.com/"
+      "detail": "mobile/ios/VICountdown/ViewController.swift",
+      "critical": true
+    },
+    {
+      "id": "ios-load",
+      "claim": "iOS loads homeURL into WKWebView",
+      "ok": true,
+      "detail": "webView.load(URLRequest(url: homeURL))",
+      "critical": true
+    },
+    {
+      "id": "ios-external",
+      "claim": "iOS external UIApplication.shared.open",
+      "ok": true,
+      "detail": "present",
+      "critical": true
+    },
+    {
+      "id": "ios-host",
+      "claim": "iOS allowedHost is site host",
+      "ok": true,
+      "detail": "actual=\"gta-vi-countdown.onrender.com\"",
+      "critical": true
     },
     {
       "id": "ios-icon",
-      "readmeClaim": "AppIcon-1024.png",
+      "claim": "iOS AppIcon-1024.png present",
       "ok": true,
-      "detail": "present"
+      "detail": "present",
+      "critical": false
     },
     {
-      "id": "launcher",
-      "readmeClaim": "Launcher project",
+      "id": "launcher-sln",
+      "claim": "launcher/GtaViCountdown.sln exists",
       "ok": true,
-      "detail": "present"
+      "detail": "present",
+      "critical": true
+    },
+    {
+      "id": "launcher-webview2",
+      "claim": "AppWindow.cpp WebView2 usage",
+      "ok": true,
+      "detail": "launcher/src/AppWindow.cpp",
+      "critical": true
+    },
+    {
+      "id": "launcher-nav",
+      "claim": "Launcher navigation chrome in AppWindow",
+      "ok": true,
+      "detail": "nav patterns found",
+      "critical": false
     },
     {
       "id": "launcher-ico",
-      "readmeClaim": "GtaLogo.ico",
+      "claim": "launcher/assets/GtaLogo.ico exists",
       "ok": true,
-      "detail": "present"
+      "detail": "present",
+      "critical": false
+    },
+    {
+      "id": "readme-README_md",
+      "claim": "README.md exists",
+      "ok": true,
+      "detail": "present",
+      "critical": true
+    },
+    {
+      "id": "readme-mobile_README_md",
+      "claim": "mobile/README.md exists",
+      "ok": true,
+      "detail": "present",
+      "critical": false
+    },
+    {
+      "id": "readme-launcher_README_md",
+      "claim": "launcher/README.md exists",
+      "ok": true,
+      "detail": "present",
+      "critical": false
+    },
+    {
+      "id": "readme-launcher_assets_README_md",
+      "claim": "launcher/assets/README.md exists",
+      "ok": true,
+      "detail": "present",
+      "critical": false
+    },
+    {
+      "id": "readme-discovery",
+      "claim": "At least one README.md discovered",
+      "ok": true,
+      "detail": "4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md",
+      "critical": true
     }
   ]
 }
