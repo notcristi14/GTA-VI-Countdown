@@ -1,1 +1,166 @@
-PLACEHOLDER
+#!/usr/bin/env node
+/**
+ * GTA-VI-Countdown — README integrity & documentation sync
+ * Scans the live tree, validates claims against implementation, rewrites all README.md
+ * files and scripts/integrity-report.json. Exit 0 always (CI commits when README_CHANGED=1).
+ */
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+const ROOT = path.resolve(__dirname, '..');
+const now = new Date().toISOString();
+const commitSha = process.env.GITHUB_SHA || 'local';
+
+const EXPECTED_REGIONS = [
+  ['new-zealand', 'New Zealand', '2026-11-18T11:00:00Z'],
+  ['australia', 'Australia', '2026-11-18T13:00:00Z'],
+  ['japan-korea', 'Japan & South Korea', '2026-11-18T15:00:00Z'],
+  ['asia-pacific', 'Hong Kong, Taiwan, Singapore, Malaysia', '2026-11-18T16:00:00Z'],
+  ['indonesia-thailand', 'Indonesia & Thailand', '2026-11-18T17:00:00Z'],
+  ['india', 'India', '2026-11-18T18:30:00Z'],
+  ['uae', 'United Arab Emirates', '2026-11-18T20:00:00Z'],
+  ['saudi-turkey', 'Saudi Arabia & Turkey', '2026-11-18T21:00:00Z'],
+  ['eastern-europe', 'Eastern Europe / UTC+2 (Greece, Romania, Finland, Israel, South Africa, etc.)', '2026-11-18T22:00:00Z'],
+  ['europe', 'Central Europe (CET)', '2026-11-18T23:00:00Z'],
+  ['uk', 'United Kingdom, Ireland, Iceland, Portugal', '2026-11-19T00:00:00Z'],
+  ['south-america', 'Brazil, Argentina, Chile, Paraguay, Uruguay', '2026-11-19T03:00:00Z'],
+  ['bolivia', 'Bolivia', '2026-11-19T04:00:00Z'],
+  ['us-canada', 'United States, Canada + Colombia, Ecuador, Panama, Peru', '2026-11-19T05:00:00Z'],
+  ['mexico', 'Mexico & Central America', '2026-11-19T06:00:00Z'],
+];
+
+function exists(rel) {
+  return fs.existsSync(path.join(ROOT, rel));
+}
+function read(rel) {
+  const p = path.join(ROOT, rel);
+  return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '';
+}
+function write(rel, content) {
+  const p = path.join(ROOT, rel);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  const prev = exists(rel) ? fs.readFileSync(p, 'utf8') : null;
+  if (prev === content) return false;
+  fs.writeFileSync(p, content.endsWith('\n') ? content : content + '\n');
+  console.log('Wrote', rel);
+  return true;
+}
+function has(rel, needle) {
+  return read(rel).includes(needle);
+}
+function countImgs(dir) {
+  const abs = path.join(ROOT, dir);
+  if (!fs.existsSync(abs)) return 0;
+  return fs.readdirSync(abs).filter((f) => /\.(png|jpe?g|webp|gif)$/i.test(f)).length;
+}
+function findReadmes(dir, acc) {
+  acc = acc || [];
+  for (const name of fs.readdirSync(dir)) {
+    if (name === '.git' || name === 'node_modules') continue;
+    const full = path.join(dir, name);
+    const st = fs.statSync(full);
+    if (st.isDirectory()) findReadmes(full, acc);
+    else if (name === 'README.md') acc.push(path.relative(ROOT, full).replace(/\\/g, '/'));
+  }
+  return acc;
+}
+
+const MAIN_KT = 'mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt';
+const IOS_VC = 'mobile/ios/VICountdown/ViewController.swift';
+const html = read('gta-vi-countdown.html');
+const appJs = read('app.js');
+const musicJs = read('music.js');
+const musicCss = read('music.css');
+const musicDisc = read('music-discovery.js');
+const bgsApi = read('backgrounds-api.js');
+const ghApi = read('github-api.js');
+const mainKt = read(MAIN_KT);
+const iosVc = read(IOS_VC);
+
+const androidHome = (mainKt.match(/HOME_URL\s*=\s*"([^"]+)"/) || [])[1] || null;
+const iosHome = (iosVc.match(/homeURL\s*=\s*URL\(string:\s*"([^"]+)"/) || [])[1] || null;
+const androidHost = (mainKt.match(/ALLOWED_HOST\s*=\s*"([^"]+)"/) || [])[1] || null;
+const iosHost = (iosVc.match(/allowedHost\s*=\s*"([^"]+)"/) || [])[1] || null;
+const bgsCount = countImgs('bgs');
+const gradleProps = read('mobile/android/gradle/wrapper/gradle-wrapper.properties');
+const gradleVer = (gradleProps.match(/gradle-(\d+\.\d+(?:\.\d+)?)/) || [])[1] || null;
+const settingsG = read('mobile/android/settings.gradle');
+const agpVer = (settingsG.match(/com\.android\.application"\s+version\s+"([^"]+)"/) || [])[1] || null;
+const kotlinVer = (settingsG.match(/kotlin\.android"\s+version\s+"([^"]+)"/) || [])[1] || null;
+const appId = (read('mobile/android/app/build.gradle').match(/applicationId\s*=\s*"([^"]+)"/) || [])[1] || null;
+const pureAndroid = !settingsG.includes('flutter.sdk') && !settingsG.includes('flutter-plugin');
+const iosIcon = exists('mobile/ios/VICountdown/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png');
+const launcherIco = exists('launcher/assets/GtaLogo.ico');
+const launcherSln = exists('launcher/GtaViCountdown.sln');
+const readmeFiles = findReadmes(ROOT);
+
+const apis = {
+  '/api/trailers': /app\.get\(\s*['"]\/api\/trailers['"]/.test(appJs) || /app\.get\(\s*['"]\/api\/trailers['"]/.test(musicDisc),
+  '/api/music': /app\.get\(\s*['"]\/api\/music['"]/.test(musicDisc) || /app\.get\(\s*['"]\/api\/music['"]/.test(appJs),
+  '/api/repo': /app\.get\(\s*['"]\/api\/repo['"]/.test(appJs),
+  '/api/commits': /app\.get\(\s*['"]\/api\/commits['"]/.test(appJs),
+  '/api/commit': /app\.get\(\s*['"]\/api\/commit['"]/.test(appJs),
+  '/api/news': /app\.get\(\s*['"]\/api\/news['"]/.test(appJs),
+  '/api/stats': /app\.get\(\s*['"]\/api\/stats['"]/.test(appJs),
+  '/api/backgrounds': /app\.get\(\s*['"]\/api\/backgrounds['"]/.test(bgsApi) || /app\.get\(\s*['"]\/api\/backgrounds['"]/.test(appJs),
+};
+
+const regionImpl = {};
+for (const [slug, name, target] of EXPECTED_REGIONS) {
+  const nameOk = html.includes("'" + slug + "'") && html.includes(target);
+  regionImpl[slug] = { expectedName: name, expectedTarget: target, implemented: nameOk };
+}
+const regionsOkCount = Object.values(regionImpl).filter((r) => r.implemented).length;
+
+const features = {
+  regions15: regionsOkCount === 15,
+  defaultRegionEurope: /let activeSlug\s*=\s*'europe'/.test(html),
+  pathSlugSync: /localStorage\.getItem\('gtaRegion'\)/.test(html) && /pathname/.test(html),
+  digitReels: html.includes('requestAnimationFrame'),
+  availableNow: /Available now/i.test(html),
+  welcomeScreen: /welcome/i.test(html),
+  preorder: html.includes('preorder'),
+  musicPanel: exists('music.js') && exists('music.css'),
+  musicCentered: /align-items:\s*center/.test(musicCss),
+  spotifyOfficial: musicJs.includes('spotify') && musicDisc.includes('SPOTIFY'),
+  trailersApi: apis['/api/trailers'],
+  musicApi: apis['/api/music'],
+  newsApi: apis['/api/news'],
+  repoApi: apis['/api/repo'],
+  backgroundsApi: apis['/api/backgrounds'],
+  backgroundsOnDisk: bgsCount >= 1,
+  pwaManifest: html.includes('manifest') && html.includes('standalone'),
+  serviceWorker: html.includes('serviceWorker'),
+  githubTokenSupport: ghApi.includes('GITHUB_TOKEN') || appJs.includes('GITHUB_TOKEN') || ghApi.includes('GH_TOKEN'),
+  androidWebView: mainKt.includes('WebView') && !!androidHome,
+  androidExternalLinks: mainKt.includes('ACTION_VIEW'),
+  iosWebView: iosVc.includes('WKWebView') && !!iosHome,
+  iosExternalLinks: iosVc.includes('UIApplication.shared.open'),
+  launcherWebView2: exists('launcher/src/AppWindow.cpp') && read('launcher/src/AppWindow.cpp').includes('WebView'),
+};
+
+const checks = [];
+function check(id, claim, ok, detail, severity) {
+  checks.push({ id, claim, ok: !!ok, detail: String(detail), severity: severity || (ok ? 'info' : 'error') });
+}
+
+check('file-html', 'gta-vi-countdown.html exists', exists('gta-vi-countdown.html'), 'frontend shell');
+check('file-app', 'app.js Express server exists', exists('app.js'), 'server entry');
+check('regions-count', 'All 15 region slugs + UTC targets in HTML', regionsOkCount === 15, regionsOkCount + '/15 implemented');
+for (const [slug, name, target] of EXPECTED_REGIONS) {
+  check('region-' + slug, 'Region ' + slug + ' (' + target + ')', regionImpl[slug].implemented, regionImpl[slug].implemented ? 'ok' : 'missing slug or target in HTML');
+}
+check('default-europe', "Default activeSlug is 'europe'", features.defaultRegionEurope, features.defaultRegionEurope ? "activeSlug = 'europe'" : 'default differs');
+check('region-persist', 'Region path + localStorage gtaRegion', features.pathSlugSync, 'pathname + localStorage');
+check('digit-reels', 'requestAnimationFrame countdown animation', features.digitReels, 'in HTML');
+check('available-now', 'Available now UI when timer hits zero', features.availableNow, features.availableNow ? 'string present' : 'not found');
+check('preorder', 'Pre-order UI in HTML', features.preorder, features.preorder ? 'present' : 'absent');
+check('music-files', 'music.js + music.css', features.musicPanel, 'client music panel');
+check('music-center', 'Music panel CSS centered (align-items: center)', features.musicCentered, 'music.css');
+check('api-trailers', 'GET /api/trailers registered', apis['/api/trailers'], 'app.js or music-discovery.js');
+check('api-music', 'GET /api/music registered', apis['/api/music'], 'music-discovery.js');
+check('api-repo', 'GET /api/repo registered', apis['/api/repo'], 'app.js');
+check('api-commits', 'GET /api/commits registered', apis['/api/commits'], 'app.js');
+check('api-commit', 'GET /api/commit registered', apis['/api/commit'], 'app.js');
