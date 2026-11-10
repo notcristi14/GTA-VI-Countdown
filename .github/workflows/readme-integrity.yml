@@ -22,7 +22,6 @@ on:
       - 'launcher/*.vcxproj'
       - 'launcher/assets/**'
       - 'scripts/readme-integrity-check.js'
-      - 'scripts/ric.b64.*'
       - 'package.json'
 
 permissions:
@@ -44,30 +43,25 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Decode integrity script from base64 parts
-        run: |
-          set -euo pipefail
-          if ls scripts/ric.b64.* >/dev/null 2>&1; then
-            cat scripts/ric.b64.0 scripts/ric.b64.1 scripts/ric.b64.2 scripts/ric.b64.3 2>/dev/null | base64 -d > scripts/readme-integrity-check.js
-            echo "Decoded $(wc -c < scripts/readme-integrity-check.js) bytes"
-          fi
-          test -s scripts/readme-integrity-check.js
-          node --check scripts/readme-integrity-check.js
-
-      - name: Scan implementation and regenerate all READMEs
+      - name: Scan implementation and regenerate README integrity sections
         id: check
         run: |
-          set -euo pipefail
+          set -uo pipefail
+          set +e
           node scripts/readme-integrity-check.js | tee /tmp/integrity-out.txt
+          code=${PIPESTATUS[0]}
+          set -e
           if grep -q 'README_CHANGED=1' /tmp/integrity-out.txt; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
           if grep -q '^FAIL ' /tmp/integrity-out.txt; then
-            echo "::warning::Integrity checks reported FAIL lines"
+            echo "::warning::Integrity checks reported FAIL lines — see scripts/integrity-report.json"
           fi
-          tail -30 /tmp/integrity-out.txt
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          tail -40 /tmp/integrity-out.txt
+          echo "$code" > /tmp/integrity-exit-code
 
       - uses: actions/upload-artifact@v4
         with:
@@ -82,9 +76,19 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add README.md mobile/README.md launcher/README.md launcher/assets/README.md scripts/integrity-report.json
+          git add '**/README.md' 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "Nothing staged"
             exit 0
           fi
-          git commit -m "chore(docs): sync READMEs with implementation [skip ci]"
+          git commit -m "chore(docs): sync README integrity sections [skip ci]"
           git push
+
+      - name: Fail job on critical integrity failures
+        run: |
+          code=$(cat /tmp/integrity-exit-code 2>/dev/null || echo 0)
+          if [ "$code" != "0" ]; then
+            echo "Integrity script exited with code $code (critical failures)."
+            exit "$code"
+          fi
+          echo "Integrity script exited 0."
