@@ -9,9 +9,9 @@ Related: [launcher/README.md](../README.md) · [root README](../../README.md)
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last run: **2026-11-10T13:46:50.999Z** · commit `907f0d0` · **60/62 passed** · **2 critical failures** · launcher/assets
+Last run: **2026-11-10T14:07:37.728Z** · commit `0f90039` · **62/62 passed** · launcher/assets
 
-Expected mobile home URL: `https://gta-vi-countdown.onrender.com/eastern-europe`  
+Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
 
 | ID | Claim | Status | Detail |
@@ -56,14 +56,14 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `bgs-disk` | Background images on disk (bgs/) | PASS | 26 image files |
 | `pwa-manifest` | Web App Manifest standalone | PASS | HTML |
 | `no-service-worker` | No service worker (document honestly) | PASS | manifest-only PWA |
-| `android-home-url` | Android HOME_URL is https://gta-vi-countdown.onrender.com/eastern-europe | FAIL | actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/eastern-europe" |
+| `android-home-url` | Android HOME_URL is https://gta-vi-countdown.onrender.com/ | PASS | actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/" |
 | `android-webview` | Android uses android.webkit WebView | PASS | mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt |
 | `android-loadurl` | Android loadUrl(HOME_URL) | PASS | loadUrl(HOME_URL) |
 | `android-external` | Android external links ACTION_VIEW | PASS | Intent.ACTION_VIEW |
 | `android-host` | Android ALLOWED_HOST is site host | PASS | actual="gta-vi-countdown.onrender.com" |
 | `android-pure-gradle` | Android Gradle has no Flutter plugin | PASS | pure Gradle |
 | `android-gradle-ver` | Gradle wrapper 8.7 | PASS | actual=8.7 |
-| `ios-home-url` | iOS homeURL is https://gta-vi-countdown.onrender.com/eastern-europe | FAIL | actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/eastern-europe" |
+| `ios-home-url` | iOS homeURL is https://gta-vi-countdown.onrender.com/ | PASS | actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/" |
 | `ios-webview` | iOS uses WKWebView | PASS | mobile/ios/VICountdown/ViewController.swift |
 | `ios-load` | iOS loads homeURL into WKWebView | PASS | webView.load(URLRequest(url: homeURL)) |
 | `ios-external` | iOS external UIApplication.shared.open | PASS | present |

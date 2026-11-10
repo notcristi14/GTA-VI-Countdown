@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-10T13:46:50.999Z",
-  "commit": "907f0d07d1da11fb2edc9b213e7d41d0f2ac6e25",
+  "generatedAt": "2026-11-10T14:07:37.728Z",
+  "commit": "0f900393a8459dd332119c7f09f0fcfb79a33ccc",
   "analysisType": "static-source-only",
-  "expectedMobileHome": "https://gta-vi-countdown.onrender.com/eastern-europe",
+  "expectedMobileHome": "https://gta-vi-countdown.onrender.com/",
   "readmeFilesScanned": [
     "README.md",
     "launcher/README.md",
@@ -12,9 +12,9 @@
   "readmeFileCount": 4,
   "summary": {
     "total": 62,
-    "passed": 60,
-    "failed": 2,
-    "criticalFailed": 2
+    "passed": 62,
+    "failed": 0,
+    "criticalFailed": 0
   },
   "detectedFeatures": {
     "regions15": true,
@@ -160,11 +160,11 @@
   "regionsImplemented": 15,
   "backgroundImageCount": 26,
   "mobile": {
-    "expectedHome": "https://gta-vi-countdown.onrender.com/eastern-europe",
+    "expectedHome": "https://gta-vi-countdown.onrender.com/",
     "androidHome": "https://gta-vi-countdown.onrender.com/",
-    "androidHomeMatchesExpected": false,
+    "androidHomeMatchesExpected": true,
     "iosHome": "https://gta-vi-countdown.onrender.com/",
-    "iosHomeMatchesExpected": false,
+    "iosHomeMatchesExpected": true,
     "androidHost": "gta-vi-countdown.onrender.com",
     "iosHost": "gta-vi-countdown.onrender.com",
     "appId": "com.notcristi.vicountdown",
@@ -185,20 +185,7 @@
     "source": "launcher/src/AppWindow.cpp"
   },
   "missingOrOutdatedDocumentation": [],
-  "failedChecks": [
-    {
-      "id": "android-home-url",
-      "claim": "Android HOME_URL is https://gta-vi-countdown.onrender.com/eastern-europe",
-      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/eastern-europe\"",
-      "critical": true
-    },
-    {
-      "id": "ios-home-url",
-      "claim": "iOS homeURL is https://gta-vi-countdown.onrender.com/eastern-europe",
-      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/eastern-europe\"",
-      "critical": true
-    }
-  ],
+  "failedChecks": [],
   "checks": [
     {
       "id": "file-html",
@@ -482,9 +469,9 @@
     },
     {
       "id": "android-home-url",
-      "claim": "Android HOME_URL is https://gta-vi-countdown.onrender.com/eastern-europe",
-      "ok": false,
-      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/eastern-europe\"",
+      "claim": "Android HOME_URL is https://gta-vi-countdown.onrender.com/",
+      "ok": true,
+      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/\"",
       "critical": true
     },
     {
@@ -531,9 +518,9 @@
     },
     {
       "id": "ios-home-url",
-      "claim": "iOS homeURL is https://gta-vi-countdown.onrender.com/eastern-europe",
-      "ok": false,
-      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/eastern-europe\"",
+      "claim": "iOS homeURL is https://gta-vi-countdown.onrender.com/",
+      "ok": true,
+      "detail": "actual=\"https://gta-vi-countdown.onrender.com/\" expected=\"https://gta-vi-countdown.onrender.com/\"",
       "critical": true
     },
     {
