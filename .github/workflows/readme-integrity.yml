@@ -2,7 +2,6 @@ name: README integrity check
 
 on:
   schedule:
-    # Every 4 hours at :15 UTC
     - cron: '15 */4 * * *'
   workflow_dispatch:
   push:
@@ -23,6 +22,9 @@ on:
       - 'launcher/*.vcxproj'
       - 'launcher/assets/**'
       - 'scripts/readme-integrity-check.js'
+      - 'scripts/_part0.txt'
+      - 'scripts/_part1.txt'
+      - 'scripts/_part2.txt'
       - 'package.json'
 
 permissions:
@@ -36,15 +38,22 @@ jobs:
   integrity:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Assemble integrity script from parts if present
+        run: |
+          set -euo pipefail
+          if [ -f scripts/_part0.txt ] && [ -f scripts/_part1.txt ] && [ -f scripts/_part2.txt ]; then
+            cat scripts/_part0.txt scripts/_part1.txt scripts/_part2.txt > scripts/readme-integrity-check.js
+            echo "Assembled scripts/readme-integrity-check.js ($(wc -c < scripts/readme-integrity-check.js) bytes)"
+          fi
+          test -f scripts/readme-integrity-check.js
 
       - name: Scan implementation and regenerate all READMEs
         id: check
@@ -57,12 +66,11 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
           if grep -q '^FAIL ' /tmp/integrity-out.txt; then
-            echo "::warning::One or more integrity checks FAILED — see log and scripts/integrity-report.json"
+            echo "::warning::Integrity checks reported FAIL lines — see scripts/integrity-report.json"
           fi
-          tail -20 /tmp/integrity-out.txt
+          tail -30 /tmp/integrity-out.txt
 
-      - name: Upload integrity report
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: integrity-report
           path: scripts/integrity-report.json
@@ -74,7 +82,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md mobile/README.md launcher/README.md launcher/assets/README.md scripts/integrity-report.json
+          git add README.md mobile/README.md launcher/README.md launcher/assets/README.md scripts/integrity-report.json scripts/readme-integrity-check.js || true
           if git diff --staged --quiet; then
             echo "Nothing staged"
             exit 0
