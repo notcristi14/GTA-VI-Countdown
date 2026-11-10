@@ -10,3 +10,11 @@ Related docs:
 
 - [launcher/README.md](../README.md) — build and toolbar
 - [root README](../../README.md) — site features, `github-api.js`, **`GITHUB_TOKEN`** on Render
+
+<!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
+## 🔍 Automated integrity status
+
+Last run: seeded · Full status written by CI (`scripts/readme-integrity-check.js`).
+
+*From `scripts/readme-integrity-check.js`.*
+<!-- END AUTO-GENERATED -->
