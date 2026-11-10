@@ -84,7 +84,10 @@ mobile/ios/
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-Last run: seeded · Full table written by CI (`scripts/readme-integrity-check.js`).
+Last run: **2026-11-10T13:10:29.194Z** · Failed mobile checks: **2**
+
+- ❌ **Android home /eastern-europe** — home is site root
+- ❌ **iOS home /eastern-europe** — home is site root
 
 *From `scripts/readme-integrity-check.js`.*
 <!-- END AUTO-GENERATED -->

@@ -166,6 +166,44 @@ npm start
 
 ---
 
+<!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
+## 🔍 Automated integrity status
+
+Last run: **2026-11-10T13:10:29.194Z** · **24/26 passed** · Background images: **26**
+
+| Check | Status | Detail |
+|-------|--------|--------|
+| gta-vi-countdown.html frontend | ✅ | file |
+| Express app.js | ✅ | file |
+| 15 regional unlock targets | ✅ | slugs in HTML/JS |
+| requestAnimationFrame digit reels | ✅ | rAF |
+| /api/trailers | ✅ | API |
+| /api/music | ✅ | API |
+| /api/repo | ✅ | API |
+| /api/news | ✅ | API |
+| /api/backgrounds | ✅ | API |
+| music.js + music.css | ✅ | files |
+| Background images in bgs/ | ✅ | 26 images |
+| scripts/sync-backgrounds.js | ✅ | script |
+| Gradle 8.7 wrapper | ✅ | wrapper |
+| Kotlin MainActivity WebView | ✅ | MainActivity |
+| Android without Flutter plugin | ✅ | pure Gradle |
+| Android label VI Countdown | ✅ | manifest |
+| Android home /eastern-europe | ❌ | home is site root |
+| VICountdown.xcodeproj | ✅ | project |
+| Swift WKWebView | ✅ | ViewController |
+| iOS home /eastern-europe | ❌ | home is site root |
+| iOS AppIcon-1024.png | ✅ | icon |
+| iOS display name VI Countdown | ✅ | Info.plist |
+| C++ launcher solution | ✅ | launcher |
+| README.md | ✅ | doc |
+| mobile/README.md | ✅ | doc |
+| launcher/README.md | ✅ | doc |
+
+*Updated by `scripts/readme-integrity-check.js` (workflow `readme-integrity.yml`).*
+<!-- END AUTO-GENERATED -->
+
+
 ## 📜 License
 
 Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trademarks of Take-Two Interactive. Not affiliated with or endorsed by Rockstar Games / Take-Two. Soundtrack embeds use **official Spotify** players; all rights belong to their respective owners.

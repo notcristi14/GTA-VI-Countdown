@@ -38,3 +38,12 @@ See the [root README](../README.md) for:
 2. Restore NuGet packages
 3. **Release | x64** → Build Solution
 4. Run: `bin\x64\Release\GtaViCountdown.exe`
+
+<!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
+## 🔍 Automated integrity status
+
+Last run: **2026-11-10T13:10:29.194Z** · Launcher files: **✅**
+
+*From `scripts/readme-integrity-check.js`.*
+<!-- END AUTO-GENERATED -->
+
