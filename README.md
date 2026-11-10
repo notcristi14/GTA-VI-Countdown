@@ -169,7 +169,7 @@ npm start
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-Last run: **2026-11-10T13:19:07.606Z** · **24/26 passed** · Background images: **26**
+Last run: **2026-11-10T13:19:37.063Z** · **26/28 passed** · Background images: **26**
 
 | Check | Status | Detail |
 |-------|--------|--------|
@@ -196,6 +196,8 @@ Last run: **2026-11-10T13:19:07.606Z** · **24/26 passed** · Background images:
 | iOS AppIcon-1024.png | ✅ | icon |
 | iOS display name VI Countdown | ✅ | Info.plist |
 | C++ launcher solution | ✅ | launcher |
+| launcher/assets/GtaLogo.ico | ✅ | exe icon |
+| launcher/assets/README.md | ✅ | doc |
 | README.md | ✅ | doc |
 | mobile/README.md | ✅ | doc |
 | launcher/README.md | ✅ | doc |

@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-10T13:19:07.606Z",
-  "commit": "0d142acdfeeab654537229a53f622452a075ccb7",
+  "generatedAt": "2026-11-10T13:19:37.063Z",
+  "commit": "3e3f9317cc376d8d77393e10f5655c649c01968e",
   "summary": {
-    "total": 26,
-    "passed": 24,
+    "total": 28,
+    "passed": 26,
     "failed": 2
   },
   "backgroundImageCount": 26,
@@ -145,6 +145,18 @@
       "readmeClaim": "C++ launcher solution",
       "ok": true,
       "detail": "launcher"
+    },
+    {
+      "id": "launcher-ico",
+      "readmeClaim": "launcher/assets/GtaLogo.ico",
+      "ok": true,
+      "detail": "exe icon"
+    },
+    {
+      "id": "readme-launcher-assets",
+      "readmeClaim": "launcher/assets/README.md",
+      "ok": true,
+      "detail": "doc"
     },
     {
       "id": "readme-root",

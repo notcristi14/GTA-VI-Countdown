@@ -84,7 +84,7 @@ mobile/ios/
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-Last run: **2026-11-10T13:19:07.606Z** · Failed mobile checks: **2**
+Last run: **2026-11-10T13:19:37.063Z** · Failed mobile checks: **2**
 
 - ❌ **Android home /eastern-europe** — home is site root
 - ❌ **iOS home /eastern-europe** — home is site root

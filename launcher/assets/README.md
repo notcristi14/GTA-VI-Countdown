@@ -14,7 +14,8 @@ Related docs:
 <!-- AUTO-GENERATED: readme-integrity-check — do not edit by hand -->
 ## 🔍 Automated integrity status
 
-Last run: seeded · Full status written by CI (`scripts/readme-integrity-check.js`).
+Last run: **2026-11-10T13:19:37.063Z** · GtaLogo.ico: **✅** · Launcher project: **✅**
 
 *From `scripts/readme-integrity-check.js`.*
 <!-- END AUTO-GENERATED -->
+
