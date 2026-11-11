@@ -184,7 +184,7 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last run: **2026-11-11T08:23:27.694Z** · commit `23a6ddc` · **63/63 passed** · root
+Last content update: **2026-11-11T08:35:57.358Z** · commit `dce25d9` · **63/63 passed** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -258,5 +258,5 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 
 No missing or outdated documentation findings from deterministic DOC_SPECS / API registration comparison.
 
-*Static analysis only (`scripts/readme-integrity-check.js`). Documentation findings are deterministic DOC_SPECS + route checks — not full prose review. Failures remain until source or documentation is fixed.*
+*Static analysis only (`scripts/readme-integrity-check.js`). Documentation findings are deterministic DOC_SPECS + route checks — not full prose review. **Last content update** advances only when non-volatile generated content changes (volatile-only runs do not rewrite timestamps). Failures remain until source or documentation is fixed.*
 <!-- END AUTO-GENERATED -->
