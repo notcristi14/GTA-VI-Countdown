@@ -187,5 +187,40 @@ test('empty findings when everything synchronized (repeat)', () => {
   assert.strictEqual(runDocumentationAudit(baseCtx()).length, 0);
 });
 
+/* Timestamp / stripVolatile semantics (mirrors scripts/readme-integrity-check.js) */
+function stripVolatile(s) {
+  return s
+    .replace(/Last content update: \*\*[^*]+\*\*/g, 'Last content update: **STABLE**')
+    .replace(/Last run: \*\*[^*]+\*\*/g, 'Last content update: **STABLE**')
+    .replace(/commit `[a-f0-9]+`/gi, 'commit `SHA`')
+    .replace(/"lastContentUpdateAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
+    .replace(/"generatedAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
+    .replace(/"commit":\s*"[^"]+"/g, '"commit":"STABLE"');
+}
+
+test('stripVolatile: only timestamp/SHA change compares equal (no commit)', () => {
+  const a = '## Automated integrity status\n\nLast content update: **2026-11-11T08:00:00.000Z** · commit `abc1234` · **63/63 passed**\n';
+  const b = '## Automated integrity status\n\nLast content update: **2026-11-11T10:00:00.000Z** · commit `def5678` · **63/63 passed**\n';
+  assert.strictEqual(stripVolatile(a), stripVolatile(b));
+});
+
+test('stripVolatile: legacy Last run label still normalizes', () => {
+  const legacy = 'Last run: **2026-01-01T00:00:00.000Z** · commit `aaaaaaa`';
+  const modern = 'Last content update: **2026-11-11T00:00:00.000Z** · commit `bbbbbbb`';
+  assert.strictEqual(stripVolatile(legacy), stripVolatile(modern));
+});
+
+test('stripVolatile: real content change is detected', () => {
+  const a = 'Last content update: **2026-11-11T08:00:00.000Z** · **63/63 passed**\n| `x` | PASS |';
+  const b = 'Last content update: **2026-11-11T08:00:00.000Z** · **62/63 passed**\n| `x` | FAIL |';
+  assert.notStrictEqual(stripVolatile(a), stripVolatile(b));
+});
+
+test('stripVolatile: report lastContentUpdateAt is volatile', () => {
+  const a = '{"lastContentUpdateAt":"2026-11-11T08:00:00.000Z","commit":"abc","summary":{"total":63}}';
+  const b = '{"lastContentUpdateAt":"2026-11-11T10:00:00.000Z","commit":"def","summary":{"total":63}}';
+  assert.strictEqual(stripVolatile(a), stripVolatile(b));
+});
+
 console.log(JSON.stringify({ passed, failed, total: passed + failed }));
 process.exit(failed ? 1 : 0);
