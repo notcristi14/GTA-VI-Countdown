@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { runDocumentationAudit, formatDocFindingsMarkdown, DOC_SPECS } = require('./doc-audit');
+const { runDynamicDocumentationAudit } = require('./dynamic-doc-audit');
 const ROOT = path.resolve(__dirname, '..');
 const now = new Date().toISOString();
 const commitSha = process.env.GITHUB_SHA || 'local';
@@ -172,19 +173,86 @@ for (const f of docFindings) {
 if (docFindings.length === 0) {
   check('doc-audit-clean', 'Documentation audit: no missing/outdated deterministic issues', true, 'DOC_SPECS (' + DOC_SPECS.length + ') + API claim scan clean', false);
 }
+
+// Dynamic documentation impact analysis (Git diff vs parent, or injected for tests)
+const dynResult = runDynamicDocumentationAudit(ROOT, readmesMap);
+const dynFindings = dynResult.findings || [];
+const dynSummary = dynResult.summary || {};
+// Confirmed high/critical dynamic findings become integrity checks (fail CI).
+// Potential risks are recorded but do not fail CI.
+for (const f of dynFindings) {
+  if (f.unreadable) continue;
+  const isCriticalDyn = f.confirmed && (f.severity === 'critical' || f.severity === 'high');
+  check(
+    'dyn-' + f.id,
+    'Dynamic doc impact: ' + f.id,
+    false,
+    (f.kind || '') + ' · ' + (f.documentationFile || '') + ' · ' + String(f.suggestedCorrection || '').slice(0, 100),
+    isCriticalDyn
+  );
+}
+if (dynSummary.status === 'partial' || dynSummary.status === 'unavailable') {
+  check('dyn-audit-coverage', 'Dynamic audit analyzed all relevant changed files', false, 'status=' + dynSummary.status + ' unreadable=' + (dynSummary.unreadableFiles || 0) + (dynSummary.error ? ' error=' + dynSummary.error : ''), true);
+} else {
+  check('dyn-audit-coverage', 'Dynamic audit analyzed all relevant changed files', true, 'status=' + (dynSummary.status || 'complete') + ' analyzed=' + (dynSummary.analyzedFiles || 0), false);
+}
+
 const passed = checks.filter((c) => c.ok).length;
 const failed = checks.filter((c) => !c.ok);
 const criticalFailed = failed.filter((c) => c.critical);
-const report = { lastContentUpdateAt: now, commit: commitSha, timestampSemantics: 'lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value', analysisType: 'static-source-only', expectedMobileHome: EXPECTED_MOBILE_HOME, readmeFilesScanned: readmeFiles, readmeFileCount: readmeFiles.length, summary: { total: checks.length, passed, failed: failed.length, criticalFailed: criticalFailed.length, documentationFindings: docFindings.length }, detectedFeatures: features, apiEndpoints: apis, countdownRegions: regionImpl, regionsImplemented: regionsOkCount, backgroundImageCount: bgsCount, mobile: { expectedHome: EXPECTED_MOBILE_HOME, androidHome, androidHomeMatchesExpected: androidHomeOk, iosHome, iosHomeMatchesExpected: iosHomeOk, androidHost, iosHost, appId, gradleVer, agpVer, kotlinVer, pureAndroid, iosIcon, sources: { android: MAIN_KT, ios: IOS_VC } }, launcher: { solution: launcherSln, gtaLogoIco: launcherIco, webView2: features.launcherWebView2, source: APP_WINDOW }, missingOrOutdatedDocumentation: docFindings, documentationAudit: { deterministic: true, specsEvaluated: DOC_SPECS.length, note: 'Findings from explicit DOC_SPECS and registered-route comparison; not a full prose review.' }, failedChecks: failed.map((c) => ({ id: c.id, claim: c.claim, detail: c.detail, critical: c.critical })), checks };
+const report = {
+  lastContentUpdateAt: now,
+  commit: commitSha,
+  baseCommit: dynSummary.baseCommit || null,
+  timestampSemantics: 'lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value',
+  analysisType: 'static-source-plus-dynamic-git-diff',
+  expectedMobileHome: EXPECTED_MOBILE_HOME,
+  readmeFilesScanned: readmeFiles,
+  readmeFileCount: readmeFiles.length,
+  summary: { total: checks.length, passed, failed: failed.length, criticalFailed: criticalFailed.length, documentationFindings: docFindings.length + dynFindings.filter(f => !f.unreadable).length },
+  detectedFeatures: features,
+  apiEndpoints: apis,
+  countdownRegions: regionImpl,
+  regionsImplemented: regionsOkCount,
+  backgroundImageCount: bgsCount,
+  mobile: { expectedHome: EXPECTED_MOBILE_HOME, androidHome, androidHomeMatchesExpected: androidHomeOk, iosHome, iosHomeMatchesExpected: iosHomeOk, androidHost, iosHost, appId, gradleVer, agpVer, kotlinVer, pureAndroid, iosIcon, sources: { android: MAIN_KT, ios: IOS_VC } },
+  launcher: { solution: launcherSln, gtaLogoIco: launcherIco, webView2: features.launcherWebView2, source: APP_WINDOW },
+  missingOrOutdatedDocumentation: docFindings.concat(dynFindings.filter(f => !f.unreadable)),
+  documentationAudit: { deterministic: true, specsEvaluated: DOC_SPECS.length, note: 'Findings from explicit DOC_SPECS and registered-route comparison; not a full prose review.' },
+  dynamicAudit: {
+    historyAvailable: !!dynSummary.historyAvailable,
+    baseCommit: dynSummary.baseCommit || null,
+    headCommit: dynSummary.headCommit || null,
+    changedFiles: dynSummary.changedFiles || 0,
+    analyzedFiles: dynSummary.analyzedFiles || 0,
+    skippedFiles: dynSummary.skippedFiles || [],
+    unreadableFiles: dynSummary.unreadableFiles || 0,
+    readmeFilesDiscovered: dynSummary.readmeFilesDiscovered || readmeFiles.length,
+    documentationRelevantChanges: dynSummary.documentationRelevantChanges || 0,
+    missingDocumentationFindings: dynSummary.missingDocumentationFindings || 0,
+    outdatedDocumentationFindings: dynSummary.outdatedDocumentationFindings || 0,
+    potentialRisks: dynSummary.potentialRisks || 0,
+    confirmedFindings: dynSummary.confirmedFindings || 0,
+    perFileImpact: dynSummary.perFileImpact || [],
+    status: dynSummary.status || 'unknown',
+    error: dynSummary.error || null
+  },
+  failedChecks: failed.map((c) => ({ id: c.id, claim: c.claim, detail: c.detail, critical: c.critical })),
+  checks
+};
 writeIfChanged('scripts/integrity-report.json', JSON.stringify(report, null, 2));
 function statusTable() { return '| ID | Claim | Status | Detail |\n|----|-------|--------|--------|\n' + checks.map((c) => '| `' + c.id + '` | ' + c.claim.replace(/\|/g, '/') + ' | ' + (c.ok ? 'PASS' : 'FAIL') + ' | ' + c.detail.replace(/\|/g, '/') + ' |').join('\n'); }
-function integritySection(scope) { return '## Automated integrity status\n\nLast content update: **' + now + '** · commit `' + commitSha.slice(0, 7) + '` · **' + passed + '/' + checks.length + ' passed**' + (criticalFailed.length ? ' · **' + criticalFailed.length + ' critical failures**' : '') + (docFindings.length ? ' · **' + docFindings.length + ' doc findings**' : '') + (scope ? ' · ' + scope : '') + '\n\nExpected mobile home URL: `' + EXPECTED_MOBILE_HOME + '`  \nAndroid actual: `' + (androidHome || '(not found)') + '` · iOS actual: `' + (iosHome || '(not found)') + '`\n\n' + statusTable() + formatDocFindingsMarkdown(docFindings) + '\n*Static analysis only (`scripts/readme-integrity-check.js`). Documentation findings are deterministic DOC_SPECS + route checks — not full prose review. **Last content update** advances only when non-volatile generated content changes (volatile-only runs do not rewrite timestamps). Failures remain until source or documentation is fixed.*\n'; }
+function integritySection(scope) {
+  const dynNote = dynSummary.status ? ('\n\n### Dynamic change audit\n\nStatus: **' + dynSummary.status + '** · changed files: ' + (dynSummary.changedFiles || 0) + ' · analyzed: ' + (dynSummary.analyzedFiles || 0) + ' · confirmed findings: ' + (dynSummary.confirmedFindings || 0) + ' · potential risks: ' + (dynSummary.potentialRisks || 0) + (dynSummary.baseCommit ? ' · base `' + String(dynSummary.baseCommit).slice(0, 7) + '`' : '') + '\n') : '';
+  return '## Automated integrity status\n\nLast content update: **' + now + '** · commit `' + commitSha.slice(0, 7) + '` · **' + passed + '/' + checks.length + ' passed**' + (criticalFailed.length ? ' · **' + criticalFailed.length + ' critical failures**' : '') + (docFindings.length ? ' · **' + docFindings.length + ' doc findings**' : '') + (dynFindings.length ? ' · **' + dynFindings.length + ' dynamic findings**' : '') + (scope ? ' · ' + scope : '') + '\n\nExpected mobile home URL: `' + EXPECTED_MOBILE_HOME + '`  \nAndroid actual: `' + (androidHome || '(not found)') + '` · iOS actual: `' + (iosHome || '(not found)') + '`\n\n' + statusTable() + formatDocFindingsMarkdown(docFindings) + dynNote + '\n*Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*\n';
+}
 let changed = false;
 function updateReadmeGenerated(rel, scope) { if (!exists(rel)) return; const before = read(rel); const after = upsertGenerated(before, integritySection(scope)); if (writeIfChanged(rel, after)) changed = true; }
 for (const rf of readmeFiles) { let scope = rf; if (rf === 'README.md') scope = 'root'; else if (rf.startsWith('mobile/')) scope = 'mobile'; else if (rf.startsWith('launcher/assets')) scope = 'launcher/assets'; else if (rf.startsWith('launcher/')) scope = 'launcher'; updateReadmeGenerated(rf, scope); }
 if (exists('mobile/README.md')) { let m = read('mobile/README.md'); const mobileFactsStart = '<!-- AUTO-GENERATED: mobile-config-facts -->'; const mobileFactsEnd = '<!-- END AUTO-GENERATED: mobile-config-facts -->'; const facts = mobileFactsStart + '\n### Mobile home URL (integrity)\n\n| Shell | Expected | Actual (source) | Match |\n|-------|----------|-----------------|-------|\n| Android `HOME_URL` | `' + EXPECTED_MOBILE_HOME + '` | `' + (androidHome || 'NOT FOUND') + '` | ' + (androidHomeOk ? 'yes' : '**NO**') + ' |\n| iOS `homeURL` | `' + EXPECTED_MOBILE_HOME + '` | `' + (iosHome || 'NOT FOUND') + '` | ' + (iosHomeOk ? 'yes' : '**NO**') + ' |\n\nIntended mobile landing page is the **site root** (`/`). Regional paths such as `/eastern-europe` remain available in the web UI for all 15 countdown regions; they are not required as the native shell home URL.\nIf Match is **NO**, the native shell home URL does not match the intended root URL.\n' + mobileFactsEnd; const fi = m.indexOf(mobileFactsStart); const fj = m.indexOf(mobileFactsEnd); let next; if (fi !== -1 && fj !== -1 && fj > fi) next = m.slice(0, fi) + facts + m.slice(fj + mobileFactsEnd.length).replace(/^\n+/, '\n'); else { const gi = m.indexOf(MARKER_START); if (gi !== -1) next = m.slice(0, gi) + facts + '\n\n' + m.slice(gi); else next = m.trimEnd() + '\n\n' + facts + '\n'; } if (writeIfChanged('mobile/README.md', next)) changed = true; }
 console.log(JSON.stringify(report.summary));
 if (docFindings.length) { console.log('DOC_FINDINGS=' + docFindings.length); docFindings.forEach((f) => console.log('DOC', f.severity, f.id, f.documentationFile)); }
+if (dynFindings.length) { console.log('DYN_FINDINGS=' + dynFindings.length + ' status=' + dynSummary.status); dynFindings.forEach((f) => console.log('DYN', f.severity, f.confirmed ? 'confirmed' : 'potential', f.id, f.sourceFile || '')); }
 failed.forEach((c) => console.log('FAIL', c.id, c.detail));
 console.log(changed ? 'README_CHANGED=1' : 'README_CHANGED=0');
 if (criticalFailed.length > 0) { console.error('CRITICAL_FAILURES=' + criticalFailed.length + ' ' + criticalFailed.map((c) => c.id).join(',')); process.exit(1); }

@@ -307,10 +307,12 @@ function auditDocumentedApis(ctx) {
   const findings = [];
   for (const [file, text] of Object.entries(ctx.readmes || {})) {
     if (!text) continue;
+    // Ignore machine-generated integrity sections so findings listed there do not become ghost-API noise.
+    const hand = String(text).replace(/<!-- AUTO-GENERATED:[\s\S]*?<!-- END AUTO-GENERATED[^>]*-->/g, '');
     const re = /\/api\/[a-z0-9-]+/gi;
     let m;
     const seen = new Set();
-    while ((m = re.exec(text)) !== null) {
+    while ((m = re.exec(hand)) !== null) {
       const api = m[0].toLowerCase();
       if (seen.has(api)) continue;
       seen.add(api);
