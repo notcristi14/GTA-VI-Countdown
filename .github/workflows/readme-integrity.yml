@@ -21,6 +21,14 @@ name: README integrity check
 #   <!-- AUTO-GENERATED: readme-integrity-check -->
 #   <!-- END AUTO-GENERATED -->
 # and the mobile facts markers on mobile/README.md.
+#
+# Push path policy
+# ----------------
+# Trigger on integrity-relevant *kinds* of files (extensions / names) anywhere
+# in the tree so newly added source, docs, workflows, scripts, and assets are
+# covered without maintaining an exhaustive file list.
+# paths-ignore drops caches, build outputs, and other noise.
+# Job-level actor guard still skips github-actions[bot] pushes to prevent loops.
 
 on:
   schedule:
@@ -29,41 +37,69 @@ on:
   push:
     branches: [main]
     paths:
-      - 'gta-vi-countdown.html'
-      - 'app.js'
-      - 'music.js'
-      - 'music.css'
-      - 'music-discovery.js'
-      - 'backgrounds-api.js'
-      - 'github-api.js'
-      - 'bgs/**'
-      - 'mobile/android/**'
-      - 'mobile/ios/**'
-      - 'mobile/README.md'
-      - 'launcher/src/**'
-      - 'launcher/*.sln'
-      - 'launcher/*.vcxproj'
-      - 'launcher/assets/**'
-      - 'launcher/README.md'
-      - 'launcher/assets/README.md'
-      - 'scripts/readme-integrity-check.js'
-      - 'scripts/doc-audit.js'
-      - 'package.json'
-      - 'README.md'
-      - '.github/workflows/ensure-gradle-wrapper.yml'
-      - '.github/workflows/ios-build.yml'
-      - '.github/workflows/readme-integrity.yml'
-      - '.github/workflows/sync-backgrounds.yml'
-      - 'bg.jpeg'
-      - 'launcher/.gitignore'
-      - 'launcher/GtaViCountdown.vcxproj.filters'
-      - 'launcher/packages.config'
-      - 'logo.png'
-      - 'mobile/assets/logo.png'
-      - 'mobile/generate_icons.sh'
-      - 'scripts/integrity-report.json'
-      - 'scripts/sync-backgrounds.js'
-      - 'stats.json'
+      # Source / app
+      - '**/*.js'
+      - '**/*.mjs'
+      - '**/*.cjs'
+      - '**/*.ts'
+      - '**/*.html'
+      - '**/*.css'
+      - '**/*.kt'
+      - '**/*.kts'
+      - '**/*.swift'
+      - '**/*.cpp'
+      - '**/*.cc'
+      - '**/*.cxx'
+      - '**/*.h'
+      - '**/*.hpp'
+      - '**/*.rc'
+      - '**/*.gradle'
+      - '**/gradle.properties'
+      - '**/gradle-wrapper.properties'
+      - '**/gradlew'
+      - '**/gradlew.bat'
+      - '**/*.sh'
+      - '**/*.bat'
+      - '**/*.ps1'
+      - '**/*.plist'
+      - '**/*.sln'
+      - '**/*.vcxproj'
+      - '**/*.vcxproj.filters'
+      - '**/packages.config'
+      - '**/*.gitignore'
+      # Docs
+      - '**/*.md'
+      # Config / automation / reports
+      - '**/*.yml'
+      - '**/*.yaml'
+      - '**/*.json'
+      - '**/package.json'
+      - '**/package-lock.json'
+      - '**/Dockerfile'
+      - '**/.editorconfig'
+      # Assets referenced by docs / apps / launcher
+      - '**/*.png'
+      - '**/*.jpg'
+      - '**/*.jpeg'
+      - '**/*.webp'
+      - '**/*.gif'
+      - '**/*.ico'
+      - '**/*.svg'
+    paths-ignore:
+      - '**/node_modules/**'
+      - '**/.git/**'
+      - '**/build/**'
+      - '**/DerivedData/**'
+      - '**/.gradle/**'
+      - '**/local.properties'
+      - '**/*.log'
+      - '**/.DS_Store'
+      - '**/Thumbs.db'
+      - '**/*.tmp'
+      - '**/*.temp'
+      - '**/coverage/**'
+      - '**/.idea/**'
+      - '**/.vscode/**'
 
 permissions:
   contents: write
