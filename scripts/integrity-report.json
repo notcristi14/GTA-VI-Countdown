@@ -1,7 +1,7 @@
 {
   "lastContentUpdateAt": "2026-11-11T12:55:27.782Z",
-  "commit": "1bc98562ba4eec3683e10009a64b834f3759114a",
-  "baseCommit": "d4ee2b4ef7028371f4a3c8517e0f0693d1dda571",
+  "commit": "b6d6381a106fc7346e48085936f69ee9edf48fbf",
+  "baseCommit": "65f2acbd3d7f74ba3008ae36afd55a75cbed411f",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff",
   "expectedMobileHome": "https://gta-vi-countdown.onrender.com/",
@@ -195,10 +195,10 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "d4ee2b4ef7028371f4a3c8517e0f0693d1dda571",
-    "headCommit": "1bc98562ba4eec3683e10009a64b834f3759114a",
-    "changedFiles": 5,
-    "analyzedFiles": 5,
+    "baseCommit": "65f2acbd3d7f74ba3008ae36afd55a75cbed411f",
+    "headCommit": "b6d6381a106fc7346e48085936f69ee9edf48fbf",
+    "changedFiles": 1,
+    "analyzedFiles": 1,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
@@ -209,39 +209,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "launcher/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "launcher/assets/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "mobile/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "scripts/integrity-report.json",
+        "path": "scripts/readme-integrity-check.js",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -734,7 +702,7 @@
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=5",
+      "detail": "status=complete analyzed=1",
       "critical": false
     }
   ]
