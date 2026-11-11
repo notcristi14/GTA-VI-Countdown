@@ -193,6 +193,7 @@ function stripVolatile(s) {
     .replace(/Last content update: \*\*[^*]+\*\*/g, 'Last content update: **STABLE**')
     .replace(/Last run: \*\*[^*]+\*\*/g, 'Last content update: **STABLE**')
     .replace(/commit `[a-f0-9]+`/gi, 'commit `SHA`')
+  .replace(/commit `local`/gi, 'commit `SHA`')
     .replace(/"lastContentUpdateAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
     .replace(/"generatedAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
     .replace(/"commit":\s*"[^"]+"/g, '"commit":"STABLE"')
