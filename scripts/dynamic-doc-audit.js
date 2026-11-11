@@ -589,6 +589,63 @@ function analyzeChange(change, root, readmes, options = {}) {
     });
   }
 
+  // --- New source file not covered by existing static DOC_SPECS and not mentioned ---
+  if (status === 'A' && /\.(js|ts|kt|swift|cpp|yml|gradle|html|css)$/.test(rel) && !unreadable && !isTestOrAuditScript(rel)) {
+    const base = path.basename(rel);
+    const mentioned = fileMentionedIn(combined, rel) || combined.includes(base);
+    // Avoid flagging every tiny internal helper; only flag files that look public/structural
+    const looksPublic = /^(app|server|index|main)\.|api|workflow|gradle|Activity|ViewController|AppWindow/i.test(base) ||
+      rel.split('/').length <= 2;
+    if (!mentioned && looksPublic) {
+      findings.push({
+        id: 'dyn-new-file-' + base.replace(/\W/g, ''),
+        severity: 'low',
+        documentationFile: 'README.md',
+        sourceFile: rel,
+        problem: 'New source file `' + rel + '` introduced. It is not mentioned in any README and has no matching static DOC_SPECS entry.',
+        suggestedCorrection: 'Review whether `' + rel + '` should appear in the project structure or feature documentation.',
+        kind: 'missing',
+        deterministic: true,
+        confirmed: false,
+        potentialRisk: true,
+        changeType: 'A'
+      });
+    }
+  }
+
+  // --- Outdated documented commands (heuristic on changed scripts / package.json scripts) ---
+  if ((rel === 'package.json' || rel.endsWith('.sh') || rel.endsWith('gradlew') || rel.endsWith('gradlew.bat')) && status !== 'D' && !unreadable) {
+    // If README mentions a command that no longer exists in package.json scripts
+    if (rel === 'package.json') {
+      try {
+        const pkg = JSON.parse(content);
+        const scripts = Object.keys(pkg.scripts || {});
+        for (const [rf, text] of Object.entries(readmes || {})) {
+          const cmdRe = /npm run ([a-zA-Z0-9:_-]+)/g;
+          let m;
+          while ((m = cmdRe.exec(text)) !== null) {
+            if (!scripts.includes(m[1])) {
+              findings.push({
+                id: 'dyn-outdated-npm-script-' + m[1].replace(/\W/g, ''),
+                severity: 'medium',
+                documentationFile: rf,
+                sourceFile: rel,
+                problem: rf + ' documents `npm run ' + m[1] + '` but that script is not present in package.json.',
+                suggestedCorrection: 'Remove or update the documented `npm run ' + m[1] + '` command in ' + rf + '.',
+                kind: 'outdated',
+                deterministic: true,
+                confirmed: true,
+                potentialRisk: false,
+                changeType: status
+              });
+            }
+          }
+        }
+      } catch { /* ignore */ }
+    }
+  }
+
+
   return findings;
 }
 
