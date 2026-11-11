@@ -79,18 +79,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Run unit tests (test-doc-audit.js)
+      - name: Run documentation and dynamic Git audit tests
         id: tests
-        run: node scripts/test-doc-audit.js
+        run: |
+          node scripts/test-doc-audit.js
+          node test/dynamic-doc-audit.test.js
 
       - name: Scan source and update integrity sections only
         id: check
+        env:
+          DYNAMIC_AUDIT_BASE_SHA: ${{ github.event.before || github.event.pull_request.base.sha || '' }}
+          DYNAMIC_AUDIT_HEAD_SHA: ${{ github.sha }}
         run: |
           set -uo pipefail
           set +e

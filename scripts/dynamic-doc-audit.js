@@ -11,7 +11,7 @@
  *   potentialRisk: true — needs human review; must not fail CI by itself
  */
 
-const { execSync } = require('child_process');
+const { execSync, execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -67,74 +67,83 @@ function safeExec(cmd, cwd) {
  * Discover changed files via Git. Handles initial commit and missing history.
  * Returns { historyAvailable, baseCommit, headCommit, changes, skipped, error }.
  */
-function getGitChanges(root) {
-  const result = {
-    historyAvailable: false,
-    baseCommit: null,
-    headCommit: null,
-    changes: [],
-    skipped: [],
-    error: null
-  };
-
-  const inside = safeExec('git rev-parse --is-inside-work-tree', root);
-  if (!inside || inside.trim() !== 'true') {
-    result.error = 'not a git repository or git unavailable';
-    return result;
-  }
-
-  const head = safeExec('git rev-parse HEAD', root);
-  if (!head) {
-    result.error = 'cannot resolve HEAD';
-    return result;
-  }
-  result.headCommit = head.trim();
-
-  const parent = safeExec('git rev-parse HEAD~1', root);
-  if (parent) {
-    result.baseCommit = parent.trim();
-    result.historyAvailable = true;
-  }
-
-  let raw = '';
-  if (result.historyAvailable) {
-    // -M detects renames; tab-separated so filenames with spaces are safe
-    raw = safeExec('git diff --name-status -M --find-renames HEAD~1 HEAD', root) || '';
-  } else {
-    // Initial commit or no parent: treat every tracked file as added
-    const listed = safeExec('git ls-tree -r --name-only HEAD', root) || '';
-    raw = listed.split('\n').filter(Boolean).map((f) => 'A\t' + f).join('\n');
-  }
-
-  if (!raw && result.historyAvailable) {
-    // Empty diff is valid (no changes)
-  }
-
-  const lines = raw.split('\n').filter(Boolean);
-  for (const line of lines) {
-    const parts = line.split('\t');
-    if (parts.length < 2) continue;
-    let statusCode = parts[0];
-    let filePath;
-    let oldPath = null;
-    if (statusCode.startsWith('R') || statusCode.startsWith('C')) {
-      // R100\told\tnew
-      if (parts.length < 3) continue;
-      oldPath = parts[1].replace(/\\/g, '/');
-      filePath = parts[2].replace(/\\/g, '/');
-      statusCode = statusCode[0]; // 'R' or 'C'
+function gitText(root, args, maxBuffer = 20 * 1024 * 1024) {
+  try { return execFileSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer, stdio: ['ignore', 'pipe', 'pipe'] }); } catch { return null; }
+}
+function validSha(value) { return typeof value === 'string' && /^[0-9a-f]{40}$/i.test(value); }
+function readGitFile(root, sha, rel) {
+  if (!sha || !rel) return { ok: false, content: '', reason: 'missing revision or path' };
+  try {
+    const data = execFileSync('git', ['show', sha + ':' + rel], { cwd: root, encoding: 'buffer', maxBuffer: 2 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
+    return { ok: true, content: data.toString('utf8'), reason: null };
+  } catch (error) { return { ok: false, content: '', reason: 'git object unavailable: ' + (error.code || error.message) }; }
+}
+function parseNameStatusZ(raw) {
+  const f = raw.split('\0'), out = [];
+  for (let i = 0; i < f.length;) {
+    const code = f[i++]; if (!code) continue;
+    if (code[0] === 'R' || code[0] === 'C') {
+      const oldPath = f[i++], filePath = f[i++];
+      if (oldPath === undefined || filePath === undefined) throw new Error('Malformed rename/copy record');
+      out.push({ status: code[0], path: filePath, oldPath });
     } else {
-      filePath = parts[1].replace(/\\/g, '/');
+      const filePath = f[i++];
+      if (filePath === undefined) throw new Error('Malformed Git diff record');
+      out.push({ status: code[0], path: filePath, oldPath: null });
     }
-    const reason = isSkippable(filePath);
-    if (reason) {
-      result.skipped.push({ path: filePath, reason });
-      continue;
-    }
-    result.changes.push({ status: statusCode, path: filePath, oldPath });
   }
-
-  return result;
+  return out;
+}
+function getGitChanges(root, options = {}) {
+  const r = { historyAvailable: false, baseCommit: null, headCommit: null, changes: [], skipped: [], error: null, status: 'unavailable' };
+  const cwd = root || process.cwd();
+  const inside = gitText(cwd, ['rev-parse', '--is-inside-work-tree']);
+  if (!inside || inside.trim() !== 'true') { r.error = 'not a Git repository or Git unavailable'; return r; }
+  const headInput = options.headSha || process.env.DYNAMIC_AUDIT_HEAD_SHA || process.env.GITHUB_SHA || 'HEAD';
+  const head = gitText(cwd, ['rev-parse', '--verify', headInput + '^{commit}']);
+  if (!head) { r.error = 'cannot resolve requested head commit: ' + headInput; return r; }
+  r.headCommit = head.trim();
+  const shallow = (gitText(cwd, ['rev-parse', '--is-shallow-repository']) || '').trim() === 'true';
+  let baseInput = options.baseSha || process.env.DYNAMIC_AUDIT_BASE_SHA || process.env.GITHUB_EVENT_BEFORE || '';
+  const firstPush = /^0{40}$/.test(baseInput); if (firstPush) baseInput = '';
+  if (!baseInput && !firstPush) {
+    const parent = gitText(cwd, ['rev-parse', '--verify', r.headCommit + '^']);
+    if (!parent) {
+      const rawCommit = gitText(cwd, ['cat-file', '-p', r.headCommit]) || '';
+      if (shallow && /^parent [0-9a-f]{40}$/m.test(rawCommit)) { r.error = 'shallow Git history: fetch full history or provide base SHA'; return r; }
+      const tree = gitText(cwd, ['ls-tree', '-r', '-z', '--name-only', r.headCommit]);
+      if (tree === null) { r.error = 'cannot enumerate initial commit'; return r; }
+      r.changes = tree.split('\0').filter(Boolean).map(path => ({ status: 'A', path, oldPath: null })).filter(c => {
+        const reason = isSkippable(c.path); if (reason) r.skipped.push({ path: c.path, reason }); return !reason;
+      });
+      r.status = 'initial-commit'; return r;
+    }
+    if (shallow) { r.error = 'shallow Git history: fetch full history or provide base SHA'; return r; }
+    baseInput = parent.trim();
+  }
+  if (firstPush) {
+    const tree = gitText(cwd, ['ls-tree', '-r', '-z', '--name-only', r.headCommit]);
+    if (tree === null) { r.error = 'cannot enumerate first-push tree'; return r; }
+    r.changes = tree.split('\0').filter(Boolean).map(path => ({ status: 'A', path, oldPath: null })).filter(c => {
+      const reason = isSkippable(c.path); if (reason) r.skipped.push({ path, reason }); return !reason;
+    });
+    r.status = 'initial-commit'; return r;
+  }
+  if (!validSha(baseInput)) { r.error = 'invalid base commit SHA'; return r; }
+  const base = gitText(cwd, ['rev-parse', '--verify', baseInput + '^{commit}']);
+  if (!base) { r.error = 'base commit object missing; fetch full history'; return r; }
+  r.baseCommit = base.trim();
+  if (gitText(cwd, ['merge-base', '--is-ancestor', r.baseCommit, r.headCommit]) === null) {
+    r.error = 'base is not an ancestor of head (force-push, unrelated or incomplete history)'; return r;
+  }
+  const raw = gitText(cwd, ['diff', '--name-status', '-z', '--find-renames', '--find-copies', '--find-copies-harder', r.baseCommit, r.headCommit, '--']);
+  if (raw === null) { r.error = 'Git could not compare requested base and head'; return r; }
+  try {
+    for (const c of parseNameStatusZ(raw)) {
+      const reason = isSkippable(c.path); if (reason) r.skipped.push({ path: c.path, reason }); else r.changes.push(c);
+    }
+  } catch (error) { r.error = error.message; return r; }
+  r.historyAvailable = true; r.status = 'complete'; return r;
 }
 
 function readFileSafe(root, rel) {
@@ -217,33 +226,39 @@ function analyzeChange(change, root, readmes, options = {}) {
   let content = change.content;
   let oldContent = change.oldContent;
   let unreadable = false;
-
-  if (content === undefined && !options.skipGitContent) {
-    if (status !== 'D') {
-      const r = readFileSafe(root, rel);
-      if (r.ok) content = r.content;
+  if (!options.skipGitContent && options.headSha) {
+    if (options.baseSha && status !== 'A' && oldContent === undefined) {
+      const old = readGitFile(root, options.baseSha, change.oldPath || rel);
+      if (old.ok) oldContent = old.content;
       else {
         unreadable = true;
-        findings.push({
-          id: 'dyn-unreadable-' + rel.replace(/\W/g, '_'),
-          severity: 'medium',
-          documentationFile: '(none)',
-          sourceFile: rel,
-          problem: 'Changed file ' + rel + ' could not be read (' + r.reason + '). Dynamic analysis skipped for this file.',
-          suggestedCorrection: 'Ensure the file is readable and not excluded.',
-          kind: 'risk',
-          deterministic: true,
-          confirmed: false,
-          potentialRisk: true,
-          unreadable: true
-        });
+        findings.push({ id: 'dyn-old-unreadable-' + rel.replace(/\W/g, '_'), severity: 'medium',
+          documentationFile: '(none)', sourceFile: rel, problem: 'Base-version content for ' + rel + ' could not be read (' + old.reason + ').',
+          suggestedCorrection: 'Ensure the base commit object and path are available.', kind: 'risk',
+          deterministic: true, confirmed: false, potentialRisk: true, unreadable: true });
       }
     }
-  }
-  if (oldContent === undefined && !options.skipGitContent && (status === 'D' || change.oldPath)) {
-    const showPath = change.oldPath || rel;
-    const shown = safeExec('git show HEAD~1:"' + showPath.replace(/"/g, '\\"') + '"', root);
-    if (shown !== null) oldContent = shown;
+    if (status !== 'D' && content === undefined) {
+      const fresh = readGitFile(root, options.headSha, rel);
+      if (fresh.ok) content = fresh.content;
+      else {
+        unreadable = true;
+        findings.push({ id: 'dyn-new-unreadable-' + rel.replace(/\W/g, '_'), severity: 'medium',
+          documentationFile: '(none)', sourceFile: rel, problem: 'Head-version content for ' + rel + ' could not be read (' + fresh.reason + ').',
+          suggestedCorrection: 'Ensure the head commit object and path are available.', kind: 'risk',
+          deterministic: true, confirmed: false, potentialRisk: true, unreadable: true });
+      }
+    }
+  } else if (!options.skipGitContent && content === undefined && status !== 'D') {
+    const current = readFileSafe(root, rel);
+    if (current.ok) content = current.content;
+    else {
+      unreadable = true;
+      findings.push({ id: 'dyn-unreadable-' + rel.replace(/\W/g, '_'), severity: 'medium',
+        documentationFile: '(none)', sourceFile: rel, problem: 'Changed file ' + rel + ' could not be read (' + current.reason + ').',
+        suggestedCorrection: 'Ensure the file is readable and not excluded.', kind: 'risk',
+        deterministic: true, confirmed: false, potentialRisk: true, unreadable: true });
+    }
   }
 
   content = content || '';
@@ -315,6 +330,16 @@ function analyzeChange(change, root, readmes, options = {}) {
       }
     }
   }
+
+    for (const v of oldEnvs) {
+      if (CI_ENV_IGNORE.has(v)) continue;
+      if (!envs.includes(v) && combined.includes(v)) findings.push({
+        id: 'dyn-removed-env-' + v, severity: 'medium', documentationFile: 'README.md', sourceFile: rel,
+        problem: 'Environment variable ' + v + ' is no longer referenced in ' + rel + ' but remains documented in README(s).',
+        suggestedCorrection: 'Remove or update documentation for \`' + v + '\`.', kind: 'outdated',
+        deterministic: true, confirmed: true, potentialRisk: false, changeType: status
+      });
+    }
 
   // --- Deleted file still referenced ---
   if (status === 'D') {
@@ -389,6 +414,31 @@ function analyzeChange(change, root, readmes, options = {}) {
         }
       }
     } catch { /* invalid json — skip */ }
+  }
+
+  // --- Removed package dependencies and npm scripts ---
+  if (rel === 'package.json' && status !== 'D' && !unreadable && oldContent) {
+    try {
+      const oldPkg = JSON.parse(oldContent), newPkg = JSON.parse(content);
+      const oldDeps = { ...(oldPkg.dependencies || {}), ...(oldPkg.devDependencies || {}) };
+      const newDeps = { ...(newPkg.dependencies || {}), ...(newPkg.devDependencies || {}) };
+      for (const name of Object.keys(oldDeps)) if (!Object.prototype.hasOwnProperty.call(newDeps, name) && combined.includes(name)) {
+        findings.push({ id: 'dyn-removed-dep-' + name.replace(/\W/g, ''), severity: 'medium',
+          documentationFile: 'README.md', sourceFile: rel,
+          problem: 'Dependency ' + name + ' was removed from package.json but remains referenced in README(s).',
+          suggestedCorrection: 'Remove or replace documentation referring to dependency \`' + name + '\`.',
+          kind: 'outdated', deterministic: true, confirmed: true, potentialRisk: false, changeType: status });
+      }
+      const oldScripts = oldPkg.scripts || {}, newScripts = newPkg.scripts || {};
+      for (const name of Object.keys(oldScripts)) if (!Object.prototype.hasOwnProperty.call(newScripts, name) &&
+        (combined.includes('npm run ' + name) || combined.includes('\`' + name + '\`'))) {
+        findings.push({ id: 'dyn-removed-script-' + name.replace(/\W/g, ''), severity: 'medium',
+          documentationFile: 'README.md', sourceFile: rel,
+          problem: 'npm script "' + name + '" was removed from package.json but remains documented in README(s).',
+          suggestedCorrection: 'Update or remove the documented \`npm run ' + name + '\` command.',
+          kind: 'outdated', deterministic: true, confirmed: true, potentialRisk: false, changeType: status });
+      }
+    } catch { /* malformed package metadata is reported by other checks */ }
   }
 
   // --- Android / Gradle configuration ---
@@ -523,80 +573,21 @@ function analyzeChange(change, root, readmes, options = {}) {
     }
   }
 
-  // --- New GitHub Actions workflow ---
-  if (rel.startsWith('.github/workflows/') && status === 'A') {
+  // --- Added or removed GitHub Actions workflows ---
+  if (rel.startsWith('.github/workflows/') && (status === 'A' || status === 'D')) {
     const base = path.basename(rel);
-    if (!combined.includes(base)) {
-      findings.push({
-        id: 'dyn-new-workflow-' + base.replace(/\W/g, ''),
-        severity: 'low',
-        documentationFile: 'README.md',
-        sourceFile: rel,
-        problem: 'New workflow `' + rel + '` added but not listed in any README structure section.',
-        suggestedCorrection: 'Consider listing `' + base + '` under .github/workflows in the root README Structure section.',
-        kind: 'missing',
-        deterministic: true,
-        confirmed: false,
-        potentialRisk: true,
-        changeType: 'A'
-      });
-    }
-  }
-
-  // --- New source file not covered by existing static DOC_SPECS and not mentioned ---
-  if (status === 'A' && /\.(js|ts|kt|swift|cpp|yml|gradle|html|css)$/.test(rel) && !unreadable && !isTestOrAuditScript(rel)) {
-    const base = path.basename(rel);
-    const mentioned = fileMentionedIn(combined, rel) || combined.includes(base);
-    // Avoid flagging every tiny internal helper; only flag files that look public/structural
-    const looksPublic = /^(app|server|index|main)\.|api|workflow|gradle|Activity|ViewController|AppWindow/i.test(base) ||
-      rel.split('/').length <= 2;
-    if (!mentioned && looksPublic) {
-      findings.push({
-        id: 'dyn-new-file-' + base.replace(/\W/g, ''),
-        severity: 'low',
-        documentationFile: 'README.md',
-        sourceFile: rel,
-        problem: 'New source file `' + rel + '` introduced. It is not mentioned in any README and has no matching static DOC_SPECS entry.',
-        suggestedCorrection: 'Review whether `' + rel + '` should appear in the project structure or feature documentation.',
-        kind: 'missing',
-        deterministic: true,
-        confirmed: false,
-        potentialRisk: true,
-        changeType: 'A'
-      });
-    }
-  }
-
-  // --- Outdated documented commands (heuristic on changed scripts / package.json scripts) ---
-  if ((rel === 'package.json' || rel.endsWith('.sh') || rel.endsWith('gradlew') || rel.endsWith('gradlew.bat')) && status !== 'D' && !unreadable) {
-    // If README mentions a command that no longer exists in package.json scripts
-    if (rel === 'package.json') {
-      try {
-        const pkg = JSON.parse(content);
-        const scripts = Object.keys(pkg.scripts || {});
-        for (const [rf, text] of Object.entries(readmes || {})) {
-          const cmdRe = /npm run ([a-zA-Z0-9:_-]+)/g;
-          let m;
-          while ((m = cmdRe.exec(text)) !== null) {
-            if (!scripts.includes(m[1])) {
-              findings.push({
-                id: 'dyn-outdated-npm-script-' + m[1].replace(/\W/g, ''),
-                severity: 'medium',
-                documentationFile: rf,
-                sourceFile: rel,
-                problem: rf + ' documents `npm run ' + m[1] + '` but that script is not present in package.json.',
-                suggestedCorrection: 'Remove or update the documented `npm run ' + m[1] + '` command in ' + rf + '.',
-                kind: 'outdated',
-                deterministic: true,
-                confirmed: true,
-                potentialRisk: false,
-                changeType: status
-              });
-            }
-          }
-        }
-      } catch { /* ignore */ }
-    }
+    if (status === 'A' && !combined.includes(base)) findings.push({
+      id: 'dyn-new-workflow-' + base.replace(/\W/g, ''), severity: 'low', documentationFile: 'README.md', sourceFile: rel,
+      problem: 'New workflow \`' + rel + '\` added but not listed in any README structure section.',
+      suggestedCorrection: 'Consider listing \`' + base + '\` under .github/workflows in the root README.',
+      kind: 'missing', deterministic: true, confirmed: false, potentialRisk: true, changeType: 'A'
+    });
+    if (status === 'D' && (combined.includes(rel) || combined.includes(base))) findings.push({
+      id: 'dyn-removed-workflow-' + base.replace(/\W/g, ''), severity: 'medium', documentationFile: 'README.md', sourceFile: rel,
+      problem: 'Workflow \`' + rel + '\` was removed but is still referenced in README(s).',
+      suggestedCorrection: 'Remove or replace references to \`' + base + '\` in README(s).',
+      kind: 'outdated', deterministic: true, confirmed: true, potentialRisk: false, changeType: 'D'
+    });
   }
 
   return findings;
@@ -656,7 +647,7 @@ function runDynamicDocumentationAudit(root, readmes, options = {}) {
       error: null
     };
   } else {
-    gitInfo = getGitChanges(root || process.cwd());
+    gitInfo = getGitChanges(root || process.cwd(), options);
   }
 
   const findings = [];
@@ -664,7 +655,7 @@ function runDynamicDocumentationAudit(root, readmes, options = {}) {
   let unreadableCount = 0;
 
   for (const change of gitInfo.changes) {
-    const fileFindings = analyzeChange(change, root, readmes, options);
+    const fileFindings = analyzeChange(change, root, readmes, { ...options, baseSha: validSha(gitInfo.baseCommit) ? gitInfo.baseCommit : null, headSha: validSha(gitInfo.headCommit) ? gitInfo.headCommit : null });
     const unreadable = fileFindings.some((f) => f.unreadable);
     if (unreadable) unreadableCount++;
     findings.push(...fileFindings);
@@ -686,7 +677,7 @@ function runDynamicDocumentationAudit(root, readmes, options = {}) {
 
   let status = 'complete';
   if (gitInfo.error) status = 'unavailable';
-  else if (!gitInfo.historyAvailable) status = 'initial-commit';
+  else if (gitInfo.status === 'initial-commit') status = 'initial-commit';
   if (unreadableCount > 0) status = 'partial';
 
   const summary = {
@@ -719,5 +710,7 @@ module.exports = {
   extractEnvVars,
   extractGradleVersion,
   scanReadmeContradictions,
-  isSkippable
+  isSkippable,
+  readGitFile,
+  parseNameStatusZ
 };
