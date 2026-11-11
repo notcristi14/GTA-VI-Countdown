@@ -40,5 +40,26 @@ test('removed dependency and npm script references are detected', () => withRepo
 test('removed workflow references are detected', () => withRepo(r => { put(r,'.github/workflows/legacy.yml','name: Legacy'); const b=commit(r,'b'); fs.unlinkSync(path.join(r,'.github/workflows/legacy.yml')); const h=commit(r,'h'); const x=runDynamicDocumentationAudit(r,{'README.md':'legacy.yml'},{baseSha:b,headSha:h}); assert.ok(x.findings.some(f=>f.id==='dyn-removed-workflow-legacyyml')); }));
 test('file-to-symlink type changes remain visible', () => withRepo(r => { put(r,'target.txt','target'); put(r,'link.txt','regular'); const b=commit(r,'b'); fs.unlinkSync(path.join(r,'link.txt')); fs.symlinkSync('target.txt',path.join(r,'link.txt')); const h=commit(r,'h'); assert.ok(get(r,b,h).changes.some(c=>c.status==='T'&&c.path==='link.txt')); }));
 
+
+test('deleted source file reports removed API routes and environment variables', () => withRepo(r => {
+  put(r, 'server.js', "app.get('/api/gone', f);\nconst secret = process.env.GONE_SECRET;\n");
+  const base = commit(r, 'base');
+  fs.unlinkSync(path.join(r, 'server.js'));
+  const head = commit(r, 'delete source');
+  const result = runDynamicDocumentationAudit(r, { 'README.md': '/api/gone GONE_SECRET' }, { baseSha: base, headSha: head });
+  assert.ok(result.findings.some(f => f.id === 'dyn-removed-api-apigone'));
+  assert.ok(result.findings.some(f => f.id === 'dyn-removed-env-GONE_SECRET'));
+}));
+
+test('deleted package.json reports removed documented dependencies and scripts', () => withRepo(r => {
+  put(r, 'package.json', JSON.stringify({ dependencies: { vanished: '^1.0.0' }, scripts: { legacy: 'node old.js' } }));
+  const base = commit(r, 'base');
+  fs.unlinkSync(path.join(r, 'package.json'));
+  const head = commit(r, 'delete package');
+  const result = runDynamicDocumentationAudit(r, { 'README.md': 'vanished npm run legacy' }, { baseSha: base, headSha: head });
+  assert.ok(result.findings.some(f => f.id === 'dyn-removed-dep-vanished'));
+  assert.ok(result.findings.some(f => f.id === 'dyn-removed-script-legacy'));
+}));
+
 console.log('\nDynamic documentation Git integration tests: '+passed+' passed, '+failed+' failed.');
 if (failed) process.exit(1);

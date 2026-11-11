@@ -266,8 +266,8 @@ function analyzeChange(change, root, readmes, options = {}) {
 
   // --- New / removed API routes ---
   // Skip test and audit scripts: they contain example snippets that are not production routes.
-  if (/\.(js|ts|mjs|cjs)$/.test(rel) && status !== 'D' && !unreadable && !isTestOrAuditScript(rel)) {
-    const routes = extractRoutes(content);
+  if (/\.(js|ts|mjs|cjs)$/.test(rel) && !unreadable && !isTestOrAuditScript(rel)) {
+    const routes = status === 'D' ? [] : extractRoutes(content);
     const oldRoutes = extractRoutes(oldContent);
     for (const r of routes) {
       if (!oldRoutes.includes(r) && !combined.includes(r)) {
@@ -306,8 +306,8 @@ function analyzeChange(change, root, readmes, options = {}) {
   }
 
   // --- Environment variables (new ones) ---
-  if (status !== 'D' && !unreadable && !isTestOrAuditScript(rel)) {
-    const envs = extractEnvVars(content);
+  if (!unreadable && !isTestOrAuditScript(rel)) {
+    const envs = status === 'D' ? [] : extractEnvVars(content);
     const oldEnvs = extractEnvVars(oldContent);
     for (const v of envs) {
       if (CI_ENV_IGNORE.has(v)) continue;
@@ -416,9 +416,9 @@ function analyzeChange(change, root, readmes, options = {}) {
   }
 
   // --- Removed package dependencies and npm scripts ---
-  if (rel === 'package.json' && status !== 'D' && !unreadable && oldContent) {
+  if (rel === 'package.json' && !unreadable && oldContent) {
     try {
-      const oldPkg = JSON.parse(oldContent), newPkg = JSON.parse(content);
+      const oldPkg = JSON.parse(oldContent), newPkg = status === 'D' ? {} : JSON.parse(content);
       const oldDeps = { ...(oldPkg.dependencies || {}), ...(oldPkg.devDependencies || {}) };
       const newDeps = { ...(newPkg.dependencies || {}), ...(newPkg.devDependencies || {}) };
       for (const name of Object.keys(oldDeps)) if (!Object.prototype.hasOwnProperty.call(newDeps, name) && combined.includes(name)) {
