@@ -184,7 +184,7 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last run: **2026-11-10T17:29:43.096Z** · commit `860f965` · **62/62 passed** · root
+Last run: **2026-11-11T08:23:27.694Z** · commit `23a6ddc` · **63/63 passed** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -253,6 +253,10 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `readme-launcher_README_md` | launcher/README.md exists | PASS | present |
 | `readme-launcher_assets_README_md` | launcher/assets/README.md exists | PASS | present |
 | `readme-discovery` | At least one README.md discovered | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
+| `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
+### Documentation audit
 
-*Static analysis only (`scripts/readme-integrity-check.js`). Failures remain until source or expectations are fixed.*
+No missing or outdated documentation findings from deterministic DOC_SPECS / API registration comparison.
+
+*Static analysis only (`scripts/readme-integrity-check.js`). Documentation findings are deterministic DOC_SPECS + route checks — not full prose review. Failures remain until source or documentation is fixed.*
 <!-- END AUTO-GENERATED -->

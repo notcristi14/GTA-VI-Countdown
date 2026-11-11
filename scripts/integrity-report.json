@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-10T16:41:43.353Z",
-  "commit": "4c8d7ac3c1ab3e9b4223c3255d07c82a589c5ff6",
+  "generatedAt": "2026-11-11T08:23:27.694Z",
+  "commit": "23a6ddc0c4becb84a5f5564a633044ceb513572f",
   "analysisType": "static-source-only",
   "expectedMobileHome": "https://gta-vi-countdown.onrender.com/",
   "readmeFilesScanned": [
@@ -11,10 +11,11 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 62,
-    "passed": 62,
+    "total": 63,
+    "passed": 63,
     "failed": 0,
-    "criticalFailed": 0
+    "criticalFailed": 0,
+    "documentationFindings": 0
   },
   "detectedFeatures": {
     "regions15": true,
@@ -185,6 +186,11 @@
     "source": "launcher/src/AppWindow.cpp"
   },
   "missingOrOutdatedDocumentation": [],
+  "documentationAudit": {
+    "deterministic": true,
+    "specsEvaluated": 21,
+    "note": "Findings from explicit DOC_SPECS and registered-route comparison; not a full prose review."
+  },
   "failedChecks": [],
   "checks": [
     {
@@ -620,6 +626,13 @@
       "ok": true,
       "detail": "4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md",
       "critical": true
+    },
+    {
+      "id": "doc-audit-clean",
+      "claim": "Documentation audit: no missing/outdated deterministic issues",
+      "ok": true,
+      "detail": "DOC_SPECS (21) + API claim scan clean",
+      "critical": false
     }
   ]
 }

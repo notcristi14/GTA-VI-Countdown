@@ -144,7 +144,7 @@ If Match is **NO**, the native shell home URL does not match the intended root U
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last run: **2026-11-10T17:28:26.812Z** · commit `2dcd30f` · **62/62 passed** · mobile
+Last run: **2026-11-11T08:23:27.694Z** · commit `23a6ddc` · **63/63 passed** · mobile
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -213,6 +213,10 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `readme-launcher_README_md` | launcher/README.md exists | PASS | present |
 | `readme-launcher_assets_README_md` | launcher/assets/README.md exists | PASS | present |
 | `readme-discovery` | At least one README.md discovered | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
+| `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
+### Documentation audit
 
-*Static analysis only (`scripts/readme-integrity-check.js`). Failures remain until source or expectations are fixed.*
+No missing or outdated documentation findings from deterministic DOC_SPECS / API registration comparison.
+
+*Static analysis only (`scripts/readme-integrity-check.js`). Documentation findings are deterministic DOC_SPECS + route checks — not full prose review. Failures remain until source or documentation is fixed.*
 <!-- END AUTO-GENERATED -->
