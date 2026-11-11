@@ -329,8 +329,6 @@ function analyzeChange(change, root, readmes, options = {}) {
         });
       }
     }
-  }
-
     for (const v of oldEnvs) {
       if (CI_ENV_IGNORE.has(v)) continue;
       if (!envs.includes(v) && combined.includes(v)) findings.push({
@@ -340,6 +338,7 @@ function analyzeChange(change, root, readmes, options = {}) {
         deterministic: true, confirmed: true, potentialRisk: false, changeType: status
       });
     }
+  }
 
   // --- Deleted file still referenced ---
   if (status === 'D') {
