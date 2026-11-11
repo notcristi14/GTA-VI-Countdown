@@ -42,7 +42,7 @@ See the [root README](../README.md) for:
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-11T08:35:57.358Z** · commit `dce25d9` · **63/63 passed** · launcher
+Last content update: **2026-11-11T09:39:39.991Z** · commit `11e7cbc` · **68/68 passed** · launcher
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -106,11 +106,16 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `launcher-webview2` | AppWindow.cpp WebView2 usage | PASS | launcher/src/AppWindow.cpp |
 | `launcher-nav` | Launcher navigation chrome in AppWindow | PASS | nav patterns found |
 | `launcher-ico` | launcher/assets/GtaLogo.ico exists | PASS | present |
-| `readme-README_md` | README.md exists | PASS | present |
-| `readme-mobile_README_md` | mobile/README.md exists | PASS | present |
-| `readme-launcher_README_md` | launcher/README.md exists | PASS | present |
-| `readme-launcher_assets_README_md` | launcher/assets/README.md exists | PASS | present |
-| `readme-discovery` | At least one README.md discovered | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
+| `readme-README_md-exists` | README.md exists and is readable | PASS | present |
+| `readme-README_md-markers` | README.md has ordered AUTO-GENERATED integrity markers | PASS | markers ordered |
+| `readme-launcher_README_md-exists` | launcher/README.md exists and is readable | PASS | present |
+| `readme-launcher_README_md-markers` | launcher/README.md has ordered AUTO-GENERATED integrity markers | PASS | markers ordered |
+| `readme-launcher_assets_README_md-exists` | launcher/assets/README.md exists and is readable | PASS | present |
+| `readme-launcher_assets_README_md-markers` | launcher/assets/README.md has ordered AUTO-GENERATED integrity markers | PASS | markers ordered |
+| `readme-mobile_README_md-exists` | mobile/README.md exists and is readable | PASS | present |
+| `readme-mobile_README_md-markers` | mobile/README.md has ordered AUTO-GENERATED integrity markers | PASS | markers ordered |
+| `readme-discovery` | At least one README.md discovered recursively | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
+| `readme-no-hardcoded-list` | README checks are driven by findReadmes() discovery | PASS | dynamic discovery of 4 README.md file(s) |
 | `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
 ### Documentation audit
 

@@ -1,6 +1,6 @@
 {
-  "lastContentUpdateAt": "2026-11-11T08:35:57.358Z",
-  "commit": "dce25d974ecfccd933ffb38d6acce87684c0429e",
+  "lastContentUpdateAt": "2026-11-11T09:39:39.991Z",
+  "commit": "11e7cbc26c34545ee62bb79cdadefbbc76483c22",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-only",
   "expectedMobileHome": "https://gta-vi-countdown.onrender.com/",
@@ -12,8 +12,8 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 63,
-    "passed": 63,
+    "total": 68,
+    "passed": 68,
     "failed": 0,
     "criticalFailed": 0,
     "documentationFindings": 0
@@ -594,39 +594,74 @@
       "critical": false
     },
     {
-      "id": "readme-README_md",
-      "claim": "README.md exists",
+      "id": "readme-README_md-exists",
+      "claim": "README.md exists and is readable",
       "ok": true,
       "detail": "present",
       "critical": true
     },
     {
-      "id": "readme-mobile_README_md",
-      "claim": "mobile/README.md exists",
+      "id": "readme-README_md-markers",
+      "claim": "README.md has ordered AUTO-GENERATED integrity markers",
+      "ok": true,
+      "detail": "markers ordered",
+      "critical": false
+    },
+    {
+      "id": "readme-launcher_README_md-exists",
+      "claim": "launcher/README.md exists and is readable",
       "ok": true,
       "detail": "present",
       "critical": false
     },
     {
-      "id": "readme-launcher_README_md",
-      "claim": "launcher/README.md exists",
+      "id": "readme-launcher_README_md-markers",
+      "claim": "launcher/README.md has ordered AUTO-GENERATED integrity markers",
+      "ok": true,
+      "detail": "markers ordered",
+      "critical": false
+    },
+    {
+      "id": "readme-launcher_assets_README_md-exists",
+      "claim": "launcher/assets/README.md exists and is readable",
       "ok": true,
       "detail": "present",
       "critical": false
     },
     {
-      "id": "readme-launcher_assets_README_md",
-      "claim": "launcher/assets/README.md exists",
+      "id": "readme-launcher_assets_README_md-markers",
+      "claim": "launcher/assets/README.md has ordered AUTO-GENERATED integrity markers",
+      "ok": true,
+      "detail": "markers ordered",
+      "critical": false
+    },
+    {
+      "id": "readme-mobile_README_md-exists",
+      "claim": "mobile/README.md exists and is readable",
       "ok": true,
       "detail": "present",
+      "critical": false
+    },
+    {
+      "id": "readme-mobile_README_md-markers",
+      "claim": "mobile/README.md has ordered AUTO-GENERATED integrity markers",
+      "ok": true,
+      "detail": "markers ordered",
       "critical": false
     },
     {
       "id": "readme-discovery",
-      "claim": "At least one README.md discovered",
+      "claim": "At least one README.md discovered recursively",
       "ok": true,
       "detail": "4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md",
       "critical": true
+    },
+    {
+      "id": "readme-no-hardcoded-list",
+      "claim": "README checks are driven by findReadmes() discovery",
+      "ok": true,
+      "detail": "dynamic discovery of 4 README.md file(s)",
+      "critical": false
     },
     {
       "id": "doc-audit-clean",
