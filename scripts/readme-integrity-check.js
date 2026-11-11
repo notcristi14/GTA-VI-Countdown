@@ -20,13 +20,39 @@ const stripVolatile = (s) => s
   .replace(/"lastContentUpdateAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
   .replace(/"generatedAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
   .replace(/"commit":\s*"[^"]+"/g, '"commit":"STABLE"');
-const writeIfChanged = (rel, content) => { const p = path.join(ROOT, rel); fs.mkdirSync(path.dirname(p), { recursive: true }); const body = content.endsWith('\n') ? content : content + '\n'; const prev = exists(rel) ? fs.readFileSync(p, 'utf8') : null; if (prev !== null && stripVolatile(prev) === stripVolatile(body)) return false; fs.writeFileSync(p, body); console.log('Wrote', rel); return true; };
+const writeIfChanged = (rel, content) => { const p = path.join(ROOT, rel); fs.mkdirSync(path.dirname(p), { recursive: true }); const body = content.replace(/\n+$/, '') + '\n'; const prev = exists(rel) ? fs.readFileSync(p, 'utf8') : null; if (prev !== null && stripVolatile(prev) === stripVolatile(body)) return false; fs.writeFileSync(p, body); console.log('Wrote', rel); return true; };
 const countImgs = (d) => { const a = path.join(ROOT, d); if (!fs.existsSync(a)) return 0; return fs.readdirSync(a).filter((f) => /\.(png|jpe?g|webp|gif)$/i.test(f)).length; };
-function findReadmes(dir, acc) { acc = acc || []; let names; try { names = fs.readdirSync(dir); } catch { return acc; } for (const name of names) { if (name === '.git' || name === 'node_modules' || name === 'build' || name === 'DerivedData' || name === '.gradle' || name === 'coverage' || name === '.idea' || name === '.vscode') continue; const full = path.join(dir, name); let st; try { st = fs.statSync(full); } catch { continue; } if (st.isDirectory()) findReadmes(full, acc); else if (name === 'README.md') acc.push(path.relative(ROOT, full).replace(/\\/g, '/')); } return acc.sort(); }
+function findReadmes(dir, acc, root) {
+  acc = acc || [];
+  root = root || ROOT;
+  let names;
+  try { names = fs.readdirSync(dir); } catch { return acc; }
+  for (const name of names) {
+    if (name === '.git' || name === 'node_modules' || name === 'build' || name === 'DerivedData' || name === '.gradle' || name === 'coverage' || name === '.idea' || name === '.vscode') continue;
+    const full = path.join(dir, name);
+    let st;
+    try { st = fs.statSync(full); } catch { continue; }
+    if (st.isDirectory()) findReadmes(full, acc, root);
+    else if (name === 'README.md') acc.push(path.relative(root, full).replace(/\\/g, '/'));
+  }
+  return acc.sort();
+}
 function normalizeUrl(u) { if (!u) return null; try { const x = new URL(u); let pathname = x.pathname.replace(/\/+$/, '') || '/'; return (x.origin + (pathname === '/' ? '/' : pathname)).toLowerCase(); } catch { return String(u).trim().toLowerCase().replace(/\/+$/, '') || null; } }
 function urlsMatchExpected(actual) { if (!actual) return false; const a = normalizeUrl(actual); const e = normalizeUrl(EXPECTED_MOBILE_HOME); return a === e || a === e.replace(/\/$/, '') || a + '/' === e; }
 function routeRegistered(source, apiPath) { const esc = apiPath.replace(/\//g, '\\/'); return new RegExp('app\\.get\\(\\s*[\'"]' + esc + '[\'"]').test(source); }
-function upsertGenerated(content, generatedBody) { const block = MARKER_START + '\n' + generatedBody.trim() + '\n' + MARKER_END; const i = content.indexOf(MARKER_START); const j = content.indexOf(MARKER_END); if (i !== -1 && j !== -1 && j > i) return content.slice(0, i) + block + content.slice(j + MARKER_END.length).replace(/^\n+/, '\n'); return content.trimEnd() + '\n\n' + block + '\n'; }
+function upsertGenerated(content, generatedBody) {
+  const block = MARKER_START + '\n' + generatedBody.trim() + '\n' + MARKER_END;
+  // Strip all existing marker regions (complete pairs, orphans, reversed) so we never leave duplicates.
+  let cleaned = String(content || '');
+  function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  const pairRe = new RegExp(escapeRe(MARKER_START) + '[\\s\\S]*?' + escapeRe(MARKER_END), 'g');
+  cleaned = cleaned.replace(pairRe, '');
+  // Remove any remaining orphaned start or end markers
+  cleaned = cleaned.split(MARKER_START).join('').split(MARKER_END).join('');
+  cleaned = cleaned.replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '');
+  return cleaned + '\n' + block + '\n';
+}
+if (require.main === module) {
 const MAIN_KT = 'mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt';
 const IOS_VC = 'mobile/ios/VICountdown/ViewController.swift';
 const APP_WINDOW = 'launcher/src/AppWindow.cpp';
@@ -109,19 +135,27 @@ for (const rf of readmeFiles) {
   let readable = false;
   let content = '';
   try {
-    content = read(rf);
-    readable = exists(rf);
+    const p = path.join(ROOT, rf);
+    if (fs.existsSync(p)) {
+      content = fs.readFileSync(p, 'utf8');
+      readable = true; // read succeeded without throwing
+    }
   } catch (e) {
     readable = false;
+    content = '';
   }
   check(safeId + '-exists', rf + ' exists and is readable', readable, readable ? 'present' : 'MISSING or unreadable', rf === 'README.md');
   const si = content.indexOf(MARKER_START);
   const ei = content.indexOf(MARKER_END);
-  const markersOk = si !== -1 && ei !== -1 && ei > si;
-  check(safeId + '-markers', rf + ' has ordered AUTO-GENERATED integrity markers', markersOk, markersOk ? 'markers ordered' : 'missing or unordered (upsert will repair)', false);
+  const markersOk = si !== -1 && ei !== -1 && ei > si && content.indexOf(MARKER_START, si + 1) === -1;
+  check(safeId + '-markers', rf + ' has ordered AUTO-GENERATED integrity markers', markersOk, markersOk ? 'markers ordered' : 'missing, unordered, or duplicated (upsert will repair)', false);
 }
 check('readme-discovery', 'At least one README.md discovered recursively', readmeFiles.length >= 1, readmeFiles.length + ' files: ' + readmeFiles.join(', '), true);
-check('readme-no-hardcoded-list', 'README checks are driven by findReadmes() discovery', readmeFiles.length >= 1 && !false, 'dynamic discovery of ' + readmeFiles.length + ' README.md file(s)', false);
+// Genuine hardcoded-list detection: scan this script for a literal README path array used with forEach
+const selfSrc = read('scripts/readme-integrity-check.js');
+const hardcodedPattern = /\[\s*['"]README\.md['"]\s*,\s*['"]mobile\/README\.md['"]\s*,\s*['"]launcher\/README\.md['"]/;
+const hasHardcodedList = hardcodedPattern.test(selfSrc) && /\.forEach\s*\(/.test(selfSrc);
+check('readme-no-hardcoded-list', 'README checks are driven by findReadmes() discovery', !hasHardcodedList, hasHardcodedList ? 'hardcoded README path list detected in script' : 'dynamic discovery of ' + readmeFiles.length + ' README.md file(s)', false);
 const readmesMap = {};
 for (const rf of readmeFiles) readmesMap[rf] = read(rf);
 const sourceText = [appJs, musicDisc, bgsApi, read('github-api.js'), appWindowCpp].join('\n');
@@ -155,3 +189,7 @@ failed.forEach((c) => console.log('FAIL', c.id, c.detail));
 console.log(changed ? 'README_CHANGED=1' : 'README_CHANGED=0');
 if (criticalFailed.length > 0) { console.error('CRITICAL_FAILURES=' + criticalFailed.length + ' ' + criticalFailed.map((c) => c.id).join(',')); process.exit(1); }
 process.exit(0);
+}
+
+module.exports = { findReadmes, upsertGenerated, MARKER_START, MARKER_END, ROOT };
+

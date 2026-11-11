@@ -222,49 +222,97 @@ test('stripVolatile: report lastContentUpdateAt is volatile', () => {
   assert.strictEqual(stripVolatile(a), stripVolatile(b));
 });
 
-/* Dynamic README discovery (mirrors findReadmes in readme-integrity-check.js) */
-function findReadmes(root, dir, acc) {
-  acc = acc || [];
-  const fs = require('fs');
-  const path = require('path');
-  dir = dir || root;
-  let names;
-  try { names = fs.readdirSync(dir); } catch { return acc; }
-  for (const name of names) {
-    if (name === '.git' || name === 'node_modules' || name === 'build' || name === 'DerivedData' || name === '.gradle' || name === 'coverage' || name === '.idea' || name === '.vscode') continue;
-    const full = path.join(dir, name);
-    let st;
-    try { st = fs.statSync(full); } catch { continue; }
-    if (st.isDirectory()) findReadmes(root, full, acc);
-    else if (name === 'README.md') acc.push(path.relative(root, full).replace(/\\/g, '/'));
-  }
-  return acc.sort();
-}
+/* Dynamic README discovery — uses production findReadmes from readme-integrity-check.js */
+const { findReadmes: prodFindReadmes, upsertGenerated, MARKER_START, MARKER_END } = require('./readme-integrity-check');
 
-test('dynamic README discovery finds all four existing README.md files', () => {
+test('production findReadmes discovers known READMEs (count is not fixed)', () => {
   const path = require('path');
   const root = path.resolve(__dirname, '..');
-  const found = findReadmes(root);
+  const found = prodFindReadmes(root);
   assert.ok(found.includes('README.md'));
   assert.ok(found.includes('mobile/README.md'));
   assert.ok(found.includes('launcher/README.md'));
   assert.ok(found.includes('launcher/assets/README.md'));
-  assert.strictEqual(found.length, 4);
+  // Must not assume a fixed count — additional READMEs are allowed
+  assert.ok(found.length >= 4);
 });
 
-test('dynamic README discovery finds nested new README.md', () => {
+test('production findReadmes discovers nested README and skips excluded dirs', () => {
   const fs = require('fs');
   const path = require('path');
   const os = require('os');
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ric-readme-'));
-  fs.mkdirSync(path.join(tmp, 'nested', 'deep'), { recursive: true });
-  fs.writeFileSync(path.join(tmp, 'README.md'), '# root\n');
-  fs.writeFileSync(path.join(tmp, 'nested', 'deep', 'README.md'), '# deep\n');
-  fs.mkdirSync(path.join(tmp, 'node_modules'));
-  fs.writeFileSync(path.join(tmp, 'node_modules', 'README.md'), '# skip\n');
-  const found = findReadmes(tmp);
-  assert.deepStrictEqual(found, ['README.md', 'nested/deep/README.md']);
-  fs.rmSync(tmp, { recursive: true, force: true });
+  try {
+    fs.mkdirSync(path.join(tmp, 'nested', 'deep'), { recursive: true });
+    fs.writeFileSync(path.join(tmp, 'README.md'), '# root\n');
+    fs.writeFileSync(path.join(tmp, 'nested', 'deep', 'README.md'), '# deep\n');
+    fs.mkdirSync(path.join(tmp, 'node_modules'));
+    fs.writeFileSync(path.join(tmp, 'node_modules', 'README.md'), '# skip\n');
+    fs.mkdirSync(path.join(tmp, 'build'));
+    fs.writeFileSync(path.join(tmp, 'build', 'README.md'), '# skip build\n');
+    const found = prodFindReadmes(tmp, null, tmp);
+    assert.deepStrictEqual(found, ['README.md', 'nested/deep/README.md']);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+test('production findReadmes discovers a fifth README without failing', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const os = require('os');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ric-fifth-'));
+  try {
+    fs.writeFileSync(path.join(tmp, 'README.md'), '# root\n');
+    fs.mkdirSync(path.join(tmp, 'docs', 'extra'), { recursive: true });
+    fs.writeFileSync(path.join(tmp, 'docs', 'README.md'), '# docs\n');
+    fs.writeFileSync(path.join(tmp, 'docs', 'extra', 'README.md'), '# extra\n');
+    const found = prodFindReadmes(tmp, null, tmp);
+    assert.ok(found.includes('README.md'));
+    assert.ok(found.includes('docs/README.md'));
+    assert.ok(found.includes('docs/extra/README.md'));
+    assert.ok(found.length >= 3);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+test('upsertGenerated repairs missing markers', () => {
+  const before = '# Hand written\n\nNo markers yet.\n';
+  const after = upsertGenerated(before, '## Automated integrity status\n\nstatus');
+  assert.ok(after.includes(MARKER_START));
+  assert.ok(after.includes(MARKER_END));
+  assert.ok(after.includes('Hand written'));
+  assert.strictEqual(after.split(MARKER_START).length - 1, 1);
+  assert.strictEqual(after.split(MARKER_END).length - 1, 1);
+});
+
+test('upsertGenerated repairs incomplete / orphaned markers', () => {
+  const before = '# Hand\n' + MARKER_START + '\npartial only\n';
+  const after = upsertGenerated(before, '## status');
+  assert.strictEqual(after.split(MARKER_START).length - 1, 1);
+  assert.strictEqual(after.split(MARKER_END).length - 1, 1);
+  assert.ok(after.includes('Hand'));
+});
+
+test('upsertGenerated repairs duplicated markers', () => {
+  const before = '# Hand\n\n' + MARKER_START + '\nold\n' + MARKER_END + '\n\n' + MARKER_START + '\ndupe\n' + MARKER_END + '\n';
+  const after = upsertGenerated(before, '## clean');
+  assert.strictEqual(after.split(MARKER_START).length - 1, 1);
+  assert.strictEqual(after.split(MARKER_END).length - 1, 1);
+  assert.ok(after.includes('## clean'));
+  assert.ok(!after.includes('old'));
+  assert.ok(!after.includes('dupe'));
+});
+
+test('upsertGenerated repairs reversed markers', () => {
+  const before = '# Hand\n' + MARKER_END + '\nthen start\n' + MARKER_START + '\n';
+  const after = upsertGenerated(before, '## fixed');
+  assert.strictEqual(after.split(MARKER_START).length - 1, 1);
+  assert.strictEqual(after.split(MARKER_END).length - 1, 1);
+  const si = after.indexOf(MARKER_START);
+  const ei = after.indexOf(MARKER_END);
+  assert.ok(si < ei);
 });
 
 test('no hardcoded four-file existence-check list in integrity script', () => {
@@ -274,6 +322,8 @@ test('no hardcoded four-file existence-check list in integrity script', () => {
   assert.ok(!src.includes("['README.md', 'mobile/README.md', 'launcher/README.md', 'launcher/assets/README.md'].forEach"));
   assert.ok(src.includes('for (const rf of readmeFiles)'));
   assert.ok(src.includes('findReadmes'));
+  // The production check itself should not use a meaningless !false condition
+  assert.ok(!src.includes('readmeFiles.length >= 1 && !false'));
 });
 
 console.log(JSON.stringify({ passed, failed, total: passed + failed }));

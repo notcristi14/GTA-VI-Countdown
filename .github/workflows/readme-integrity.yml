@@ -85,6 +85,10 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Run unit tests (test-doc-audit.js)
+        id: tests
+        run: node scripts/test-doc-audit.js
+
       - name: Scan source and update integrity sections only
         id: check
         run: |
@@ -106,20 +110,30 @@ jobs:
           echo "$code" > /tmp/integrity-exit-code
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: integrity-report
           path: scripts/integrity-report.json
           if-no-files-found: warn
 
       - name: Commit integrity sections when they changed
-        if: steps.check.outputs.changed == 'true'
+        if: steps.tests.outcome == 'success' && steps.check.outputs.changed == 'true' && steps.check.outputs.exit_code == '0'
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Stage every README.md discovered in the tree (dynamic; no hardcoded list)
+          # Stage every README.md discovered in the tree (dynamic; exclusions match findReadmes)
           git add scripts/integrity-report.json
-          while IFS= read -r -d '' f; do git add -- "$f"; done < <(find . -type f -name 'README.md' -not -path './.git/*' -print0 2>/dev/null)
+          while IFS= read -r -d '' f; do git add -- "$f"; done < <(find . -type f -name 'README.md' \
+            -not -path './.git/*' \
+            -not -path './node_modules/*' -not -path '*/node_modules/*' \
+            -not -path './build/*' -not -path '*/build/*' \
+            -not -path '*/DerivedData/*' \
+            -not -path '*/.gradle/*' \
+            -not -path '*/coverage/*' \
+            -not -path '*/.idea/*' \
+            -not -path '*/.vscode/*' \
+            -print0 2>/dev/null)
           if git diff --staged --quiet; then
             echo "Nothing staged"
             exit 0
@@ -128,6 +142,7 @@ jobs:
           git push
 
       - name: Fail job on critical integrity failures
+        if: always()
         run: |
           code=$(cat /tmp/integrity-exit-code 2>/dev/null || echo 0)
           if [ "$code" != "0" ]; then
