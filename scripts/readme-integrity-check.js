@@ -20,7 +20,16 @@ const stripVolatile = (s) => s
   .replace(/commit `[a-f0-9]+`/gi, 'commit `SHA`')
   .replace(/"lastContentUpdateAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
   .replace(/"generatedAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
-  .replace(/"commit":\s*"[^"]+"/g, '"commit":"STABLE"');
+  .replace(/"commit":\s*"[^"]+"/g, '"commit":"STABLE"')
+  .replace(/Status: \*\*[^*]+\*\* · changed files: \d+ · analyzed: \d+ · confirmed findings: \d+ · potential risks: \d+( · base `[a-f0-9]+`)?/g, 'Status: **STABLE** · changed files: N · analyzed: N · confirmed findings: N · potential risks: N · base `SHA`')
+  .replace(/"baseCommit":\s*"[^"]+"/g, '"baseCommit":"STABLE"')
+  .replace(/"headCommit":\s*"[^"]+"/g, '"headCommit":"STABLE"')
+  .replace(/"changedFiles":\s*\d+/g, '"changedFiles":0')
+  .replace(/"analyzedFiles":\s*\d+/g, '"analyzedFiles":0')
+  .replace(/"documentationRelevantChanges":\s*\d+/g, '"documentationRelevantChanges":0')
+  .replace(/"perFileImpact":\s*\[[\s\S]*?\]/g, '"perFileImpact":[]')
+  .replace(/"skippedFiles":\s*\[[\s\S]*?\]/g, '"skippedFiles":[]')
+  .replace(/analyzed=\d+/g, 'analyzed=N');
 const writeIfChanged = (rel, content) => { const p = path.join(ROOT, rel); fs.mkdirSync(path.dirname(p), { recursive: true }); const body = content.replace(/\n+$/, '') + '\n'; const prev = exists(rel) ? fs.readFileSync(p, 'utf8') : null; if (prev !== null && stripVolatile(prev) === stripVolatile(body)) return false; fs.writeFileSync(p, body); console.log('Wrote', rel); return true; };
 const countImgs = (d) => { const a = path.join(ROOT, d); if (!fs.existsSync(a)) return 0; return fs.readdirSync(a).filter((f) => /\.(png|jpe?g|webp|gif)$/i.test(f)).length; };
 function findReadmes(dir, acc, root) {

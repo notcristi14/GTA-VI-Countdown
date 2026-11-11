@@ -195,7 +195,16 @@ function stripVolatile(s) {
     .replace(/commit `[a-f0-9]+`/gi, 'commit `SHA`')
     .replace(/"lastContentUpdateAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
     .replace(/"generatedAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
-    .replace(/"commit":\s*"[^"]+"/g, '"commit":"STABLE"');
+    .replace(/"commit":\s*"[^"]+"/g, '"commit":"STABLE"')
+    .replace(/Status: \*\*[^*]+\*\* · changed files: \d+ · analyzed: \d+ · confirmed findings: \d+ · potential risks: \d+( · base `[a-f0-9]+`)?/g, 'Status: **STABLE** · changed files: N · analyzed: N · confirmed findings: N · potential risks: N · base `SHA`')
+    .replace(/"baseCommit":\s*"[^"]+"/g, '"baseCommit":"STABLE"')
+    .replace(/"headCommit":\s*"[^"]+"/g, '"headCommit":"STABLE"')
+    .replace(/"changedFiles":\s*\d+/g, '"changedFiles":0')
+    .replace(/"analyzedFiles":\s*\d+/g, '"analyzedFiles":0')
+    .replace(/"documentationRelevantChanges":\s*\d+/g, '"documentationRelevantChanges":0')
+  .replace(/"perFileImpact":\s*\[[\s\S]*?\]/g, '"perFileImpact":[]')
+  .replace(/"skippedFiles":\s*\[[\s\S]*?\]/g, '"skippedFiles":[]')
+  .replace(/analyzed=\d+/g, 'analyzed=N');
 }
 
 test('stripVolatile: only timestamp/SHA change compares equal (no commit)', () => {
