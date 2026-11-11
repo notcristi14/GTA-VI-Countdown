@@ -222,5 +222,59 @@ test('stripVolatile: report lastContentUpdateAt is volatile', () => {
   assert.strictEqual(stripVolatile(a), stripVolatile(b));
 });
 
+/* Dynamic README discovery (mirrors findReadmes in readme-integrity-check.js) */
+function findReadmes(root, dir, acc) {
+  acc = acc || [];
+  const fs = require('fs');
+  const path = require('path');
+  dir = dir || root;
+  let names;
+  try { names = fs.readdirSync(dir); } catch { return acc; }
+  for (const name of names) {
+    if (name === '.git' || name === 'node_modules' || name === 'build' || name === 'DerivedData' || name === '.gradle' || name === 'coverage' || name === '.idea' || name === '.vscode') continue;
+    const full = path.join(dir, name);
+    let st;
+    try { st = fs.statSync(full); } catch { continue; }
+    if (st.isDirectory()) findReadmes(root, full, acc);
+    else if (name === 'README.md') acc.push(path.relative(root, full).replace(/\\/g, '/'));
+  }
+  return acc.sort();
+}
+
+test('dynamic README discovery finds all four existing README.md files', () => {
+  const path = require('path');
+  const root = path.resolve(__dirname, '..');
+  const found = findReadmes(root);
+  assert.ok(found.includes('README.md'));
+  assert.ok(found.includes('mobile/README.md'));
+  assert.ok(found.includes('launcher/README.md'));
+  assert.ok(found.includes('launcher/assets/README.md'));
+  assert.strictEqual(found.length, 4);
+});
+
+test('dynamic README discovery finds nested new README.md', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const os = require('os');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ric-readme-'));
+  fs.mkdirSync(path.join(tmp, 'nested', 'deep'), { recursive: true });
+  fs.writeFileSync(path.join(tmp, 'README.md'), '# root\n');
+  fs.writeFileSync(path.join(tmp, 'nested', 'deep', 'README.md'), '# deep\n');
+  fs.mkdirSync(path.join(tmp, 'node_modules'));
+  fs.writeFileSync(path.join(tmp, 'node_modules', 'README.md'), '# skip\n');
+  const found = findReadmes(tmp);
+  assert.deepStrictEqual(found, ['README.md', 'nested/deep/README.md']);
+  fs.rmSync(tmp, { recursive: true, force: true });
+});
+
+test('no hardcoded four-file existence-check list in integrity script', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const src = fs.readFileSync(path.join(__dirname, 'readme-integrity-check.js'), 'utf8');
+  assert.ok(!src.includes("['README.md', 'mobile/README.md', 'launcher/README.md', 'launcher/assets/README.md'].forEach"));
+  assert.ok(src.includes('for (const rf of readmeFiles)'));
+  assert.ok(src.includes('findReadmes'));
+});
+
 console.log(JSON.stringify({ passed, failed, total: passed + failed }));
 process.exit(failed ? 1 : 0);
