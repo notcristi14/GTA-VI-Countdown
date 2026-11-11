@@ -1,7 +1,7 @@
 {
   "lastContentUpdateAt": "2026-11-11T12:55:27.782Z",
-  "commit": "b6d6381a106fc7346e48085936f69ee9edf48fbf",
-  "baseCommit": "65f2acbd3d7f74ba3008ae36afd55a75cbed411f",
+  "commit": "9b2d33067215acfcbbc16d95c720d2bd67d8c5b4",
+  "baseCommit": "fcb1e19a7083cc06d526ccdc6e15f6e1e4038da7",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff",
   "expectedMobileHome": "https://gta-vi-countdown.onrender.com/",
@@ -195,10 +195,10 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "65f2acbd3d7f74ba3008ae36afd55a75cbed411f",
-    "headCommit": "b6d6381a106fc7346e48085936f69ee9edf48fbf",
-    "changedFiles": 1,
-    "analyzedFiles": 1,
+    "baseCommit": "fcb1e19a7083cc06d526ccdc6e15f6e1e4038da7",
+    "headCommit": "9b2d33067215acfcbbc16d95c720d2bd67d8c5b4",
+    "changedFiles": 2,
+    "analyzedFiles": 2,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
@@ -209,7 +209,15 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "scripts/readme-integrity-check.js",
+        "path": "scripts/dynamic-doc-audit.js",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "test/dynamic-doc-audit.test.js",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -702,7 +710,7 @@
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=1",
+      "detail": "status=complete analyzed=2",
       "critical": false
     }
   ]
