@@ -31,7 +31,28 @@ const stripVolatile = (s) => s
   .replace(/"perFileImpact":\s*\[[\s\S]*?\]/g, '"perFileImpact":[]')
   .replace(/"skippedFiles":\s*\[[\s\S]*?\]/g, '"skippedFiles":[]')
   .replace(/analyzed=\d+/g, 'analyzed=N');
-const writeIfChanged = (rel, content) => { const p = path.join(ROOT, rel); fs.mkdirSync(path.dirname(p), { recursive: true }); const body = content.replace(/\n+$/, '') + '\n'; const prev = exists(rel) ? fs.readFileSync(p, 'utf8') : null; if (prev !== null && stripVolatile(prev) === stripVolatile(body)) return false; fs.writeFileSync(p, body); console.log('Wrote', rel); return true; };
+const writeIfChanged = (rel, content) => {
+  const p = path.join(ROOT, rel);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  let body = content.replace(/\n+$/, '') + '\n';
+  const prev = exists(rel) ? fs.readFileSync(p, 'utf8') : null;
+  if (prev !== null && stripVolatile(prev) === stripVolatile(body)) {
+    // Keep the semantic content-update timestamp stable, but refresh volatile
+    // audit metadata (commit/base/head SHAs, counts and per-file impact).
+    const previousMarkdownTimestamp = prev.match(/Last content update: \*\*([^*]+)\*\*/);
+    if (previousMarkdownTimestamp) {
+      body = body.replace(/Last content update: \*\*[^*]+\*\*/, 'Last content update: **' + previousMarkdownTimestamp[1] + '**');
+    }
+    const previousJsonTimestamp = prev.match(/"lastContentUpdateAt":\s*"([^"]+)"/);
+    if (previousJsonTimestamp) {
+      body = body.replace(/"lastContentUpdateAt":\s*"[^"]+"/, '"lastContentUpdateAt": "' + previousJsonTimestamp[1] + '"');
+    }
+  }
+  if (prev === body) return false;
+  fs.writeFileSync(p, body);
+  console.log('Wrote', rel);
+  return true;
+};
 const countImgs = (d) => { const a = path.join(ROOT, d); if (!fs.existsSync(a)) return 0; return fs.readdirSync(a).filter((f) => /\.(png|jpe?g|webp|gif)$/i.test(f)).length; };
 function findReadmes(dir, acc, root) {
   acc = acc || [];
