@@ -49,6 +49,20 @@ on:
       - 'scripts/readme-integrity-check.js'
       - 'package.json'
       - 'README.md'
+      - '.github/workflows/ensure-gradle-wrapper.yml'
+      - '.github/workflows/ios-build.yml'
+      - '.github/workflows/readme-integrity.yml'
+      - '.github/workflows/sync-backgrounds.yml'
+      - 'bg.jpeg'
+      - 'launcher/.gitignore'
+      - 'launcher/GtaViCountdown.vcxproj.filters'
+      - 'launcher/packages.config'
+      - 'logo.png'
+      - 'mobile/assets/logo.png'
+      - 'mobile/generate_icons.sh'
+      - 'scripts/integrity-report.json'
+      - 'scripts/sync-backgrounds.js'
+      - 'stats.json'
 
 permissions:
   contents: write
