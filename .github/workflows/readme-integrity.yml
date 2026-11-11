@@ -47,6 +47,7 @@ on:
       - 'launcher/README.md'
       - 'launcher/assets/README.md'
       - 'scripts/readme-integrity-check.js'
+      - 'scripts/doc-audit.js'
       - 'package.json'
       - 'README.md'
       - '.github/workflows/ensure-gradle-wrapper.yml'
