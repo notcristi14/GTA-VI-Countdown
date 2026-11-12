@@ -1,9 +1,368 @@
 {
-  "lastContentUpdateAt": "2026-11-12T12:18:05.457Z",
-  "commit": "5b65691c2e4eb01ad45f448aff7246d38d2c29b7",
-  "baseCommit": "0582be445c7016aaac707c8bc4ffd236d976cc1b",
+  "lastContentUpdateAt": "2026-11-12T12:45:19.019Z",
+  "commit": "4b5c80351439269cec2b2e4a7042c910fe253748",
+  "baseCommit": "bc10d597786173bc400afa20c2e62cd746e77579",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
-  "analysisType": "static-source-plus-dynamic-git-diff",
+  "analysisType": "static-source-plus-dynamic-git-diff-plus-github-releases",
+  "releaseAudit": {
+    "repository": "notcristi14/GTA-VI-Countdown",
+    "checkedAt": "2026-11-12T12:45:21.428Z",
+    "status": "success",
+    "releaseCount": 3,
+    "expectedReleaseCount": 3,
+    "summary": {
+      "total": 38,
+      "passed": 38,
+      "failed": 0,
+      "criticalFailed": 0
+    },
+    "releases": [
+      {
+        "tag": "desktop-v1.0.0",
+        "name": "Windows Desktop v1.0.0",
+        "platform": "Windows x64",
+        "draft": false,
+        "prerelease": false,
+        "publishedAt": "2026-11-12T12:05:39Z",
+        "htmlUrl": "https://github.com/notcristi14/GTA-VI-Countdown/releases/tag/desktop-v1.0.0",
+        "tagRef": {
+          "type": "commit",
+          "sha": "9c5dd99da15efd4f7726a282f7ec39cc2f7394e3"
+        },
+        "assets": [
+          {
+            "name": "GTA-VI-Countdown-Windows-x64.zip",
+            "size": 332892,
+            "state": "uploaded",
+            "contentType": "application/zip",
+            "digest": "sha256:9471f0d1e67b55fa032224dee024dd3e16f67ecc45c9b77f581d3555e7291b00",
+            "downloadUrl": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/desktop-v1.0.0/GTA-VI-Countdown-Windows-x64.zip",
+            "bytesVerified": true,
+            "actualSha256": "sha256:9471f0d1e67b55fa032224dee024dd3e16f67ecc45c9b77f581d3555e7291b00"
+          }
+        ]
+      },
+      {
+        "tag": "ios-v1.0.0",
+        "name": "iOS v1.0.0",
+        "platform": "iOS",
+        "draft": false,
+        "prerelease": false,
+        "publishedAt": "2026-11-05T12:09:26Z",
+        "htmlUrl": "https://github.com/notcristi14/GTA-VI-Countdown/releases/tag/ios-v1.0.0",
+        "tagRef": {
+          "type": "commit",
+          "sha": "4f09f049882af8a0f8168636af3cd7c220d06526"
+        },
+        "assets": [
+          {
+            "name": "gta-countdown.ipa",
+            "size": 1654904,
+            "state": "uploaded",
+            "contentType": "application/octet-stream",
+            "digest": "sha256:4e38a383e8f16bc43e0c00f94fd9d633a55d047004397f979d7cb2d5cc929a56",
+            "downloadUrl": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/ios-v1.0.0/gta-countdown.ipa",
+            "bytesVerified": true,
+            "actualSha256": "sha256:4e38a383e8f16bc43e0c00f94fd9d633a55d047004397f979d7cb2d5cc929a56"
+          }
+        ]
+      },
+      {
+        "tag": "android-v1.0.0",
+        "name": "Android v1.0.0",
+        "platform": "Android",
+        "draft": false,
+        "prerelease": false,
+        "publishedAt": "2026-11-05T12:09:25Z",
+        "htmlUrl": "https://github.com/notcristi14/GTA-VI-Countdown/releases/tag/android-v1.0.0",
+        "tagRef": {
+          "type": "commit",
+          "sha": "4f09f049882af8a0f8168636af3cd7c220d06526"
+        },
+        "assets": [
+          {
+            "name": "app-debug.apk",
+            "size": 3396767,
+            "state": "uploaded",
+            "contentType": "application/vnd.android.package-archive",
+            "digest": "sha256:609f3dcab01e58ad54eb2e4acbb9a265c8f5ab82374e4b7bb0c41b1f3462d181",
+            "downloadUrl": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/android-v1.0.0/app-debug.apk",
+            "bytesVerified": true,
+            "actualSha256": "sha256:609f3dcab01e58ad54eb2e4acbb9a265c8f5ab82374e4b7bb0c41b1f3462d181"
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "checks": [
+      {
+        "id": "releases-api",
+        "claim": "GitHub Releases API returned a valid release collection",
+        "ok": true,
+        "detail": "3 release(s) retrieved",
+        "critical": true
+      },
+      {
+        "id": "releases-published-count",
+        "claim": "At least one published GitHub Release exists",
+        "ok": true,
+        "detail": "3 published release(s)",
+        "critical": true
+      },
+      {
+        "id": "release-desktop-v1_0_0-published",
+        "claim": "Release desktop-v1.0.0 is published (not a draft)",
+        "ok": true,
+        "detail": "draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z",
+        "critical": true
+      },
+      {
+        "id": "release-desktop-v1_0_0-tag",
+        "claim": "Release desktop-v1.0.0 points to an existing Git tag",
+        "ok": true,
+        "detail": "tag ref resolves to commit 9c5dd99da15efd4f7726a282f7ec39cc2f7394e3",
+        "critical": true
+      },
+      {
+        "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-uploaded",
+        "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip is uploaded",
+        "ok": true,
+        "detail": "state=uploaded",
+        "critical": true
+      },
+      {
+        "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-size",
+        "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip has a non-zero size",
+        "ok": true,
+        "detail": "332892 bytes",
+        "critical": true
+      },
+      {
+        "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest",
+        "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest",
+        "ok": true,
+        "detail": "sha256:9471f0d1e67b55fa032224dee024dd3e16f67ecc45c9b77f581d3555e7291b00",
+        "critical": true
+      },
+      {
+        "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-url",
+        "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip has a valid GitHub download URL",
+        "ok": true,
+        "detail": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/desktop-v1.0.0/GTA-VI-Countdown-Windows-x64.zip",
+        "critical": true
+      },
+      {
+        "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-bytes",
+        "claim": "Downloaded bytes for GTA-VI-Countdown-Windows-x64.zip match GitHub size and SHA-256",
+        "ok": true,
+        "detail": "downloaded=332892 bytes; API size=332892; digest=MATCH",
+        "critical": true
+      },
+      {
+        "id": "release-desktop-v1_0_0-assets",
+        "claim": "Release desktop-v1.0.0 contains at least one downloadable asset",
+        "ok": true,
+        "detail": "1 asset(s)",
+        "critical": true
+      },
+      {
+        "id": "release-ios-v1_0_0-published",
+        "claim": "Release ios-v1.0.0 is published (not a draft)",
+        "ok": true,
+        "detail": "draft=false; prerelease=false; published_at=2026-11-05T12:09:26Z",
+        "critical": true
+      },
+      {
+        "id": "release-ios-v1_0_0-tag",
+        "claim": "Release ios-v1.0.0 points to an existing Git tag",
+        "ok": true,
+        "detail": "tag ref resolves to commit 4f09f049882af8a0f8168636af3cd7c220d06526",
+        "critical": true
+      },
+      {
+        "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-uploaded",
+        "claim": "Release asset gta-countdown.ipa is uploaded",
+        "ok": true,
+        "detail": "state=uploaded",
+        "critical": true
+      },
+      {
+        "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-size",
+        "claim": "Release asset gta-countdown.ipa has a non-zero size",
+        "ok": true,
+        "detail": "1654904 bytes",
+        "critical": true
+      },
+      {
+        "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-digest",
+        "claim": "Release asset gta-countdown.ipa exposes a SHA-256 digest",
+        "ok": true,
+        "detail": "sha256:4e38a383e8f16bc43e0c00f94fd9d633a55d047004397f979d7cb2d5cc929a56",
+        "critical": true
+      },
+      {
+        "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-url",
+        "claim": "Release asset gta-countdown.ipa has a valid GitHub download URL",
+        "ok": true,
+        "detail": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/ios-v1.0.0/gta-countdown.ipa",
+        "critical": true
+      },
+      {
+        "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-bytes",
+        "claim": "Downloaded bytes for gta-countdown.ipa match GitHub size and SHA-256",
+        "ok": true,
+        "detail": "downloaded=1654904 bytes; API size=1654904; digest=MATCH",
+        "critical": true
+      },
+      {
+        "id": "release-ios-v1_0_0-assets",
+        "claim": "Release ios-v1.0.0 contains at least one downloadable asset",
+        "ok": true,
+        "detail": "1 asset(s)",
+        "critical": true
+      },
+      {
+        "id": "release-android-v1_0_0-published",
+        "claim": "Release android-v1.0.0 is published (not a draft)",
+        "ok": true,
+        "detail": "draft=false; prerelease=false; published_at=2026-11-05T12:09:25Z",
+        "critical": true
+      },
+      {
+        "id": "release-android-v1_0_0-tag",
+        "claim": "Release android-v1.0.0 points to an existing Git tag",
+        "ok": true,
+        "detail": "tag ref resolves to commit 4f09f049882af8a0f8168636af3cd7c220d06526",
+        "critical": true
+      },
+      {
+        "id": "release-android-v1_0_0-asset-app-debug.apk-uploaded",
+        "claim": "Release asset app-debug.apk is uploaded",
+        "ok": true,
+        "detail": "state=uploaded",
+        "critical": true
+      },
+      {
+        "id": "release-android-v1_0_0-asset-app-debug.apk-size",
+        "claim": "Release asset app-debug.apk has a non-zero size",
+        "ok": true,
+        "detail": "3396767 bytes",
+        "critical": true
+      },
+      {
+        "id": "release-android-v1_0_0-asset-app-debug.apk-digest",
+        "claim": "Release asset app-debug.apk exposes a SHA-256 digest",
+        "ok": true,
+        "detail": "sha256:609f3dcab01e58ad54eb2e4acbb9a265c8f5ab82374e4b7bb0c41b1f3462d181",
+        "critical": true
+      },
+      {
+        "id": "release-android-v1_0_0-asset-app-debug.apk-url",
+        "claim": "Release asset app-debug.apk has a valid GitHub download URL",
+        "ok": true,
+        "detail": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/android-v1.0.0/app-debug.apk",
+        "critical": true
+      },
+      {
+        "id": "release-android-v1_0_0-asset-app-debug.apk-bytes",
+        "claim": "Downloaded bytes for app-debug.apk match GitHub size and SHA-256",
+        "ok": true,
+        "detail": "downloaded=3396767 bytes; API size=3396767; digest=MATCH",
+        "critical": true
+      },
+      {
+        "id": "release-android-v1_0_0-assets",
+        "claim": "Release android-v1.0.0 contains at least one downloadable asset",
+        "ok": true,
+        "detail": "1 asset(s)",
+        "critical": true
+      },
+      {
+        "id": "expected-desktop-v1_0_0",
+        "claim": "Expected Windows x64 release desktop-v1.0.0 exists",
+        "ok": true,
+        "detail": "found",
+        "critical": true
+      },
+      {
+        "id": "expected-desktop-v1_0_0-asset",
+        "claim": "Windows x64 release contains GTA-VI-Countdown-Windows-x64.zip",
+        "ok": true,
+        "detail": "present",
+        "critical": true
+      },
+      {
+        "id": "expected-desktop-v1_0_0-type",
+        "claim": "Windows x64 asset has expected content type",
+        "ok": true,
+        "detail": "actual=application/zip; expected=application/zip",
+        "critical": true
+      },
+      {
+        "id": "expected-desktop-v1_0_0-release-state",
+        "claim": "Windows x64 stable release is publicly published",
+        "ok": true,
+        "detail": "draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z",
+        "critical": true
+      },
+      {
+        "id": "expected-ios-v1_0_0",
+        "claim": "Expected iOS release ios-v1.0.0 exists",
+        "ok": true,
+        "detail": "found",
+        "critical": true
+      },
+      {
+        "id": "expected-ios-v1_0_0-asset",
+        "claim": "iOS release contains gta-countdown.ipa",
+        "ok": true,
+        "detail": "present",
+        "critical": true
+      },
+      {
+        "id": "expected-ios-v1_0_0-type",
+        "claim": "iOS asset has expected content type",
+        "ok": true,
+        "detail": "actual=application/octet-stream; expected=application/octet-stream",
+        "critical": true
+      },
+      {
+        "id": "expected-ios-v1_0_0-release-state",
+        "claim": "iOS stable release is publicly published",
+        "ok": true,
+        "detail": "draft=false; prerelease=false; published_at=2026-11-05T12:09:26Z",
+        "critical": true
+      },
+      {
+        "id": "expected-android-v1_0_0",
+        "claim": "Expected Android release android-v1.0.0 exists",
+        "ok": true,
+        "detail": "found",
+        "critical": true
+      },
+      {
+        "id": "expected-android-v1_0_0-asset",
+        "claim": "Android release contains app-debug.apk",
+        "ok": true,
+        "detail": "present",
+        "critical": true
+      },
+      {
+        "id": "expected-android-v1_0_0-type",
+        "claim": "Android asset has expected content type",
+        "ok": true,
+        "detail": "actual=application/vnd.android.package-archive; expected=application/vnd.android.package-archive",
+        "critical": true
+      },
+      {
+        "id": "expected-android-v1_0_0-release-state",
+        "claim": "Android stable release is publicly published",
+        "ok": true,
+        "detail": "draft=false; prerelease=false; published_at=2026-11-05T12:09:25Z",
+        "critical": true
+      }
+    ]
+  },
   "expectedMobileHome": "https://gta-vi-countdown.onrender.com/",
   "readmeFilesScanned": [
     "README.md",
@@ -13,11 +372,11 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 69,
-    "passed": 69,
-    "failed": 0,
+    "total": 109,
+    "passed": 107,
+    "failed": 2,
     "criticalFailed": 0,
-    "documentationFindings": 0
+    "documentationFindings": 2
   },
   "detectedFeatures": {
     "regions15": true,
@@ -187,7 +546,34 @@
     "webView2": true,
     "source": "launcher/src/AppWindow.cpp"
   },
-  "missingOrOutdatedDocumentation": [],
+  "missingOrOutdatedDocumentation": [
+    {
+      "id": "dyn-new-env-GITHUB_REPOSITORY",
+      "severity": "low",
+      "documentationFile": "README.md",
+      "sourceFile": "scripts/release-audit.js",
+      "problem": "Environment variable GITHUB_REPOSITORY is newly referenced in scripts/release-audit.js and is not mentioned in any README.",
+      "suggestedCorrection": "Document `GITHUB_REPOSITORY` in the environment section of the appropriate README, or confirm it is internal-only.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": false,
+      "potentialRisk": true,
+      "changeType": "A"
+    },
+    {
+      "id": "dyn-new-file-releaseauditjs",
+      "severity": "low",
+      "documentationFile": "README.md",
+      "sourceFile": "scripts/release-audit.js",
+      "problem": "New source file `scripts/release-audit.js` introduced. It is not mentioned in any README and has no matching static DOC_SPECS entry.",
+      "suggestedCorrection": "Review whether `scripts/release-audit.js` should appear in the project structure or feature documentation.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": false,
+      "potentialRisk": true,
+      "changeType": "A"
+    }
+  ],
   "documentationAudit": {
     "deterministic": true,
     "specsEvaluated": 21,
@@ -195,21 +581,21 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "0582be445c7016aaac707c8bc4ffd236d976cc1b",
-    "headCommit": "5b65691c2e4eb01ad45f448aff7246d38d2c29b7",
-    "changedFiles": 5,
-    "analyzedFiles": 5,
+    "baseCommit": "bc10d597786173bc400afa20c2e62cd746e77579",
+    "headCommit": "4b5c80351439269cec2b2e4a7042c910fe253748",
+    "changedFiles": 4,
+    "analyzedFiles": 4,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
-    "documentationRelevantChanges": 0,
+    "documentationRelevantChanges": 1,
     "missingDocumentationFindings": 0,
     "outdatedDocumentationFindings": 0,
-    "potentialRisks": 0,
+    "potentialRisks": 2,
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "README.md",
+        "path": ".github/workflows/readme-integrity.yml",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -217,7 +603,7 @@
         "unreadable": false
       },
       {
-        "path": "launcher/README.md",
+        "path": "scripts/readme-integrity-check.js",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -225,24 +611,16 @@
         "unreadable": false
       },
       {
-        "path": "launcher/assets/README.md",
-        "status": "M",
+        "path": "scripts/release-audit.js",
+        "status": "A",
         "oldPath": null,
-        "findings": 0,
-        "relevant": false,
+        "findings": 2,
+        "relevant": true,
         "unreadable": false
       },
       {
-        "path": "mobile/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "scripts/integrity-report.json",
-        "status": "M",
+        "path": "test/release-audit.test.js",
+        "status": "A",
         "oldPath": null,
         "findings": 0,
         "relevant": false,
@@ -252,7 +630,20 @@
     "status": "complete",
     "error": null
   },
-  "failedChecks": [],
+  "failedChecks": [
+    {
+      "id": "dyn-dyn-new-env-GITHUB_REPOSITORY",
+      "claim": "Dynamic doc impact: dyn-new-env-GITHUB_REPOSITORY",
+      "detail": "missing · README.md · Document `GITHUB_REPOSITORY` in the environment section of the appropriate README, or confirm it is ",
+      "critical": false
+    },
+    {
+      "id": "dyn-dyn-new-file-releaseauditjs",
+      "claim": "Dynamic doc impact: dyn-new-file-releaseauditjs",
+      "detail": "missing · README.md · Review whether `scripts/release-audit.js` should appear in the project structure or feature document",
+      "critical": false
+    }
+  ],
   "checks": [
     {
       "id": "file-html",
@@ -731,11 +1122,291 @@
       "critical": false
     },
     {
+      "id": "dyn-dyn-new-env-GITHUB_REPOSITORY",
+      "claim": "Dynamic doc impact: dyn-new-env-GITHUB_REPOSITORY",
+      "ok": false,
+      "detail": "missing · README.md · Document `GITHUB_REPOSITORY` in the environment section of the appropriate README, or confirm it is ",
+      "critical": false
+    },
+    {
+      "id": "dyn-dyn-new-file-releaseauditjs",
+      "claim": "Dynamic doc impact: dyn-new-file-releaseauditjs",
+      "ok": false,
+      "detail": "missing · README.md · Review whether `scripts/release-audit.js` should appear in the project structure or feature document",
+      "critical": false
+    },
+    {
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=5",
+      "detail": "status=complete analyzed=4",
       "critical": false
+    },
+    {
+      "id": "releases-api",
+      "claim": "GitHub Releases API returned a valid release collection",
+      "ok": true,
+      "detail": "3 release(s) retrieved",
+      "critical": true
+    },
+    {
+      "id": "releases-published-count",
+      "claim": "At least one published GitHub Release exists",
+      "ok": true,
+      "detail": "3 published release(s)",
+      "critical": true
+    },
+    {
+      "id": "release-desktop-v1_0_0-published",
+      "claim": "Release desktop-v1.0.0 is published (not a draft)",
+      "ok": true,
+      "detail": "draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z",
+      "critical": true
+    },
+    {
+      "id": "release-desktop-v1_0_0-tag",
+      "claim": "Release desktop-v1.0.0 points to an existing Git tag",
+      "ok": true,
+      "detail": "tag ref resolves to commit 9c5dd99da15efd4f7726a282f7ec39cc2f7394e3",
+      "critical": true
+    },
+    {
+      "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-uploaded",
+      "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip is uploaded",
+      "ok": true,
+      "detail": "state=uploaded",
+      "critical": true
+    },
+    {
+      "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-size",
+      "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip has a non-zero size",
+      "ok": true,
+      "detail": "332892 bytes",
+      "critical": true
+    },
+    {
+      "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest",
+      "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest",
+      "ok": true,
+      "detail": "sha256:9471f0d1e67b55fa032224dee024dd3e16f67ecc45c9b77f581d3555e7291b00",
+      "critical": true
+    },
+    {
+      "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-url",
+      "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip has a valid GitHub download URL",
+      "ok": true,
+      "detail": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/desktop-v1.0.0/GTA-VI-Countdown-Windows-x64.zip",
+      "critical": true
+    },
+    {
+      "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-bytes",
+      "claim": "Downloaded bytes for GTA-VI-Countdown-Windows-x64.zip match GitHub size and SHA-256",
+      "ok": true,
+      "detail": "downloaded=332892 bytes; API size=332892; digest=MATCH",
+      "critical": true
+    },
+    {
+      "id": "release-desktop-v1_0_0-assets",
+      "claim": "Release desktop-v1.0.0 contains at least one downloadable asset",
+      "ok": true,
+      "detail": "1 asset(s)",
+      "critical": true
+    },
+    {
+      "id": "release-ios-v1_0_0-published",
+      "claim": "Release ios-v1.0.0 is published (not a draft)",
+      "ok": true,
+      "detail": "draft=false; prerelease=false; published_at=2026-11-05T12:09:26Z",
+      "critical": true
+    },
+    {
+      "id": "release-ios-v1_0_0-tag",
+      "claim": "Release ios-v1.0.0 points to an existing Git tag",
+      "ok": true,
+      "detail": "tag ref resolves to commit 4f09f049882af8a0f8168636af3cd7c220d06526",
+      "critical": true
+    },
+    {
+      "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-uploaded",
+      "claim": "Release asset gta-countdown.ipa is uploaded",
+      "ok": true,
+      "detail": "state=uploaded",
+      "critical": true
+    },
+    {
+      "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-size",
+      "claim": "Release asset gta-countdown.ipa has a non-zero size",
+      "ok": true,
+      "detail": "1654904 bytes",
+      "critical": true
+    },
+    {
+      "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-digest",
+      "claim": "Release asset gta-countdown.ipa exposes a SHA-256 digest",
+      "ok": true,
+      "detail": "sha256:4e38a383e8f16bc43e0c00f94fd9d633a55d047004397f979d7cb2d5cc929a56",
+      "critical": true
+    },
+    {
+      "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-url",
+      "claim": "Release asset gta-countdown.ipa has a valid GitHub download URL",
+      "ok": true,
+      "detail": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/ios-v1.0.0/gta-countdown.ipa",
+      "critical": true
+    },
+    {
+      "id": "release-ios-v1_0_0-asset-gta-countdown.ipa-bytes",
+      "claim": "Downloaded bytes for gta-countdown.ipa match GitHub size and SHA-256",
+      "ok": true,
+      "detail": "downloaded=1654904 bytes; API size=1654904; digest=MATCH",
+      "critical": true
+    },
+    {
+      "id": "release-ios-v1_0_0-assets",
+      "claim": "Release ios-v1.0.0 contains at least one downloadable asset",
+      "ok": true,
+      "detail": "1 asset(s)",
+      "critical": true
+    },
+    {
+      "id": "release-android-v1_0_0-published",
+      "claim": "Release android-v1.0.0 is published (not a draft)",
+      "ok": true,
+      "detail": "draft=false; prerelease=false; published_at=2026-11-05T12:09:25Z",
+      "critical": true
+    },
+    {
+      "id": "release-android-v1_0_0-tag",
+      "claim": "Release android-v1.0.0 points to an existing Git tag",
+      "ok": true,
+      "detail": "tag ref resolves to commit 4f09f049882af8a0f8168636af3cd7c220d06526",
+      "critical": true
+    },
+    {
+      "id": "release-android-v1_0_0-asset-app-debug.apk-uploaded",
+      "claim": "Release asset app-debug.apk is uploaded",
+      "ok": true,
+      "detail": "state=uploaded",
+      "critical": true
+    },
+    {
+      "id": "release-android-v1_0_0-asset-app-debug.apk-size",
+      "claim": "Release asset app-debug.apk has a non-zero size",
+      "ok": true,
+      "detail": "3396767 bytes",
+      "critical": true
+    },
+    {
+      "id": "release-android-v1_0_0-asset-app-debug.apk-digest",
+      "claim": "Release asset app-debug.apk exposes a SHA-256 digest",
+      "ok": true,
+      "detail": "sha256:609f3dcab01e58ad54eb2e4acbb9a265c8f5ab82374e4b7bb0c41b1f3462d181",
+      "critical": true
+    },
+    {
+      "id": "release-android-v1_0_0-asset-app-debug.apk-url",
+      "claim": "Release asset app-debug.apk has a valid GitHub download URL",
+      "ok": true,
+      "detail": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/android-v1.0.0/app-debug.apk",
+      "critical": true
+    },
+    {
+      "id": "release-android-v1_0_0-asset-app-debug.apk-bytes",
+      "claim": "Downloaded bytes for app-debug.apk match GitHub size and SHA-256",
+      "ok": true,
+      "detail": "downloaded=3396767 bytes; API size=3396767; digest=MATCH",
+      "critical": true
+    },
+    {
+      "id": "release-android-v1_0_0-assets",
+      "claim": "Release android-v1.0.0 contains at least one downloadable asset",
+      "ok": true,
+      "detail": "1 asset(s)",
+      "critical": true
+    },
+    {
+      "id": "expected-desktop-v1_0_0",
+      "claim": "Expected Windows x64 release desktop-v1.0.0 exists",
+      "ok": true,
+      "detail": "found",
+      "critical": true
+    },
+    {
+      "id": "expected-desktop-v1_0_0-asset",
+      "claim": "Windows x64 release contains GTA-VI-Countdown-Windows-x64.zip",
+      "ok": true,
+      "detail": "present",
+      "critical": true
+    },
+    {
+      "id": "expected-desktop-v1_0_0-type",
+      "claim": "Windows x64 asset has expected content type",
+      "ok": true,
+      "detail": "actual=application/zip; expected=application/zip",
+      "critical": true
+    },
+    {
+      "id": "expected-desktop-v1_0_0-release-state",
+      "claim": "Windows x64 stable release is publicly published",
+      "ok": true,
+      "detail": "draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z",
+      "critical": true
+    },
+    {
+      "id": "expected-ios-v1_0_0",
+      "claim": "Expected iOS release ios-v1.0.0 exists",
+      "ok": true,
+      "detail": "found",
+      "critical": true
+    },
+    {
+      "id": "expected-ios-v1_0_0-asset",
+      "claim": "iOS release contains gta-countdown.ipa",
+      "ok": true,
+      "detail": "present",
+      "critical": true
+    },
+    {
+      "id": "expected-ios-v1_0_0-type",
+      "claim": "iOS asset has expected content type",
+      "ok": true,
+      "detail": "actual=application/octet-stream; expected=application/octet-stream",
+      "critical": true
+    },
+    {
+      "id": "expected-ios-v1_0_0-release-state",
+      "claim": "iOS stable release is publicly published",
+      "ok": true,
+      "detail": "draft=false; prerelease=false; published_at=2026-11-05T12:09:26Z",
+      "critical": true
+    },
+    {
+      "id": "expected-android-v1_0_0",
+      "claim": "Expected Android release android-v1.0.0 exists",
+      "ok": true,
+      "detail": "found",
+      "critical": true
+    },
+    {
+      "id": "expected-android-v1_0_0-asset",
+      "claim": "Android release contains app-debug.apk",
+      "ok": true,
+      "detail": "present",
+      "critical": true
+    },
+    {
+      "id": "expected-android-v1_0_0-type",
+      "claim": "Android asset has expected content type",
+      "ok": true,
+      "detail": "actual=application/vnd.android.package-archive; expected=application/vnd.android.package-archive",
+      "critical": true
+    },
+    {
+      "id": "expected-android-v1_0_0-release-state",
+      "claim": "Android stable release is publicly published",
+      "ok": true,
+      "detail": "draft=false; prerelease=false; published_at=2026-11-05T12:09:25Z",
+      "critical": true
     }
   ]
 }
