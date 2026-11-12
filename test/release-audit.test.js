@@ -76,6 +76,13 @@ async function main() {
     const report = await auditReleases({ fetchImpl: mockFetch(releases) });
     assert.ok(report.checks.some((c) => c.id === 'expected-android-v1_0_0-type' && !c.ok));
   });
+  await test('published prereleases are audited without being treated as broken stable releases', async () => {
+    const releases = fixtures();
+    releases[0].prerelease = true;
+    const report = await auditReleases({ fetchImpl: mockFetch(releases), expectedReleases: [] });
+    assert.ok(report.checks.some((c) => c.id === 'release-desktop-v1_0_0-published' && c.ok));
+    assert.strictEqual(report.summary.criticalFailed, 0);
+  });
   await test('API outage is reported as a critical audit failure', async () => {
     const report = await auditReleases({ fetchImpl: async () => response({}, 503) });
     assert.strictEqual(report.status, 'failure');
