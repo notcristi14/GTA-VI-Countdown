@@ -1,0 +1,104 @@
+name: Windows C++ Desktop Build & Release
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "launcher/**"
+      - ".github/workflows/desktop-build-release.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: desktop-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Windows x64 launcher
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Restore NuGet packages
+        shell: pwsh
+        run: nuget restore launcher/GtaViCountdown.sln
+
+      - name: Build Release x64
+        shell: pwsh
+        run: |
+          msbuild launcher/GtaViCountdown.sln /m /v:minimal /p:Configuration=Release /p:Platform=x64 /p:RestorePackages=false
+
+      - name: Verify executable
+        shell: pwsh
+        run: |
+          $exe = "launcher/bin/x64/Release/GtaViCountdown.exe"
+          if (-not (Test-Path $exe)) {
+            Get-ChildItem launcher -Recurse -Filter GtaViCountdown.exe | Format-Table FullName, Length
+            throw "Expected Release x64 executable was not produced: $exe"
+          }
+          if ((Get-Item $exe).Length -lt 50000) {
+            throw "Executable is unexpectedly small; refusing to publish."
+          }
+
+      - name: Stage release package
+        shell: pwsh
+        run: |
+          $stage = "release/GTA-VI-Countdown-Windows-x64"
+          New-Item -ItemType Directory -Force -Path $stage | Out-Null
+          Copy-Item "launcher/bin/x64/Release/GtaViCountdown.exe" $stage
+          $loader = Get-ChildItem "launcher/packages/Microsoft.Web.WebView2.1.0.2849.39" -Recurse -Filter WebView2Loader.dll -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -match "[\\/]x64[\\/]" } |
+            Select-Object -First 1
+          if ($loader) {
+            Copy-Item $loader.FullName $stage
+          }
+          @'
+          GTA VI Countdown — Windows x64
+          
+          Run GtaViCountdown.exe on Windows 10/11.
+          
+          Microsoft Edge WebView2 Runtime is required:
+          https://developer.microsoft.com/microsoft-edge/webview2/
+          
+          The launcher loads the live countdown:
+          https://gta-vi-countdown.onrender.com/eastern-europe
+          '@ | Set-Content "$stage/README.txt" -Encoding UTF8
+          Compress-Archive -Path "$stage/*" -DestinationPath "GTA-VI-Countdown-Windows-x64.zip" -Force
+
+      - name: Upload build package
+        uses: actions/upload-artifact@v4
+        with:
+          name: GTA-VI-Countdown-Windows-x64
+          path: GTA-VI-Countdown-Windows-x64.zip
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: desktop-v1.0.0
+          name: Windows Desktop v1.0.0
+          target_commitish: ${{ github.sha }}
+          body: |
+            GTA VI Countdown — native Windows C++ desktop launcher.
+
+            - Platform: Windows 10/11 · x64
+            - Build: Visual Studio 2022 · MSVC v143 · Release
+            - UI: Win32 + Microsoft Edge WebView2
+            - Includes the compiled launcher and release instructions.
+            - Requires the Microsoft Edge WebView2 Runtime.
+
+            Live app: https://gta-vi-countdown.onrender.com/eastern-europe
+          files: GTA-VI-Countdown-Windows-x64.zip
+          fail_on_unmatched_files: true
+          overwrite_files: true
+          make_latest: false
