@@ -1,7 +1,7 @@
 {
   "lastContentUpdateAt": "2026-11-12T13:42:53.413Z",
-  "commit": "4868c2b6e4df481407e1a6007006e491e7936eed",
-  "baseCommit": "a766048c9b82b5665862fcb45d9e3a80cbb8ca19",
+  "commit": "a1f6d4830d784ace7e90ee51949ea7dd59d9c1a0",
+  "baseCommit": "b43b343ffaab13c0db7fd4fcc64783b1a9d22e27",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -291,7 +291,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-12T17:12:51.245Z",
+    "checkedAt": "2026-11-12T17:14:01.396Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -839,8 +839,8 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "a766048c9b82b5665862fcb45d9e3a80cbb8ca19",
-    "headCommit": "4868c2b6e4df481407e1a6007006e491e7936eed",
+    "baseCommit": "b43b343ffaab13c0db7fd4fcc64783b1a9d22e27",
+    "headCommit": "a1f6d4830d784ace7e90ee51949ea7dd59d9c1a0",
     "changedFiles": 1,
     "analyzedFiles": 1,
     "skippedFiles": [],
@@ -853,7 +853,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt",
+        "path": "mobile/ios/VICountdown/ViewController.swift",
         "status": "M",
         "oldPath": null,
         "findings": 0,
