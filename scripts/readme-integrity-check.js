@@ -5,6 +5,7 @@ const path = require('path');
 const { runDocumentationAudit, formatDocFindingsMarkdown, DOC_SPECS } = require('./doc-audit');
 const { runDynamicDocumentationAudit } = require('./dynamic-doc-audit');
 const { auditReleases } = require('./release-audit');
+const { scanProjectStructure, auditProjectStructure, formatProjectStructureMarkdown } = require('./project-structure-audit');
 const ROOT = path.resolve(__dirname, '..');
 const now = new Date().toISOString();
 const commitSha = process.env.GITHUB_SHA || 'local';
@@ -118,6 +119,9 @@ const iosIcon = exists('mobile/ios/VICountdown/Assets.xcassets/AppIcon.appiconse
 const launcherIco = exists('launcher/assets/GtaLogo.ico');
 const launcherSln = exists('launcher/GtaViCountdown.sln');
 const readmeFiles = findReadmes(ROOT);
+const projectInventory = scanProjectStructure(ROOT);
+const structureAudit = auditProjectStructure(projectInventory, read('README.md'));
+const structureFindings = structureAudit.findings;
 const apis = { '/api/trailers': routeRegistered(appJs, '/api/trailers') || routeRegistered(musicDisc, '/api/trailers'), '/api/music': routeRegistered(musicDisc, '/api/music') || routeRegistered(appJs, '/api/music'), '/api/repo': routeRegistered(appJs, '/api/repo'), '/api/commits': routeRegistered(appJs, '/api/commits'), '/api/commit': routeRegistered(appJs, '/api/commit'), '/api/news': routeRegistered(appJs, '/api/news'), '/api/stats': routeRegistered(appJs, '/api/stats'), '/api/backgrounds': routeRegistered(bgsApi, '/api/backgrounds') || routeRegistered(appJs, '/api/backgrounds') };
 const regionImpl = {};
 for (const [slug, name, target] of EXPECTED_REGIONS) { const hasSlug = html.includes("'" + slug + "'"); const hasTarget = html.includes(target); regionImpl[slug] = { expectedName: name, expectedTarget: target, slugPresent: hasSlug, targetPresent: hasTarget, implemented: hasSlug && hasTarget }; }
@@ -125,6 +129,15 @@ const regionsOkCount = Object.values(regionImpl).filter((r) => r.implemented).le
 const features = { regions15: regionsOkCount === 15, defaultEurope: /let\s+activeSlug\s*=\s*'europe'/.test(html), pathPersist: /localStorage\.getItem\(\s*'gtaRegion'\s*\)/.test(html), digitReels: html.includes('requestAnimationFrame'), availableNow: /Available now/i.test(html), preorder: html.includes('preorder'), musicPanel: exists('music.js') && exists('music.css'), musicCentered: /align-items:\s*center/.test(musicCss), musicDiscoveryJob: /fetchSpotifyAlbumTracks|SPOTIFY_ALBUM/.test(musicDisc) && /registerMusic/.test(musicDisc), musicCache30m: /30\s*\*\s*60\s*\*\s*1000/.test(musicDisc), trailersCache30m: /TRAILERS_CACHE_MS\s*=\s*30\s*\*\s*60\s*\*\s*1000/.test(appJs), backgroundsJob: /registerBackgrounds/.test(bgsApi) && /6\s*\*\s*60\s*\*\s*60\s*\*\s*1000/.test(bgsApi), pwaManifest: html.includes('manifest') && html.includes('standalone'), serviceWorker: /serviceWorker|navigator\.serviceWorker/.test(html), androidWebViewClass: /WebView/.test(mainKt), androidLoadsHome: /loadUrl\(\s*HOME_URL\s*\)/.test(mainKt), androidExternal: /ACTION_VIEW/.test(mainKt), iosWebViewClass: /WKWebView/.test(iosVc), iosLoadsHome: /webView\.load\(\s*URLRequest\(\s*url:\s*homeURL/.test(iosVc), iosExternal: /UIApplication\.shared\.open/.test(iosVc), launcherWebView2: /ICoreWebView2|WebView2|CreateCoreWebView2Environment/i.test(appWindowCpp), launcherNav: /GoBack|GoForward|Navigate|Back|Forward|Home|Refresh/i.test(appWindowCpp) };
 const checks = [];
 function check(id, claim, ok, detail, critical) { checks.push({ id, claim, ok: !!ok, detail: String(detail), critical: critical === true }); }
+check('project-structure-inventory', 'Complete project file/directory inventory generated', true, projectInventory.fileCount + ' files · ' + projectInventory.directoryCount + ' directories · ' + projectInventory.workflows.length + ' workflows', false);
+check('project-structure-readme', 'Root README Structure section is present', structureAudit.status === 'complete', structureAudit.status, true);
+for (const workflow of projectInventory.workflows) {
+  const documented = !structureAudit.missingWorkflowDocs.includes(workflow);
+  check('workflow-doc-' + workflow.replace(/[^a-z0-9]+/gi, '-').toLowerCase(), 'Workflow documented: ' + workflow, documented, documented ? 'listed in root README Structure' : 'MISSING from root README Structure', false);
+}
+for (const workflow of structureAudit.staleWorkflowDocs) {
+  check('workflow-doc-stale-' + workflow.replace(/[^a-z0-9]+/gi, '-').toLowerCase(), 'README workflow reference exists: ' + workflow, false, 'stale path in root README Structure', false);
+}
 check('file-html', 'gta-vi-countdown.html exists', exists('gta-vi-countdown.html'), exists('gta-vi-countdown.html') ? 'present' : 'MISSING', true);
 check('file-app', 'app.js Express entry exists', exists('app.js'), exists('app.js') ? 'present' : 'MISSING', true);
 check('regions-count', 'All 15 region slug+UTC pairs in HTML', regionsOkCount === 15, regionsOkCount + '/15 implemented', true);
@@ -241,12 +254,26 @@ const report = {
   commit: commitSha,
   baseCommit: dynSummary.baseCommit || null,
   timestampSemantics: 'lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value',
-  analysisType: 'static-source-plus-dynamic-git-diff-plus-github-releases',
+  analysisType: 'static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases',
+  projectStructure: {
+    status: structureAudit.status,
+    fileCount: projectInventory.fileCount,
+    directoryCount: projectInventory.directoryCount,
+    files: projectInventory.files,
+    directories: projectInventory.directories,
+    readmes: projectInventory.readmes,
+    workflows: projectInventory.workflows,
+    documentedWorkflows: structureAudit.documentedWorkflows,
+    missingWorkflowDocs: structureAudit.missingWorkflowDocs,
+    staleWorkflowDocs: structureAudit.staleWorkflowDocs,
+    workflowCoverage: structureAudit.workflowCoverage,
+    workflowCount: structureAudit.workflowCount
+  },
   releaseAudit,
   expectedMobileHome: EXPECTED_MOBILE_HOME,
   readmeFilesScanned: readmeFiles,
   readmeFileCount: readmeFiles.length,
-  summary: { total: checks.length, passed, failed: failed.length, criticalFailed: criticalFailed.length, documentationFindings: docFindings.length + dynFindings.filter(f => !f.unreadable).length },
+  summary: { total: checks.length, passed, failed: failed.length, criticalFailed: criticalFailed.length, documentationFindings: docFindings.length + dynFindings.filter(f => !f.unreadable).length + structureFindings.length },
   detectedFeatures: features,
   apiEndpoints: apis,
   countdownRegions: regionImpl,
@@ -254,7 +281,7 @@ const report = {
   backgroundImageCount: bgsCount,
   mobile: { expectedHome: EXPECTED_MOBILE_HOME, androidHome, androidHomeMatchesExpected: androidHomeOk, iosHome, iosHomeMatchesExpected: iosHomeOk, androidHost, iosHost, appId, gradleVer, agpVer, kotlinVer, pureAndroid, iosIcon, sources: { android: MAIN_KT, ios: IOS_VC } },
   launcher: { solution: launcherSln, gtaLogoIco: launcherIco, webView2: features.launcherWebView2, source: APP_WINDOW },
-  missingOrOutdatedDocumentation: docFindings.concat(dynFindings.filter(f => !f.unreadable)),
+  missingOrOutdatedDocumentation: docFindings.concat(dynFindings.filter(f => !f.unreadable), structureFindings),
   documentationAudit: { deterministic: true, specsEvaluated: DOC_SPECS.length, note: 'Findings from explicit DOC_SPECS and registered-route comparison; not a full prose review.' },
   dynamicAudit: {
     historyAvailable: !!dynSummary.historyAvailable,
@@ -281,9 +308,10 @@ writeIfChanged('scripts/integrity-report.json', JSON.stringify(report, null, 2))
 function statusTable() { return '| ID | Claim | Status | Detail |\n|----|-------|--------|--------|\n' + checks.map((c) => '| `' + c.id + '` | ' + c.claim.replace(/\|/g, '/') + ' | ' + (c.ok ? 'PASS' : 'FAIL') + ' | ' + c.detail.replace(/\|/g, '/') + ' |').join('\n'); }
 function integritySection(scope) {
   const dynNote = dynSummary.status ? ('\n\n### Dynamic change audit\n\nStatus: **' + dynSummary.status + '** · changed files: ' + (dynSummary.changedFiles || 0) + ' · analyzed: ' + (dynSummary.analyzedFiles || 0) + ' · confirmed findings: ' + (dynSummary.confirmedFindings || 0) + ' · potential risks: ' + (dynSummary.potentialRisks || 0) + (dynSummary.baseCommit ? ' · base `' + String(dynSummary.baseCommit).slice(0, 7) + '`' : '') + '\n') : '';
+  const structureNote = '\n\n' + formatProjectStructureMarkdown(structureAudit) + '\n';
   const releaseRows = releaseAudit.releases.map((r) => '| ' + r.platform + ' | `' + r.tag + '` | ' + (r.assets.length && r.assets.every((a) => a.bytesVerified) ? 'bytes + SHA-256 verified' : r.assets.length && r.assets.every((a) => a.size > 0) ? 'metadata only' : 'failed') + ' | ' + r.assets.length + ' asset(s) |').join('\n');
   const releaseNote = '\n\n### GitHub Releases\n\n' + (releaseRows ? '| Platform | Tag | Audit | Assets |\n|---|---|---|---:|\n' + releaseRows : 'Release data unavailable; see failed checks.') + '\n\nRelease audit: **' + releaseAudit.summary.passed + '/' + releaseAudit.summary.total + ' checks passed** · status: **' + releaseAudit.status + '**. Downloadable assets are fetched and their byte size/SHA-256 are compared with GitHub metadata (assets above the 100 MiB safety limit are metadata-only).\n'
-  return '## Automated integrity status\n\nLast content update: **' + now + '** · commit `' + commitSha.slice(0, 7) + '` · **' + passed + '/' + checks.length + ' passed**' + (criticalFailed.length ? ' · **' + criticalFailed.length + ' critical failures**' : '') + (docFindings.length ? ' · **' + docFindings.length + ' doc findings**' : '') + (dynFindings.length ? ' · **' + dynFindings.length + ' dynamic findings**' : '') + (scope ? ' · ' + scope : '') + '\n\nExpected mobile home URL: `' + EXPECTED_MOBILE_HOME + '`  \nAndroid actual: `' + (androidHome || '(not found)') + '` · iOS actual: `' + (iosHome || '(not found)') + '`\n\n'  + statusTable() + formatDocFindingsMarkdown(docFindings) + releaseNote + dynNote + '\n*Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*\n';
+  return '## Automated integrity status\n\nLast content update: **' + now + '** · commit `' + commitSha.slice(0, 7) + '` · **' + passed + '/' + checks.length + ' passed**' + (criticalFailed.length ? ' · **' + criticalFailed.length + ' critical failures**' : '') + (docFindings.length ? ' · **' + docFindings.length + ' doc findings**' : '') + (dynFindings.length ? ' · **' + dynFindings.length + ' dynamic findings**' : '') + (scope ? ' · ' + scope : '') + '\n\nExpected mobile home URL: `' + EXPECTED_MOBILE_HOME + '`  \nAndroid actual: `' + (androidHome || '(not found)') + '` · iOS actual: `' + (iosHome || '(not found)') + '`\n\n'  + statusTable() + formatDocFindingsMarkdown(docFindings) + structureNote + releaseNote + dynNote + '\n*Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*\n';
 }
 let changed = false;
 function updateReadmeGenerated(rel, scope) { if (!exists(rel)) return; const before = read(rel); const after = upsertGenerated(before, integritySection(scope)); if (writeIfChanged(rel, after)) changed = true; }
@@ -291,6 +319,7 @@ for (const rf of readmeFiles) { let scope = rf; if (rf === 'README.md') scope = 
 if (exists('mobile/README.md')) { let m = read('mobile/README.md'); const mobileFactsStart = '<!-- AUTO-GENERATED: mobile-config-facts -->'; const mobileFactsEnd = '<!-- END AUTO-GENERATED: mobile-config-facts -->'; const facts = mobileFactsStart + '\n### Mobile home URL (integrity)\n\n| Shell | Expected | Actual (source) | Match |\n|-------|----------|-----------------|-------|\n| Android `HOME_URL` | `' + EXPECTED_MOBILE_HOME + '` | `' + (androidHome || 'NOT FOUND') + '` | ' + (androidHomeOk ? 'yes' : '**NO**') + ' |\n| iOS `homeURL` | `' + EXPECTED_MOBILE_HOME + '` | `' + (iosHome || 'NOT FOUND') + '` | ' + (iosHomeOk ? 'yes' : '**NO**') + ' |\n\nIntended mobile landing page is the **site root** (`/`). Regional paths such as `/eastern-europe` remain available in the web UI for all 15 countdown regions; they are not required as the native shell home URL.\nIf Match is **NO**, the native shell home URL does not match the intended root URL.\n' + mobileFactsEnd; const fi = m.indexOf(mobileFactsStart); const fj = m.indexOf(mobileFactsEnd); let next; if (fi !== -1 && fj !== -1 && fj > fi) next = m.slice(0, fi) + facts + m.slice(fj + mobileFactsEnd.length).replace(/^\n+/, '\n'); else { const gi = m.indexOf(MARKER_START); if (gi !== -1) next = m.slice(0, gi) + facts + '\n\n' + m.slice(gi); else next = m.trimEnd() + '\n\n' + facts + '\n'; } if (writeIfChanged('mobile/README.md', next)) changed = true; }
 console.log(JSON.stringify(report.summary));
 if (docFindings.length) { console.log('DOC_FINDINGS=' + docFindings.length); docFindings.forEach((f) => console.log('DOC', f.severity, f.id, f.documentationFile)); }
+if (structureFindings.length) { console.log('STRUCTURE_FINDINGS=' + structureFindings.length); structureFindings.forEach(f => console.log('STRUCTURE', f.kind, f.sourceFile)); }
 if (dynFindings.length) { console.log('DYN_FINDINGS=' + dynFindings.length + ' status=' + dynSummary.status); dynFindings.forEach((f) => console.log('DYN', f.severity, f.confirmed ? 'confirmed' : 'potential', f.id, f.sourceFile || '')); }
 failed.forEach((c) => console.log('FAIL', c.id, c.detail));
 console.log(changed ? 'README_CHANGED=1' : 'README_CHANGED=0');
