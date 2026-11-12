@@ -82,7 +82,6 @@ async function auditReleases(options = {}) {
     const digestMatch = typeof result.digest === 'string' && /^sha256:[a-f0-9]{64}$/i.test(result.digest);
     makeCheck(checks, prefix + '-digest', 'Release asset ' + result.name + ' exposes a SHA-256 digest', digestMatch, result.digest || 'missing/invalid digest');
 
-    let download;
     try {
       const url = new URL(result.downloadUrl);
       const expectedPrefix = 'https://github.com/' + repository + '/releases/download/';
@@ -142,8 +141,8 @@ async function auditReleases(options = {}) {
         assets: []
       };
       const safeTag = tag.replace(/[^a-zA-Z0-9_-]/g, '_');
-      const publishedOk = !release.draft && !release.prerelease && !!release.published_at && !Number.isNaN(Date.parse(release.published_at));
-      makeCheck(checks, 'release-' + safeTag + '-published', 'Release ' + tag + ' is published (not draft/prerelease)', publishedOk, 'draft=' + !!release.draft + '; prerelease=' + !!release.prerelease + '; published_at=' + (release.published_at || 'missing'));
+      const publishedOk = !release.draft && !!release.published_at && !Number.isNaN(Date.parse(release.published_at));
+      makeCheck(checks, 'release-' + safeTag + '-published', 'Release ' + tag + ' is published (not a draft)', publishedOk, 'draft=' + !!release.draft + '; prerelease=' + !!release.prerelease + '; published_at=' + (release.published_at || 'missing'));
 
       try {
         const ref = await fetchJson('https://api.github.com/repos/' + repository + '/git/ref/tags/' + encodeURIComponent(tag));
@@ -174,9 +173,8 @@ async function auditReleases(options = {}) {
       if (asset) {
         makeCheck(checks, 'expected-' + safeTag + '-type', spec.platform + ' asset has expected content type', asset.content_type === spec.contentType, 'actual=' + (asset.content_type || 'missing') + '; expected=' + spec.contentType);
       }
-      if (release.draft || release.prerelease || !release.published_at) {
-        makeCheck(checks, 'expected-' + safeTag + '-release-state', spec.platform + ' release is publicly published', false, 'draft/prerelease/unpublished release');
-      }
+      const expectedStateOk = !release.draft && !release.prerelease && !!release.published_at && !Number.isNaN(Date.parse(release.published_at));
+      makeCheck(checks, 'expected-' + safeTag + '-release-state', spec.platform + ' stable release is publicly published', expectedStateOk, 'draft=' + !!release.draft + '; prerelease=' + !!release.prerelease + '; published_at=' + (release.published_at || 'missing'));
     }
   } catch (error) {
     errors.push({ error: error.message });
