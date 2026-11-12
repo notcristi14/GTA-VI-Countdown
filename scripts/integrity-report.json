@@ -1,7 +1,7 @@
 {
-  "lastContentUpdateAt": "2026-11-12T13:16:44.626Z",
-  "commit": "102a98d64d57f1cf9fdf88a4cc38f99c5de46dc7",
-  "baseCommit": "392581479f3dd2c8bcb7bb0c6a5b3c2bd52e8efa",
+  "lastContentUpdateAt": "2026-11-12T13:30:41.555Z",
+  "commit": "f85408cec76ef70ba47cc7a2d8f12be04d69150b",
+  "baseCommit": "a8608b304cdd7bd715b2f026289a49daf1600c2e",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -277,21 +277,21 @@
       ".github/workflows/readme-integrity.yml",
       ".github/workflows/sync-backgrounds.yml"
     ],
-    "documentedWorkflows": [
+    "documentedWorkflows": [],
+    "missingWorkflowDocs": [
       ".github/workflows/desktop-build-release.yml",
       ".github/workflows/ensure-gradle-wrapper.yml",
       ".github/workflows/ios-build.yml",
       ".github/workflows/readme-integrity.yml",
       ".github/workflows/sync-backgrounds.yml"
     ],
-    "missingWorkflowDocs": [],
     "staleWorkflowDocs": [],
-    "workflowCoverage": 5,
+    "workflowCoverage": 0,
     "workflowCount": 5
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-12T13:16:48.153Z",
+    "checkedAt": "2026-11-12T13:30:43.353Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -658,10 +658,10 @@
   "readmeFileCount": 4,
   "summary": {
     "total": 114,
-    "passed": 114,
-    "failed": 0,
+    "passed": 109,
+    "failed": 5,
     "criticalFailed": 0,
-    "documentationFindings": 0
+    "documentationFindings": 5
   },
   "detectedFeatures": {
     "regions15": true,
@@ -831,7 +831,68 @@
     "webView2": true,
     "source": "launcher/src/AppWindow.cpp"
   },
-  "missingOrOutdatedDocumentation": [],
+  "missingOrOutdatedDocumentation": [
+    {
+      "id": "missing-workflow-github-workflows-desktop-build-release-yml",
+      "severity": "medium",
+      "documentationFile": "README.md",
+      "sourceFile": ".github/workflows/desktop-build-release.yml",
+      "problem": "Workflow exists in .github/workflows but is missing from the README Structure inventory.",
+      "suggestedCorrection": "Add .github/workflows/desktop-build-release.yml to the workflow list in the root README Structure section.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": true,
+      "potentialRisk": false
+    },
+    {
+      "id": "missing-workflow-github-workflows-ensure-gradle-wrapper-yml",
+      "severity": "medium",
+      "documentationFile": "README.md",
+      "sourceFile": ".github/workflows/ensure-gradle-wrapper.yml",
+      "problem": "Workflow exists in .github/workflows but is missing from the README Structure inventory.",
+      "suggestedCorrection": "Add .github/workflows/ensure-gradle-wrapper.yml to the workflow list in the root README Structure section.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": true,
+      "potentialRisk": false
+    },
+    {
+      "id": "missing-workflow-github-workflows-ios-build-yml",
+      "severity": "medium",
+      "documentationFile": "README.md",
+      "sourceFile": ".github/workflows/ios-build.yml",
+      "problem": "Workflow exists in .github/workflows but is missing from the README Structure inventory.",
+      "suggestedCorrection": "Add .github/workflows/ios-build.yml to the workflow list in the root README Structure section.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": true,
+      "potentialRisk": false
+    },
+    {
+      "id": "missing-workflow-github-workflows-readme-integrity-yml",
+      "severity": "medium",
+      "documentationFile": "README.md",
+      "sourceFile": ".github/workflows/readme-integrity.yml",
+      "problem": "Workflow exists in .github/workflows but is missing from the README Structure inventory.",
+      "suggestedCorrection": "Add .github/workflows/readme-integrity.yml to the workflow list in the root README Structure section.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": true,
+      "potentialRisk": false
+    },
+    {
+      "id": "missing-workflow-github-workflows-sync-backgrounds-yml",
+      "severity": "medium",
+      "documentationFile": "README.md",
+      "sourceFile": ".github/workflows/sync-backgrounds.yml",
+      "problem": "Workflow exists in .github/workflows but is missing from the README Structure inventory.",
+      "suggestedCorrection": "Add .github/workflows/sync-backgrounds.yml to the workflow list in the root README Structure section.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": true,
+      "potentialRisk": false
+    }
+  ],
   "documentationAudit": {
     "deterministic": true,
     "specsEvaluated": 21,
@@ -839,8 +900,8 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "392581479f3dd2c8bcb7bb0c6a5b3c2bd52e8efa",
-    "headCommit": "102a98d64d57f1cf9fdf88a4cc38f99c5de46dc7",
+    "baseCommit": "a8608b304cdd7bd715b2f026289a49daf1600c2e",
+    "headCommit": "f85408cec76ef70ba47cc7a2d8f12be04d69150b",
     "changedFiles": 1,
     "analyzedFiles": 1,
     "skippedFiles": [],
@@ -853,7 +914,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "test/project-structure-audit.test.js",
+        "path": "README.md",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -864,7 +925,38 @@
     "status": "complete",
     "error": null
   },
-  "failedChecks": [],
+  "failedChecks": [
+    {
+      "id": "workflow-doc--github-workflows-desktop-build-release-yml",
+      "claim": "Workflow documented: .github/workflows/desktop-build-release.yml",
+      "detail": "MISSING from root README Structure",
+      "critical": false
+    },
+    {
+      "id": "workflow-doc--github-workflows-ensure-gradle-wrapper-yml",
+      "claim": "Workflow documented: .github/workflows/ensure-gradle-wrapper.yml",
+      "detail": "MISSING from root README Structure",
+      "critical": false
+    },
+    {
+      "id": "workflow-doc--github-workflows-ios-build-yml",
+      "claim": "Workflow documented: .github/workflows/ios-build.yml",
+      "detail": "MISSING from root README Structure",
+      "critical": false
+    },
+    {
+      "id": "workflow-doc--github-workflows-readme-integrity-yml",
+      "claim": "Workflow documented: .github/workflows/readme-integrity.yml",
+      "detail": "MISSING from root README Structure",
+      "critical": false
+    },
+    {
+      "id": "workflow-doc--github-workflows-sync-backgrounds-yml",
+      "claim": "Workflow documented: .github/workflows/sync-backgrounds.yml",
+      "detail": "MISSING from root README Structure",
+      "critical": false
+    }
+  ],
   "checks": [
     {
       "id": "project-structure-inventory",
@@ -883,36 +975,36 @@
     {
       "id": "workflow-doc--github-workflows-desktop-build-release-yml",
       "claim": "Workflow documented: .github/workflows/desktop-build-release.yml",
-      "ok": true,
-      "detail": "listed in root README Structure",
+      "ok": false,
+      "detail": "MISSING from root README Structure",
       "critical": false
     },
     {
       "id": "workflow-doc--github-workflows-ensure-gradle-wrapper-yml",
       "claim": "Workflow documented: .github/workflows/ensure-gradle-wrapper.yml",
-      "ok": true,
-      "detail": "listed in root README Structure",
+      "ok": false,
+      "detail": "MISSING from root README Structure",
       "critical": false
     },
     {
       "id": "workflow-doc--github-workflows-ios-build-yml",
       "claim": "Workflow documented: .github/workflows/ios-build.yml",
-      "ok": true,
-      "detail": "listed in root README Structure",
+      "ok": false,
+      "detail": "MISSING from root README Structure",
       "critical": false
     },
     {
       "id": "workflow-doc--github-workflows-readme-integrity-yml",
       "claim": "Workflow documented: .github/workflows/readme-integrity.yml",
-      "ok": true,
-      "detail": "listed in root README Structure",
+      "ok": false,
+      "detail": "MISSING from root README Structure",
       "critical": false
     },
     {
       "id": "workflow-doc--github-workflows-sync-backgrounds-yml",
       "claim": "Workflow documented: .github/workflows/sync-backgrounds.yml",
-      "ok": true,
-      "detail": "listed in root README Structure",
+      "ok": false,
+      "detail": "MISSING from root README Structure",
       "critical": false
     },
     {
