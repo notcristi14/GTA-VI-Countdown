@@ -144,7 +144,7 @@ If Match is **NO**, the native shell home URL does not match the intended root U
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-12T13:30:41.555Z** · commit `f85408c` · **109/114 passed** · mobile
+Last content update: **2026-11-12T13:32:18.122Z** · commit `b816791` · **114/114 passed** · mobile
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -153,11 +153,11 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 |----|-------|--------|--------|
 | `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 220 files · 32 directories · 5 workflows |
 | `project-structure-readme` | Root README Structure section is present | PASS | complete |
-| `workflow-doc--github-workflows-desktop-build-release-yml` | Workflow documented: .github/workflows/desktop-build-release.yml | FAIL | MISSING from root README Structure |
-| `workflow-doc--github-workflows-ensure-gradle-wrapper-yml` | Workflow documented: .github/workflows/ensure-gradle-wrapper.yml | FAIL | MISSING from root README Structure |
-| `workflow-doc--github-workflows-ios-build-yml` | Workflow documented: .github/workflows/ios-build.yml | FAIL | MISSING from root README Structure |
-| `workflow-doc--github-workflows-readme-integrity-yml` | Workflow documented: .github/workflows/readme-integrity.yml | FAIL | MISSING from root README Structure |
-| `workflow-doc--github-workflows-sync-backgrounds-yml` | Workflow documented: .github/workflows/sync-backgrounds.yml | FAIL | MISSING from root README Structure |
+| `workflow-doc--github-workflows-desktop-build-release-yml` | Workflow documented: .github/workflows/desktop-build-release.yml | PASS | listed in root README Structure |
+| `workflow-doc--github-workflows-ensure-gradle-wrapper-yml` | Workflow documented: .github/workflows/ensure-gradle-wrapper.yml | PASS | listed in root README Structure |
+| `workflow-doc--github-workflows-ios-build-yml` | Workflow documented: .github/workflows/ios-build.yml | PASS | listed in root README Structure |
+| `workflow-doc--github-workflows-readme-integrity-yml` | Workflow documented: .github/workflows/readme-integrity.yml | PASS | listed in root README Structure |
+| `workflow-doc--github-workflows-sync-backgrounds-yml` | Workflow documented: .github/workflows/sync-backgrounds.yml | PASS | listed in root README Structure |
 | `file-html` | gta-vi-countdown.html exists | PASS | present |
 | `file-app` | app.js Express entry exists | PASS | present |
 | `regions-count` | All 15 region slug+UTC pairs in HTML | PASS | 15/15 implemented |
@@ -274,15 +274,15 @@ No missing or outdated documentation findings from deterministic DOC_SPECS / API
 
 Repository inventory: **220 files** across **32 directories** · **4 README.md files** discovered recursively.
 
-Workflow documentation: **0/5** current workflow files listed in the root README Structure section.
+Workflow documentation: **5/5** current workflow files listed in the root README Structure section.
 
 | Workflow file | Listed in root README |
 |---|---|
-| .github/workflows/desktop-build-release.yml | **MISSING** |
-| .github/workflows/ensure-gradle-wrapper.yml | **MISSING** |
-| .github/workflows/ios-build.yml | **MISSING** |
-| .github/workflows/readme-integrity.yml | **MISSING** |
-| .github/workflows/sync-backgrounds.yml | **MISSING** |
+| .github/workflows/desktop-build-release.yml | yes |
+| .github/workflows/ensure-gradle-wrapper.yml | yes |
+| .github/workflows/ios-build.yml | yes |
+| .github/workflows/readme-integrity.yml | yes |
+| .github/workflows/sync-backgrounds.yml | yes |
 
 
 The complete file and directory inventory, including binary assets, is recorded in scripts/integrity-report.json. Cache/build directories and temporary OS files are excluded.
@@ -301,7 +301,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `a8608b3`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `3f21a13`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
