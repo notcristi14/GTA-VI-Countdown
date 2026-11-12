@@ -148,7 +148,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   ├── readme-integrity.yml   # every 4h + on source push
 │   ├── sync-backgrounds.yml
 │   ├── ensure-gradle-wrapper.yml
-│   └── ios-build.yml
+│   ├── ios-build.yml
+│   └── desktop-build-release.yml
 └── README.md
 ```
 
