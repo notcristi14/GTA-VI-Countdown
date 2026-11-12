@@ -23,6 +23,15 @@ function extractStructureCodeBlock(readme){
 function auditProjectStructure(inventory,rootReadme){
  const block=extractStructureCodeBlock(rootReadme);
  const documented=new Set((block.match(/\.github\/workflows\/[A-Za-z0-9._/-]+\.ya?ml/gi)||[]).map(p=>p.replace(/[),;]+$/,'')));
+ const lines=block.split(/\r?\n/);
+ const workflowDir=lines.findIndex(line=>/\.github\/workflows\/\s*$/.test(line));
+ if(workflowDir>=0){
+  for(let n=workflowDir+1;n<lines.length;n++){
+   if(/^[├└]──\s/.test(lines[n]))break;
+   const leaf=/^\s*│\s*[├└]──\s+([A-Za-z0-9._-]+\.ya?ml)\b/.exec(lines[n]);
+   if(leaf)documented.add('.github/workflows/'+leaf[1]);
+  }
+ }
  const actual=new Set(inventory.workflows),missingWorkflowDocs=inventory.workflows.filter(p=>!documented.has(p));
  const staleWorkflowDocs=[...documented].filter(p=>!actual.has(p)).sort(),findings=[];
  for(const p of missingWorkflowDocs)findings.push({id:'missing-workflow-'+p.replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase(),severity:'medium',documentationFile:'README.md',sourceFile:p,problem:'Workflow exists in .github/workflows but is missing from the README Structure inventory.',suggestedCorrection:'Add '+p+' to the workflow list in the root README Structure section.',kind:'missing',deterministic:true,confirmed:true,potentialRisk:false});
