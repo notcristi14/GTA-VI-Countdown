@@ -17,8 +17,8 @@ function scanProjectStructure(root){
 function extractStructureCodeBlock(readme){
  const s=String(readme||''),h=/^##\s+📁\s+Structure\s*$/m.exec(s);if(!h)return '';
  const rest=s.slice(h.index+h[0].length),next=/^##\s+/m.exec(rest),section=next?rest.slice(0,next.index):rest;
- const tick=String.fromCharCode(96),re=new RegExp(tick.repeat(3)+'[\\\\s\\\\S]*?'+tick.repeat(3));
- const m=re.exec(section);return m?m[0]:'';
+ const tick=String.fromCharCode(96).repeat(3),start=section.indexOf(tick);if(start<0)return '';
+ const end=section.indexOf(tick,start+tick.length);return end<0?'':section.slice(start,end+tick.length);
 }
 function auditProjectStructure(inventory,rootReadme){
  const block=extractStructureCodeBlock(rootReadme);
