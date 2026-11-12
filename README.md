@@ -77,6 +77,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - ⭐ **Repo stats** — Stars, forks, watchers, issues, language; **`/api/repo` background refresh every 60s** + client poll; `checkedAt` in response.
 - 🔑 Optional **`GITHUB_TOKEN`** / **`GH_TOKEN`** on the server for authenticated GitHub rate limits (avoids **403** on shared Render IPs).
 - 📦 **GitHub Releases integrity audit** — `scripts/release-audit.js` checks the Windows, iOS, and Android release tags and assets, then downloads assets up to 100 MiB to verify their byte size and SHA-256 against GitHub metadata.
+- 🗂️ **Complete project structure audit** — `scripts/project-structure-audit.js` inventories every repository file/directory (including binary assets) and checks that every GitHub Actions workflow is listed in the root README Structure tree.
 
 ### 📰 News & analytics
 - 💬 **Rockstar Newswire** — Live feed via `/api/news` (GraphQL NewswireList, 30s cache); toggleable panel.
