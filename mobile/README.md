@@ -115,7 +115,7 @@ mobile/ios/
 
 ## Icons
 
-Source logo: `mobile/assets/logo.png` (copied from repo-root `logo.png` when generating).
+Source logo: repository-root `logo.png` (the script reads it directly; `mobile/assets/logo.png` is a separate tracked copy).
 
 ```bash
 # From repo root (needs ImageMagick)
