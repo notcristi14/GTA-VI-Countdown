@@ -8,6 +8,9 @@ name: README integrity check
 #   launcher/README.md
 #   launcher/assets/README.md
 #
+# The root README Structure code block is generated from the complete recursive
+# repository inventory by scripts/project-structure-audit.js. Do not hand-edit
+# that ASCII tree; new files/directories are inserted automatically on each audit.
 # Structure (mirrored across those files):
 #   1. Title + short pitch
 #   2. Key facts / links (tables where useful)
@@ -16,8 +19,8 @@ name: README integrity check
 #   5. Legal (where applicable)
 #   6. AUTO-GENERATED integrity block at the end only
 #
-# scripts/readme-integrity-check.js must NOT rewrite the hand-written layout.
-# It only upserts content between:
+# scripts/readme-integrity-check.js preserves hand-written layout and prose.
+# It regenerates only the root README Structure code block, then upserts content between:
 #   <!-- AUTO-GENERATED: readme-integrity-check -->
 #   <!-- END AUTO-GENERATED -->
 # and the mobile facts markers on mobile/README.md.
