@@ -91,6 +91,7 @@ jobs:
           node scripts/test-doc-audit.js
           node test/dynamic-doc-audit.test.js
           node test/release-audit.test.js
+          node test/project-structure-audit.test.js
 
       - name: Scan source and update integrity sections only
         id: check

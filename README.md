@@ -77,6 +77,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - ⭐ **Repo stats** — Stars, forks, watchers, issues, language; **`/api/repo` background refresh every 60s** + client poll; `checkedAt` in response.
 - 🔑 Optional **`GITHUB_TOKEN`** / **`GH_TOKEN`** on the server for authenticated GitHub rate limits (avoids **403** on shared Render IPs).
 - 📦 **GitHub Releases integrity audit** — `scripts/release-audit.js` checks the Windows, iOS, and Android release tags and assets, then downloads assets up to 100 MiB to verify their byte size and SHA-256 against GitHub metadata.
+- 🗂️ **Complete project structure audit** — `scripts/project-structure-audit.js` inventories every repository file/directory (including binary assets) and checks that every GitHub Actions workflow is listed in the root README Structure tree.
 
 ### 📰 News & analytics
 - 💬 **Rockstar Newswire** — Live feed via `/api/news` (GraphQL NewswireList, 30s cache); toggleable panel.
@@ -127,11 +128,13 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── package.json               # npm start → node app.js (express)
 ├── scripts/
 │   ├── readme-integrity-check.js
+│   ├── project-structure-audit.js
 │   ├── release-audit.js
 │   ├── integrity-report.json
 │   └── sync-backgrounds.js
 ├── test/
-│   └── release-audit.test.js
+│   ├── release-audit.test.js
+│   └── project-structure-audit.test.js
 ├── launcher/                  # Windows C++ WebView2 shell
 │   ├── GtaViCountdown.sln
 │   ├── src/                   # AppWindow.cpp, main.cpp, app.rc
@@ -146,7 +149,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   ├── readme-integrity.yml   # every 4h + on source push
 │   ├── sync-backgrounds.yml
 │   ├── ensure-gradle-wrapper.yml
-│   └── ios-build.yml
+│   ├── ios-build.yml
+│   └── desktop-build-release.yml
 └── README.md
 ```
 
