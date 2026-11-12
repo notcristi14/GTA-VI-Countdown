@@ -1,7 +1,7 @@
 {
   "lastContentUpdateAt": "2026-11-12T13:42:53.413Z",
-  "commit": "b2002d2a4b837bdbcd83ace82e1aa8b11875e982",
-  "baseCommit": "b8cc9e3f8cea56f842df2d3bbf058cd6dea932ac",
+  "commit": "1fc2ba37a397db2ef6dada61db61c11ab2a65e7c",
+  "baseCommit": "1f8faaa7e43f30d31d7ae80ab07b560f8abb35d4",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -291,7 +291,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-12T13:42:55.027Z",
+    "checkedAt": "2026-11-12T13:48:14.844Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -839,8 +839,8 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "b8cc9e3f8cea56f842df2d3bbf058cd6dea932ac",
-    "headCommit": "b2002d2a4b837bdbcd83ace82e1aa8b11875e982",
+    "baseCommit": "1f8faaa7e43f30d31d7ae80ab07b560f8abb35d4",
+    "headCommit": "1fc2ba37a397db2ef6dada61db61c11ab2a65e7c",
     "changedFiles": 1,
     "analyzedFiles": 1,
     "skippedFiles": [],
@@ -853,7 +853,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "test/project-structure-audit.test.js",
+        "path": "mobile/README.md",
         "status": "M",
         "oldPath": null,
         "findings": 0,
