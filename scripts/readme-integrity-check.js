@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { runDocumentationAudit, formatDocFindingsMarkdown, DOC_SPECS } = require('./doc-audit');
 const { runDynamicDocumentationAudit } = require('./dynamic-doc-audit');
+const { auditReleases } = require('./release-audit');
 const ROOT = path.resolve(__dirname, '..');
 const now = new Date().toISOString();
 const commitSha = process.env.GITHUB_SHA || 'local';
@@ -20,6 +21,7 @@ const stripVolatile = (s) => s
   .replace(/commit `[a-f0-9]+`/gi, 'commit `SHA`')
   .replace(/commit `local`/gi, 'commit `SHA`')
   .replace(/"lastContentUpdateAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
+  .replace(/"checkedAt":\s*"[^"]+"/g, '"checkedAt":"STABLE"')
   .replace(/"generatedAt":\s*"[^"]+"/g, '"lastContentUpdateAt":"STABLE"')
   .replace(/"commit":\s*"[^"]+"/g, '"commit":"STABLE"')
   .replace(/Status: \*\*[^*]+\*\* · changed files: \d+ · analyzed: \d+ · confirmed findings: \d+ · potential risks: \d+( · base `[a-f0-9]+`)?/g, 'Status: **STABLE** · changed files: N · analyzed: N · confirmed findings: N · potential risks: N · base `SHA`')
@@ -84,7 +86,7 @@ function upsertGenerated(content, generatedBody) {
   cleaned = cleaned.replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '');
   return cleaned + '\n' + block + '\n';
 }
-if (require.main === module) {
+async function main() {
 const MAIN_KT = 'mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt';
 const IOS_VC = 'mobile/ios/VICountdown/ViewController.swift';
 const APP_WINDOW = 'launcher/src/AppWindow.cpp';
@@ -228,6 +230,9 @@ if (dynSummary.status === 'partial' || dynSummary.status === 'unavailable') {
   check('dyn-audit-coverage', 'Dynamic audit analyzed all relevant changed files', true, 'status=' + (dynSummary.status || 'complete') + ' analyzed=' + (dynSummary.analyzedFiles || 0), false);
 }
 
+const releaseAudit = await auditReleases({ repository: process.env.GITHUB_REPOSITORY || 'notcristi14/GTA-VI-Countdown', token: process.env.GITHUB_TOKEN || process.env.GH_TOKEN });
+for (const c of releaseAudit.checks) checks.push(c);
+
 const passed = checks.filter((c) => c.ok).length;
 const failed = checks.filter((c) => !c.ok);
 const criticalFailed = failed.filter((c) => c.critical);
@@ -236,7 +241,8 @@ const report = {
   commit: commitSha,
   baseCommit: dynSummary.baseCommit || null,
   timestampSemantics: 'lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value',
-  analysisType: 'static-source-plus-dynamic-git-diff',
+  analysisType: 'static-source-plus-dynamic-git-diff-plus-github-releases',
+  releaseAudit,
   expectedMobileHome: EXPECTED_MOBILE_HOME,
   readmeFilesScanned: readmeFiles,
   readmeFileCount: readmeFiles.length,
@@ -275,7 +281,9 @@ writeIfChanged('scripts/integrity-report.json', JSON.stringify(report, null, 2))
 function statusTable() { return '| ID | Claim | Status | Detail |\n|----|-------|--------|--------|\n' + checks.map((c) => '| `' + c.id + '` | ' + c.claim.replace(/\|/g, '/') + ' | ' + (c.ok ? 'PASS' : 'FAIL') + ' | ' + c.detail.replace(/\|/g, '/') + ' |').join('\n'); }
 function integritySection(scope) {
   const dynNote = dynSummary.status ? ('\n\n### Dynamic change audit\n\nStatus: **' + dynSummary.status + '** · changed files: ' + (dynSummary.changedFiles || 0) + ' · analyzed: ' + (dynSummary.analyzedFiles || 0) + ' · confirmed findings: ' + (dynSummary.confirmedFindings || 0) + ' · potential risks: ' + (dynSummary.potentialRisks || 0) + (dynSummary.baseCommit ? ' · base `' + String(dynSummary.baseCommit).slice(0, 7) + '`' : '') + '\n') : '';
-  return '## Automated integrity status\n\nLast content update: **' + now + '** · commit `' + commitSha.slice(0, 7) + '` · **' + passed + '/' + checks.length + ' passed**' + (criticalFailed.length ? ' · **' + criticalFailed.length + ' critical failures**' : '') + (docFindings.length ? ' · **' + docFindings.length + ' doc findings**' : '') + (dynFindings.length ? ' · **' + dynFindings.length + ' dynamic findings**' : '') + (scope ? ' · ' + scope : '') + '\n\nExpected mobile home URL: `' + EXPECTED_MOBILE_HOME + '`  \nAndroid actual: `' + (androidHome || '(not found)') + '` · iOS actual: `' + (iosHome || '(not found)') + '`\n\n' + statusTable() + formatDocFindingsMarkdown(docFindings) + dynNote + '\n*Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*\n';
+  const releaseRows = releaseAudit.releases.map((r) => '| ' + r.platform + ' | `' + r.tag + '` | ' + (r.assets.length && r.assets.every((a) => a.bytesVerified) ? 'bytes + SHA-256 verified' : r.assets.length && r.assets.every((a) => a.size > 0) ? 'metadata only' : 'failed') + ' | ' + r.assets.length + ' asset(s) |').join('\n');
+  const releaseNote = '\n\n### GitHub Releases\n\n' + (releaseRows ? '| Platform | Tag | Audit | Assets |\n|---|---|---|---:|\n' + releaseRows : 'Release data unavailable; see failed checks.') + '\n\nRelease audit: **' + releaseAudit.summary.passed + '/' + releaseAudit.summary.total + ' checks passed** · status: **' + releaseAudit.status + '**. Downloadable assets are fetched and their byte size/SHA-256 are compared with GitHub metadata (assets above the 100 MiB safety limit are metadata-only).\n'
+  return '## Automated integrity status\n\nLast content update: **' + now + '** · commit `' + commitSha.slice(0, 7) + '` · **' + passed + '/' + checks.length + ' passed**' + (criticalFailed.length ? ' · **' + criticalFailed.length + ' critical failures**' : '') + (docFindings.length ? ' · **' + docFindings.length + ' doc findings**' : '') + (dynFindings.length ? ' · **' + dynFindings.length + ' dynamic findings**' : '') + (scope ? ' · ' + scope : '') + '\n\nExpected mobile home URL: `' + EXPECTED_MOBILE_HOME + '`  \nAndroid actual: `' + (androidHome || '(not found)') + '` · iOS actual: `' + (iosHome || '(not found)') + '`\n\n'  + statusTable() + formatDocFindingsMarkdown(docFindings) + releaseNote + dynNote + '\n*Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*\n';
 }
 let changed = false;
 function updateReadmeGenerated(rel, scope) { if (!exists(rel)) return; const before = read(rel); const after = upsertGenerated(before, integritySection(scope)); if (writeIfChanged(rel, after)) changed = true; }
@@ -289,6 +297,7 @@ console.log(changed ? 'README_CHANGED=1' : 'README_CHANGED=0');
 if (criticalFailed.length > 0) { console.error('CRITICAL_FAILURES=' + criticalFailed.length + ' ' + criticalFailed.map((c) => c.id).join(',')); process.exit(1); }
 process.exit(0);
 }
+if (require.main === module) main().catch((error) => { console.error('Integrity checker failed:', error && error.stack ? error.stack : error); process.exit(1); });
 
 module.exports = { findReadmes, upsertGenerated, MARKER_START, MARKER_END, ROOT };
 
