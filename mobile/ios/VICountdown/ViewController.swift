@@ -2,8 +2,9 @@ import UIKit
 import WebKit
 
 /// Native WKWebView shell — same behavior as the Android app.
-/// Home: Eastern Europe countdown; same-origin and official embeds stay in-app;
-/// other main-frame links open in Safari. Iframe loads never open externally.
+/// Home: site root; users choose a countdown region in the web UI.
+/// Same-origin and official embeds stay in-app; other main-frame links open in Safari.
+/// Iframe loads never open externally.
 /// window.open / target=_blank (e.g. Latest update card) open in Safari.
 final class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
