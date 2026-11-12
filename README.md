@@ -115,8 +115,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ## 📁 Structure
 
 ```
-├── .github/
-│   └── workflows/
+├── .github/workflows/
 │       ├── desktop-build-release.yml
 │       ├── ensure-gradle-wrapper.yml
 │       ├── ios-build.yml
