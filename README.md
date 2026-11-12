@@ -76,6 +76,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - 📜 **Commit history panel** — Recent commits list (scrollable, up to 15).
 - ⭐ **Repo stats** — Stars, forks, watchers, issues, language; **`/api/repo` background refresh every 60s** + client poll; `checkedAt` in response.
 - 🔑 Optional **`GITHUB_TOKEN`** / **`GH_TOKEN`** on the server for authenticated GitHub rate limits (avoids **403** on shared Render IPs).
+- 📦 **GitHub Releases integrity audit** — `scripts/release-audit.js` checks the Windows, iOS, and Android release tags and assets, then downloads assets up to 100 MiB to verify their byte size and SHA-256 against GitHub metadata.
 
 ### 📰 News & analytics
 - 💬 **Rockstar Newswire** — Live feed via `/api/news` (GraphQL NewswireList, 30s cache); toggleable panel.
@@ -126,8 +127,11 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── package.json               # npm start → node app.js (express)
 ├── scripts/
 │   ├── readme-integrity-check.js
+│   ├── release-audit.js
 │   ├── integrity-report.json
 │   └── sync-backgrounds.js
+├── test/
+│   └── release-audit.test.js
 ├── launcher/                  # Windows C++ WebView2 shell
 │   ├── GtaViCountdown.sln
 │   ├── src/                   # AppWindow.cpp, main.cpp, app.rc
@@ -173,6 +177,7 @@ npm start
 | Variable | Purpose |
 | --- | --- |
 | **`GITHUB_TOKEN`** (or `GH_TOKEN`) | Authenticated GitHub (~5k/hr). Without it: 60/hr per IP → often **403** on Render. |
+| `GITHUB_REPOSITORY` | GitHub Actions-provided `owner/repo` slug used by the Releases audit to inspect tags and downloadable assets. |
 | `GA_PROPERTY_ID` / `GA_CLIENT_EMAIL` / `GA_PRIVATE_KEY` | Optional GA4 panel |
 
 ---
