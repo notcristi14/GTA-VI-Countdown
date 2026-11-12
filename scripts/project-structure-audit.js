@@ -39,8 +39,19 @@ function buildTree(inventory){
   ].sort((a,b)=>a.name.localeCompare(b.name)||Number(b.dir)-Number(a.dir));
   entries.forEach((entry,index)=>{
    const last=index===entries.length-1,branch=last?'└── ':'├── ';
-   lines.push(prefix+branch+entry.name+(entry.dir?'/':''));
-   if(entry.dir)render(parent?parent+'/'+entry.name:entry.name,prefix+(last?'    ':'│   '));
+   let displayName=entry.name,childPath=parent?parent+'/'+entry.name:entry.name;
+   if(entry.dir){
+    let child=nodes.get(childPath);
+    // Compact directory-only chains (for example .github/workflows/) without hiding inventory entries.
+    while(child&&child.files.size===0&&child.dirs.size===1){
+     const next=[...child.dirs][0];
+     displayName+='/'+next;
+     childPath+='/'+next;
+     child=nodes.get(childPath);
+    }
+   }
+   lines.push(prefix+branch+displayName+(entry.dir?'/':''));
+   if(entry.dir)render(childPath,prefix+(last?'    ':'│   '));
   });
  }
  render('','');
