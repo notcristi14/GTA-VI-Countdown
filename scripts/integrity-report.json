@@ -1,12 +1,12 @@
 {
-  "lastContentUpdateAt": "2026-11-12T12:45:19.019Z",
-  "commit": "4b5c80351439269cec2b2e4a7042c910fe253748",
-  "baseCommit": "bc10d597786173bc400afa20c2e62cd746e77579",
+  "lastContentUpdateAt": "2026-11-12T12:46:20.189Z",
+  "commit": "21a1b730911f6de0c5232a96b16b1759fe00df0d",
+  "baseCommit": "c3b1af0021e1b373df406897e366965cc5dd10cb",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-github-releases",
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-12T12:45:21.428Z",
+    "checkedAt": "2026-11-12T12:46:21.348Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -372,11 +372,11 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 109,
+    "total": 107,
     "passed": 107,
-    "failed": 2,
+    "failed": 0,
     "criticalFailed": 0,
-    "documentationFindings": 2
+    "documentationFindings": 0
   },
   "detectedFeatures": {
     "regions15": true,
@@ -546,34 +546,7 @@
     "webView2": true,
     "source": "launcher/src/AppWindow.cpp"
   },
-  "missingOrOutdatedDocumentation": [
-    {
-      "id": "dyn-new-env-GITHUB_REPOSITORY",
-      "severity": "low",
-      "documentationFile": "README.md",
-      "sourceFile": "scripts/release-audit.js",
-      "problem": "Environment variable GITHUB_REPOSITORY is newly referenced in scripts/release-audit.js and is not mentioned in any README.",
-      "suggestedCorrection": "Document `GITHUB_REPOSITORY` in the environment section of the appropriate README, or confirm it is internal-only.",
-      "kind": "missing",
-      "deterministic": true,
-      "confirmed": false,
-      "potentialRisk": true,
-      "changeType": "A"
-    },
-    {
-      "id": "dyn-new-file-releaseauditjs",
-      "severity": "low",
-      "documentationFile": "README.md",
-      "sourceFile": "scripts/release-audit.js",
-      "problem": "New source file `scripts/release-audit.js` introduced. It is not mentioned in any README and has no matching static DOC_SPECS entry.",
-      "suggestedCorrection": "Review whether `scripts/release-audit.js` should appear in the project structure or feature documentation.",
-      "kind": "missing",
-      "deterministic": true,
-      "confirmed": false,
-      "potentialRisk": true,
-      "changeType": "A"
-    }
-  ],
+  "missingOrOutdatedDocumentation": [],
   "documentationAudit": {
     "deterministic": true,
     "specsEvaluated": 21,
@@ -581,46 +554,22 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "bc10d597786173bc400afa20c2e62cd746e77579",
-    "headCommit": "4b5c80351439269cec2b2e4a7042c910fe253748",
-    "changedFiles": 4,
-    "analyzedFiles": 4,
+    "baseCommit": "c3b1af0021e1b373df406897e366965cc5dd10cb",
+    "headCommit": "21a1b730911f6de0c5232a96b16b1759fe00df0d",
+    "changedFiles": 1,
+    "analyzedFiles": 1,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
-    "documentationRelevantChanges": 1,
+    "documentationRelevantChanges": 0,
     "missingDocumentationFindings": 0,
     "outdatedDocumentationFindings": 0,
-    "potentialRisks": 2,
+    "potentialRisks": 0,
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": ".github/workflows/readme-integrity.yml",
+        "path": "README.md",
         "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "scripts/readme-integrity-check.js",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "scripts/release-audit.js",
-        "status": "A",
-        "oldPath": null,
-        "findings": 2,
-        "relevant": true,
-        "unreadable": false
-      },
-      {
-        "path": "test/release-audit.test.js",
-        "status": "A",
         "oldPath": null,
         "findings": 0,
         "relevant": false,
@@ -630,20 +579,7 @@
     "status": "complete",
     "error": null
   },
-  "failedChecks": [
-    {
-      "id": "dyn-dyn-new-env-GITHUB_REPOSITORY",
-      "claim": "Dynamic doc impact: dyn-new-env-GITHUB_REPOSITORY",
-      "detail": "missing · README.md · Document `GITHUB_REPOSITORY` in the environment section of the appropriate README, or confirm it is ",
-      "critical": false
-    },
-    {
-      "id": "dyn-dyn-new-file-releaseauditjs",
-      "claim": "Dynamic doc impact: dyn-new-file-releaseauditjs",
-      "detail": "missing · README.md · Review whether `scripts/release-audit.js` should appear in the project structure or feature document",
-      "critical": false
-    }
-  ],
+  "failedChecks": [],
   "checks": [
     {
       "id": "file-html",
@@ -1122,24 +1058,10 @@
       "critical": false
     },
     {
-      "id": "dyn-dyn-new-env-GITHUB_REPOSITORY",
-      "claim": "Dynamic doc impact: dyn-new-env-GITHUB_REPOSITORY",
-      "ok": false,
-      "detail": "missing · README.md · Document `GITHUB_REPOSITORY` in the environment section of the appropriate README, or confirm it is ",
-      "critical": false
-    },
-    {
-      "id": "dyn-dyn-new-file-releaseauditjs",
-      "claim": "Dynamic doc impact: dyn-new-file-releaseauditjs",
-      "ok": false,
-      "detail": "missing · README.md · Review whether `scripts/release-audit.js` should appear in the project structure or feature document",
-      "critical": false
-    },
-    {
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=4",
+      "detail": "status=complete analyzed=1",
       "critical": false
     },
     {
