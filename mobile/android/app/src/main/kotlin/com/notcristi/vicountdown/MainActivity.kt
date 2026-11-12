@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Pure Android WebView shell — no Flutter.
- * Loads the Eastern Europe countdown; same-origin stays in-app; other links open externally.
+ * Loads the site root; users choose a countdown region in the web UI. Same-origin stays in-app; other links open externally.
  */
 class MainActivity : AppCompatActivity() {
 
