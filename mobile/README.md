@@ -144,7 +144,7 @@ If Match is **NO**, the native shell home URL does not match the intended root U
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-11T12:55:27.782Z** · commit `1b1c2d3` · **69/69 passed** · mobile
+Last content update: **2026-11-11T12:55:27.782Z** · commit `af9bbce` · **69/69 passed** · mobile
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -227,7 +227,7 @@ No missing or outdated documentation findings from deterministic DOC_SPECS / API
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 5 · analyzed: 5 · confirmed findings: 0 · potential risks: 0 · base `9b2d330`
+Status: **complete** · changed files: 5 · analyzed: 5 · confirmed findings: 0 · potential risks: 0 · base `1b1c2d3`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->

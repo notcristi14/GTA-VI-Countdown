@@ -1,7 +1,7 @@
 {
   "lastContentUpdateAt": "2026-11-11T12:55:27.782Z",
-  "commit": "1b1c2d3576e09ff21d38b948f3e0184e65cbc294",
-  "baseCommit": "9b2d33067215acfcbbc16d95c720d2bd67d8c5b4",
+  "commit": "af9bbcee355ca5af1449b949a691137127148825",
+  "baseCommit": "1b1c2d3576e09ff21d38b948f3e0184e65cbc294",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff",
   "expectedMobileHome": "https://gta-vi-countdown.onrender.com/",
@@ -195,8 +195,8 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "9b2d33067215acfcbbc16d95c720d2bd67d8c5b4",
-    "headCommit": "1b1c2d3576e09ff21d38b948f3e0184e65cbc294",
+    "baseCommit": "1b1c2d3576e09ff21d38b948f3e0184e65cbc294",
+    "headCommit": "af9bbcee355ca5af1449b949a691137127148825",
     "changedFiles": 5,
     "analyzedFiles": 5,
     "skippedFiles": [],
