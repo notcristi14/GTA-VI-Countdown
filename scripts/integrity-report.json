@@ -1,7 +1,7 @@
 {
-  "lastContentUpdateAt": "2026-11-12T13:32:18.122Z",
-  "commit": "b816791821ec3acc04f28a46b9934ee4fec6f3f5",
-  "baseCommit": "3f21a13410a689738659e5fc6e3df8405215a078",
+  "lastContentUpdateAt": "2026-11-12T13:42:53.413Z",
+  "commit": "b2002d2a4b837bdbcd83ace82e1aa8b11875e982",
+  "baseCommit": "b8cc9e3f8cea56f842df2d3bbf058cd6dea932ac",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -291,7 +291,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-12T13:32:20.127Z",
+    "checkedAt": "2026-11-12T13:42:55.027Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -657,8 +657,8 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 114,
-    "passed": 114,
+    "total": 115,
+    "passed": 115,
     "failed": 0,
     "criticalFailed": 0,
     "documentationFindings": 0
@@ -839,8 +839,8 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "3f21a13410a689738659e5fc6e3df8405215a078",
-    "headCommit": "b816791821ec3acc04f28a46b9934ee4fec6f3f5",
+    "baseCommit": "b8cc9e3f8cea56f842df2d3bbf058cd6dea932ac",
+    "headCommit": "b2002d2a4b837bdbcd83ace82e1aa8b11875e982",
     "changedFiles": 1,
     "analyzedFiles": 1,
     "skippedFiles": [],
@@ -853,7 +853,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "README.md",
+        "path": "test/project-structure-audit.test.js",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -878,6 +878,13 @@
       "claim": "Root README Structure section is present",
       "ok": true,
       "detail": "complete",
+      "critical": true
+    },
+    {
+      "id": "project-structure-tree",
+      "claim": "Root README ASCII tree matches the complete recursive inventory",
+      "ok": true,
+      "detail": "all included files and directories are listed",
       "critical": true
     },
     {

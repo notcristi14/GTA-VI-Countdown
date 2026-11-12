@@ -116,46 +116,206 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 
 ```
 ├── .github/workflows/
-│       ├── desktop-build-release.yml
-│       ├── ensure-gradle-wrapper.yml
-│       ├── ios-build.yml
-│       ├── readme-integrity.yml
-│       └── sync-backgrounds.yml
-├── bgs/                         # Artwork pack: 143 image files + metadata
+│   ├── desktop-build-release.yml
+│   ├── ensure-gradle-wrapper.yml
+│   ├── ios-build.yml
+│   ├── readme-integrity.yml
+│   └── sync-backgrounds.yml
+├── app.js
+├── backgrounds-api.js
+├── bg.jpeg
+├── bgs/
 │   ├── .rockstar-meta.json
+│   ├── Ambrosia_Postcard_landscape.jpg
+│   ├── Ambrosia_Postcard_phone.jpg
+│   ├── Ambrosia_Postcard_portrait.jpg
+│   ├── Ambrosia_Postcard_square.jpg
+│   ├── Ambrosia_Postcard_tablet.jpg
+│   ├── Ambrosia_Postcard_ultrawide.jpg
+│   ├── Boobie_Ike_landscape.jpg
+│   ├── Boobie_Ike_phone.jpg
+│   ├── Boobie_Ike_portrait.jpg
+│   ├── Boobie_Ike_square.jpg
+│   ├── Boobie_Ike_tablet.jpg
+│   ├── Boobie_Ike_ultrawide.jpg
+│   ├── Brian_Heder_landscape.jpg
+│   ├── Brian_Heder_phone.jpg
+│   ├── Brian_Heder_portrait.jpg
+│   ├── Brian_Heder_square.jpg
+│   ├── Brian_Heder_tablet.jpg
+│   ├── Brian_Heder_ultrawide.jpg
+│   ├── Cal_Hampton_landscape.jpg
+│   ├── Cal_Hampton_phone.jpg
+│   ├── Cal_Hampton_portrait.jpg
+│   ├── Cal_Hampton_square.jpg
+│   ├── Cal_Hampton_tablet.jpg
+│   ├── Cal_Hampton_ultrawide.jpg
+│   ├── DreQuan_Priest_landscape.jpg
+│   ├── DreQuan_Priest_phone.jpg
+│   ├── DreQuan_Priest_portrait.jpg
+│   ├── DreQuan_Priest_square.jpg
+│   ├── DreQuan_Priest_tablet.jpg
+│   ├── DreQuan_Priest_ultrawide.jpg
+│   ├── Grassrivers_Postcard_landscape.jpg
+│   ├── Grassrivers_Postcard_phone.jpg
+│   ├── Grassrivers_Postcard_portrait.jpg
+│   ├── Grassrivers_Postcard_square.jpg
+│   ├── Grassrivers_Postcard_tablet.jpg
+│   ├── Grassrivers_Postcard_ultrawide.jpg
+│   ├── Jason_and_Lucia_01_landscape.jpg
+│   ├── Jason_and_Lucia_01_phone.jpg
+│   ├── Jason_and_Lucia_01_portrait.jpg
+│   ├── Jason_and_Lucia_01_square.jpg
+│   ├── Jason_and_Lucia_01_tablet.jpg
+│   ├── Jason_and_Lucia_01_ultrawide.jpg
+│   ├── Jason_and_Lucia_01_With_Logos_landscape.jpg
+│   ├── Jason_and_Lucia_01_With_Logos_portrait.jpg
+│   ├── Jason_and_Lucia_01_With_Logos_square.jpg
+│   ├── Jason_and_Lucia_02_landscape.jpg
+│   ├── Jason_and_Lucia_02_phone_A.jpg
+│   ├── Jason_and_Lucia_02_phone_B.jpg
+│   ├── Jason_and_Lucia_02_portrait.jpg
+│   ├── Jason_and_Lucia_02_square.jpg
+│   ├── Jason_and_Lucia_02_tablet.jpg
+│   ├── Jason_and_Lucia_02_ultrawide.jpg
+│   ├── Jason_and_Lucia_02_With_Logos_landscape.jpg
+│   ├── Jason_and_Lucia_02_With_Logos_portrait.jpg
+│   ├── Jason_and_Lucia_02_With_Logos_square.jpg
+│   ├── Jason_and_Lucia_Beach_landscape.jpg
+│   ├── Jason_and_Lucia_Beach_phone.jpg
+│   ├── Jason_and_Lucia_Beach_portrait.jpg
+│   ├── Jason_and_Lucia_Beach_square.jpg
+│   ├── Jason_and_Lucia_Beach_tablet.jpg
+│   ├── Jason_and_Lucia_Beach_ultrawide.jpg
+│   ├── Jason_and_Lucia_Beach_With_Logos_landscape.jpg
+│   ├── Jason_and_Lucia_Beach_With_Logos_portrait.jpg
+│   ├── Jason_and_Lucia_Beach_With_Logos_square.jpg
+│   ├── Jason_and_Lucia_Motel_landscape.jpg
+│   ├── Jason_and_Lucia_Motel_phone.jpg
+│   ├── Jason_and_Lucia_Motel_portrait.jpg
+│   ├── Jason_and_Lucia_Motel_square.jpg
+│   ├── Jason_and_Lucia_Motel_tablet.jpg
+│   ├── Jason_and_Lucia_Motel_ultrawide.jpg
+│   ├── Jason_and_Lucia_Robbery_landscape.jpg
+│   ├── Jason_and_Lucia_Robbery_phone.jpg
+│   ├── Jason_and_Lucia_Robbery_portrait.jpg
+│   ├── Jason_and_Lucia_Robbery_square.jpg
+│   ├── Jason_and_Lucia_Robbery_tablet.jpg
+│   ├── Jason_and_Lucia_Robbery_ultrawide.jpg
+│   ├── Jason_and_Lucia_Robbery_With_Logo_landscape.jpg
+│   ├── Jason_and_Lucia_Robbery_With_Logo_portrait.jpg
+│   ├── Jason_and_Lucia_Robbery_With_Logo_square.jpg
+│   ├── Jason_Lucia_Lock_And_Load_landscape.jpg
+│   ├── Jason_Lucia_Lock_And_Load_phone.jpg
+│   ├── Jason_Lucia_Lock_And_Load_portrait.jpg
+│   ├── Jason_Lucia_Lock_And_Load_square.jpg
+│   ├── Jason_Lucia_Lock_And_Load_tablet.jpg
+│   ├── Jason_Lucia_Lock_And_Load_ultrawide.jpg
+│   ├── Jason_Lucia_Lock_And_Load_With_Logos_landscape.jpg
+│   ├── Jason_Lucia_Lock_And_Load_With_Logos_portrait.jpg
+│   ├── Jason_Lucia_Lock_And_Load_With_Logos_square.jpg
+│   ├── Jason_Lucia_Rooftop_landscape.jpg
+│   ├── Jason_Lucia_Rooftop_phone.jpg
+│   ├── Jason_Lucia_Rooftop_portrait.jpg
+│   ├── Jason_Lucia_Rooftop_square.jpg
+│   ├── Jason_Lucia_Rooftop_tablet.jpg
+│   ├── Jason_Lucia_Rooftop_ultrawide.jpg
+│   ├── Jason_Lucia_Rooftop_With_Logos_landscape.jpg
+│   ├── Jason_Lucia_Rooftop_With_Logos_portrait.jpg
+│   ├── Jason_Lucia_Rooftop_With_Logos_square.jpg
+│   ├── Leonida_Keys_Postcard_landscape.jpg
+│   ├── Leonida_Keys_Postcard_phone.jpg
+│   ├── Leonida_Keys_Postcard_portrait.jpg
+│   ├── Leonida_Keys_Postcard_square.jpg
+│   ├── Leonida_Keys_Postcard_tablet.jpg
+│   ├── Leonida_Keys_Postcard_ultrawide.jpg
 │   ├── main.jpeg
-│   └── ...                      # Multi-size artwork variants
-├── launcher/                    # Windows C++ / WebView2 desktop app
+│   ├── Mount_Kalaga_National_Park_Postcard_landscape.jpg
+│   ├── Mount_Kalaga_National_Park_Postcard_phone.jpg
+│   ├── Mount_Kalaga_National_Park_Postcard_portrait.jpg
+│   ├── Mount_Kalaga_National_Park_Postcard_square.jpg
+│   ├── Mount_Kalaga_National_Park_Postcard_tablet.jpg
+│   ├── Mount_Kalaga_National_Park_Postcard_ultrawide.jpg
+│   ├── Official_Cover_Art_landscape.jpg
+│   ├── Official_Cover_Art_phone.jpg
+│   ├── Official_Cover_Art_portrait.jpg
+│   ├── Official_Cover_Art_square.jpg
+│   ├── Official_Cover_Art_tablet.jpg
+│   ├── Official_Cover_Art_ultrawide.jpg
+│   ├── Port_Gellhorn_Postcard_landscape.jpg
+│   ├── Port_Gellhorn_Postcard_phone.jpg
+│   ├── Port_Gellhorn_Postcard_portrait.jpg
+│   ├── Port_Gellhorn_Postcard_square.jpg
+│   ├── Port_Gellhorn_Postcard_tablet.jpg
+│   ├── Port_Gellhorn_Postcard_ultrawide.jpg
+│   ├── Raul_Bautista_landscape.jpg
+│   ├── Raul_Bautista_phone.jpg
+│   ├── Raul_Bautista_portrait.jpg
+│   ├── Raul_Bautista_square.jpg
+│   ├── Raul_Bautista_tablet.jpg
+│   ├── Raul_Bautista_ultrawide.jpg
+│   ├── Real_Dimez_landscape.jpg
+│   ├── Real_Dimez_phone.jpg
+│   ├── Real_Dimez_portrait.jpg
+│   ├── Real_Dimez_square.jpg
+│   ├── Real_Dimez_tablet.jpg
+│   ├── Real_Dimez_ultrawide.jpg
+│   ├── The_Album_Cover_Art_landscape.jpg
+│   ├── The_Album_Cover_Art_portrait.jpg
+│   ├── The_Album_Cover_Art_square.jpg
+│   ├── Vice_City_Postcard_landscape.jpg
+│   ├── Vice_City_Postcard_phone.jpg
+│   ├── Vice_City_Postcard_portrait.jpg
+│   ├── Vice_City_Postcard_square.jpg
+│   ├── Vice_City_Postcard_tablet.jpg
+│   └── Vice_City_Postcard_ultrawide.jpg
+├── github-api.js
+├── gta-vi-countdown.html
+├── launcher/
+│   ├── .gitignore
 │   ├── assets/
 │   │   ├── .gitkeep
 │   │   ├── GtaLogo.ico
 │   │   └── README.md
-│   ├── src/
-│   │   ├── AppWindow.cpp
-│   │   ├── AppWindow.h
-│   │   ├── app.rc
-│   │   ├── main.cpp
-│   │   └── resource.h
-│   ├── .gitignore
 │   ├── GtaViCountdown.sln
 │   ├── GtaViCountdown.vcxproj
 │   ├── GtaViCountdown.vcxproj.filters
 │   ├── packages.config
-│   └── README.md
+│   ├── README.md
+│   └── src/
+│       ├── app.rc
+│       ├── AppWindow.cpp
+│       ├── AppWindow.h
+│       ├── main.cpp
+│       └── resource.h
+├── logo.png
 ├── mobile/
 │   ├── android/
 │   │   ├── app/
-│   │   │   ├── src/main/
-│   │   │   │   ├── AndroidManifest.xml
-│   │   │   │   ├── kotlin/com/notcristi/vicountdown/MainActivity.kt
-│   │   │   │   └── res/
-│   │   │   │       ├── mipmap-hdpi/       # launcher + round icons
-│   │   │   │       ├── mipmap-mdpi/       # launcher + round icons
-│   │   │   │       ├── mipmap-xhdpi/      # launcher + round icons
-│   │   │   │       ├── mipmap-xxhdpi/     # launcher + round icons
-│   │   │   │       ├── mipmap-xxxhdpi/    # launcher + round icons
-│   │   │   │       └── values/styles.xml
-│   │   │   └── build.gradle
+│   │   │   ├── build.gradle
+│   │   │   └── src/main/
+│   │   │       ├── AndroidManifest.xml
+│   │   │       ├── kotlin/com/notcristi/vicountdown/
+│   │   │       │   └── MainActivity.kt
+│   │   │       └── res/
+│   │   │           ├── mipmap-hdpi/
+│   │   │           │   ├── ic_launcher_round.png
+│   │   │           │   └── ic_launcher.png
+│   │   │           ├── mipmap-mdpi/
+│   │   │           │   ├── ic_launcher_round.png
+│   │   │           │   └── ic_launcher.png
+│   │   │           ├── mipmap-xhdpi/
+│   │   │           │   ├── ic_launcher_round.png
+│   │   │           │   └── ic_launcher.png
+│   │   │           ├── mipmap-xxhdpi/
+│   │   │           │   ├── ic_launcher_round.png
+│   │   │           │   └── ic_launcher.png
+│   │   │           ├── mipmap-xxxhdpi/
+│   │   │           │   ├── ic_launcher_round.png
+│   │   │           │   └── ic_launcher.png
+│   │   │           └── values/
+│   │   │               └── styles.xml
+│   │   ├── build.gradle
 │   │   ├── gradle/wrapper/
 │   │   │   ├── gradle-wrapper.jar
 │   │   │   └── gradle-wrapper.properties
@@ -164,23 +324,29 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   │   ├── gradlew.bat
 │   │   ├── local.properties
 │   │   ├── local.properties.example
-│   │   ├── build.gradle
 │   │   └── settings.gradle
-│   ├── ios/
-│   │   ├── VICountdown.xcodeproj/project.pbxproj
-│   │   └── VICountdown/
-│   │       ├── Assets.xcassets/
-│   │       │   ├── AppIcon.appiconset/
-│   │       │   │   ├── AppIcon-1024.png
-│   │       │   │   └── Contents.json
-│   │       │   └── Contents.json
-│   │       ├── AppDelegate.swift
-│   │       ├── Info.plist
-│   │       ├── SceneDelegate.swift
-│   │       └── ViewController.swift
-│   ├── assets/logo.png
+│   ├── assets/
+│   │   └── logo.png
 │   ├── generate_icons.sh
+│   ├── ios/
+│   │   ├── VICountdown/
+│   │   │   ├── AppDelegate.swift
+│   │   │   ├── Assets.xcassets/
+│   │   │   │   ├── AppIcon.appiconset/
+│   │   │   │   │   ├── AppIcon-1024.png
+│   │   │   │   │   └── Contents.json
+│   │   │   │   └── Contents.json
+│   │   │   ├── Info.plist
+│   │   │   ├── SceneDelegate.swift
+│   │   │   └── ViewController.swift
+│   │   └── VICountdown.xcodeproj/
+│   │       └── project.pbxproj
 │   └── README.md
+├── music-discovery.js
+├── music.css
+├── music.js
+├── package.json
+├── README.md
 ├── scripts/
 │   ├── doc-audit.js
 │   ├── dynamic-doc-audit.js
@@ -190,22 +356,11 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   ├── release-audit.js
 │   ├── sync-backgrounds.js
 │   └── test-doc-audit.js
-├── test/
-│   ├── dynamic-doc-audit.test.js
-│   ├── project-structure-audit.test.js
-│   └── release-audit.test.js
-├── app.js
-├── backgrounds-api.js
-├── bg.jpeg
-├── github-api.js
-├── gta-vi-countdown.html
-├── logo.png
-├── music-discovery.js
-├── music.css
-├── music.js
-├── package.json
-├── README.md
-└── stats.json
+├── stats.json
+└── test/
+    ├── dynamic-doc-audit.test.js
+    ├── project-structure-audit.test.js
+    └── release-audit.test.js
 ```
 
 ---
@@ -246,7 +401,7 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-12T13:32:18.122Z** · commit `b816791` · **114/114 passed** · root
+Last content update: **2026-11-12T13:42:53.413Z** · commit `b2002d2` · **115/115 passed** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -255,6 +410,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 |----|-------|--------|--------|
 | `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 220 files · 32 directories · 5 workflows |
 | `project-structure-readme` | Root README Structure section is present | PASS | complete |
+| `project-structure-tree` | Root README ASCII tree matches the complete recursive inventory | PASS | all included files and directories are listed |
 | `workflow-doc--github-workflows-desktop-build-release-yml` | Workflow documented: .github/workflows/desktop-build-release.yml | PASS | listed in root README Structure |
 | `workflow-doc--github-workflows-ensure-gradle-wrapper-yml` | Workflow documented: .github/workflows/ensure-gradle-wrapper.yml | PASS | listed in root README Structure |
 | `workflow-doc--github-workflows-ios-build-yml` | Workflow documented: .github/workflows/ios-build.yml | PASS | listed in root README Structure |
@@ -376,6 +532,8 @@ No missing or outdated documentation findings from deterministic DOC_SPECS / API
 
 Repository inventory: **220 files** across **32 directories** · **4 README.md files** discovered recursively.
 
+ASCII tree synchronization: **PASS** · README tree matches every included file and directory.
+
 Workflow documentation: **5/5** current workflow files listed in the root README Structure section.
 
 | Workflow file | Listed in root README |
@@ -387,7 +545,7 @@ Workflow documentation: **5/5** current workflow files listed in the root README
 | .github/workflows/sync-backgrounds.yml | yes |
 
 
-The complete file and directory inventory, including binary assets, is recorded in scripts/integrity-report.json. Cache/build directories and temporary OS files are excluded.
+The ASCII tree in the root README is generated from the complete recursive file and directory inventory. Cache/build directories and temporary OS files are excluded.
 
 
 ### GitHub Releases
@@ -403,7 +561,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `3f21a13`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `b8cc9e3`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
