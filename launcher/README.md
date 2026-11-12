@@ -41,7 +41,7 @@ See the [root README](../README.md) for:
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-12T13:42:53.413Z** · commit `a1f6d48` · **115/115 passed** · launcher
+Last content update: **2026-11-12T13:42:53.413Z** · commit `0e38b88` · **115/115 passed** · launcher
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -124,7 +124,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `readme-discovery` | At least one README.md discovered recursively | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
 | `readme-no-hardcoded-list` | README checks are driven by findReadmes() discovery | PASS | dynamic discovery of 4 README.md file(s) |
 | `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
-| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=1 |
+| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=5 |
 | `releases-api` | GitHub Releases API returned a valid release collection | PASS | 3 release(s) retrieved |
 | `releases-published-count` | At least one published GitHub Release exists | PASS | 3 published release(s) |
 | `release-desktop-v1_0_0-published` | Release desktop-v1.0.0 is published (not a draft) | PASS | draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z |
@@ -201,7 +201,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `b43b343`
+Status: **complete** · changed files: 5 · analyzed: 5 · confirmed findings: 0 · potential risks: 0 · base `a1f6d48`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
