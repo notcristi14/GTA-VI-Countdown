@@ -5,7 +5,7 @@ const path = require('path');
 const { runDocumentationAudit, formatDocFindingsMarkdown, DOC_SPECS } = require('./doc-audit');
 const { runDynamicDocumentationAudit } = require('./dynamic-doc-audit');
 const { auditReleases } = require('./release-audit');
-const { scanProjectStructure, auditProjectStructure, formatProjectStructureMarkdown } = require('./project-structure-audit');
+const { scanProjectStructure, buildTree, replaceStructureCodeBlock, auditProjectStructure, formatProjectStructureMarkdown } = require('./project-structure-audit');
 const ROOT = path.resolve(__dirname, '..');
 const now = new Date().toISOString();
 const commitSha = process.env.GITHUB_SHA || 'local';
@@ -120,7 +120,13 @@ const launcherIco = exists('launcher/assets/GtaLogo.ico');
 const launcherSln = exists('launcher/GtaViCountdown.sln');
 const readmeFiles = findReadmes(ROOT);
 const projectInventory = scanProjectStructure(ROOT);
-const structureAudit = auditProjectStructure(projectInventory, read('README.md'));
+// Regenerate only the fenced ASCII tree in the root README Structure section.
+// All other hand-written README prose and generated integrity sections are preserved.
+const rootReadmeBeforeTreeSync = read('README.md');
+const rootReadmeAfterTreeSync = replaceStructureCodeBlock(rootReadmeBeforeTreeSync, buildTree(projectInventory));
+const structureTreeChanged = rootReadmeAfterTreeSync !== rootReadmeBeforeTreeSync;
+if (structureTreeChanged) writeIfChanged('README.md', rootReadmeAfterTreeSync);
+const structureAudit = auditProjectStructure(projectInventory, rootReadmeAfterTreeSync);
 const structureFindings = structureAudit.findings;
 const apis = { '/api/trailers': routeRegistered(appJs, '/api/trailers') || routeRegistered(musicDisc, '/api/trailers'), '/api/music': routeRegistered(musicDisc, '/api/music') || routeRegistered(appJs, '/api/music'), '/api/repo': routeRegistered(appJs, '/api/repo'), '/api/commits': routeRegistered(appJs, '/api/commits'), '/api/commit': routeRegistered(appJs, '/api/commit'), '/api/news': routeRegistered(appJs, '/api/news'), '/api/stats': routeRegistered(appJs, '/api/stats'), '/api/backgrounds': routeRegistered(bgsApi, '/api/backgrounds') || routeRegistered(appJs, '/api/backgrounds') };
 const regionImpl = {};
@@ -131,6 +137,7 @@ const checks = [];
 function check(id, claim, ok, detail, critical) { checks.push({ id, claim, ok: !!ok, detail: String(detail), critical: critical === true }); }
 check('project-structure-inventory', 'Complete project file/directory inventory generated', true, projectInventory.fileCount + ' files · ' + projectInventory.directoryCount + ' directories · ' + projectInventory.workflows.length + ' workflows', false);
 check('project-structure-readme', 'Root README Structure section is present', structureAudit.status === 'complete', structureAudit.status, true);
+check('project-structure-tree', 'Root README ASCII tree matches the complete recursive inventory', structureAudit.treeMatches, structureAudit.treeMatches ? 'all included files and directories are listed' : 'tree differs from inventory', true);
 for (const workflow of projectInventory.workflows) {
   const documented = !structureAudit.missingWorkflowDocs.includes(workflow);
   check('workflow-doc-' + workflow.replace(/[^a-z0-9]+/gi, '-').toLowerCase(), 'Workflow documented: ' + workflow, documented, documented ? 'listed in root README Structure' : 'MISSING from root README Structure', false);
