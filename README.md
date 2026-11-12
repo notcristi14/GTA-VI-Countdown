@@ -127,11 +127,13 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── package.json               # npm start → node app.js (express)
 ├── scripts/
 │   ├── readme-integrity-check.js
+│   ├── project-structure-audit.js
 │   ├── release-audit.js
 │   ├── integrity-report.json
 │   └── sync-backgrounds.js
 ├── test/
-│   └── release-audit.test.js
+│   ├── release-audit.test.js
+│   └── project-structure-audit.test.js
 ├── launcher/                  # Windows C++ WebView2 shell
 │   ├── GtaViCountdown.sln
 │   ├── src/                   # AppWindow.cpp, main.cpp, app.rc
