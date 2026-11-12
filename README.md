@@ -115,43 +115,98 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ## 📁 Structure
 
 ```
-├── gta-vi-countdown.html      # Frontend UI (countdown, trailers, music, news, repo)
-├── app.js                     # Express entry — routes, static, discovery hooks
-├── music-discovery.js         # /api/music + trailer discovery (30 min jobs)
-├── music.js / music.css       # Music panel UI (centered neon panel)
-├── github-api.js              # GitHub API helpers + GITHUB_TOKEN / GH_TOKEN
-├── backgrounds-api.js         # /api/backgrounds + pack registration
-├── bgs/                       # Artwork pack (multi-size JPGs; 143 image files on disk)
-├── logo.png                   # Site / app logo source
-├── bg.jpeg                    # Fallback background
-├── stats.json                 # Optional GA / stats snapshot
-├── package.json               # npm start → node app.js (express)
-├── scripts/
-│   ├── readme-integrity-check.js
-│   ├── project-structure-audit.js
-│   ├── release-audit.js
-│   ├── integrity-report.json
-│   └── sync-backgrounds.js
-├── test/
-│   ├── release-audit.test.js
-│   └── project-structure-audit.test.js
-├── launcher/                  # Windows C++ WebView2 shell
+├── .github/
+│   └── workflows/
+│       ├── desktop-build-release.yml
+│       ├── ensure-gradle-wrapper.yml
+│       ├── ios-build.yml
+│       ├── readme-integrity.yml
+│       └── sync-backgrounds.yml
+├── bgs/                         # Artwork pack: 143 image files + metadata
+│   ├── .rockstar-meta.json
+│   ├── main.jpeg
+│   └── ...                      # Multi-size artwork variants
+├── launcher/                    # Windows C++ / WebView2 desktop app
+│   ├── assets/
+│   │   ├── .gitkeep
+│   │   ├── GtaLogo.ico
+│   │   └── README.md
+│   ├── src/
+│   │   ├── AppWindow.cpp
+│   │   ├── AppWindow.h
+│   │   ├── app.rc
+│   │   ├── main.cpp
+│   │   └── resource.h
+│   ├── .gitignore
 │   ├── GtaViCountdown.sln
-│   ├── src/                   # AppWindow.cpp, main.cpp, app.rc
-│   └── assets/GtaLogo.ico
+│   ├── GtaViCountdown.vcxproj
+│   ├── GtaViCountdown.vcxproj.filters
+│   ├── packages.config
+│   └── README.md
 ├── mobile/
-│   ├── android/               # Kotlin WebView · Gradle 8.7 · gradlew / gradlew.bat
-│   ├── ios/                   # Swift WKWebView · VICountdown.xcodeproj
+│   ├── android/
+│   │   ├── app/
+│   │   │   ├── src/main/
+│   │   │   │   ├── AndroidManifest.xml
+│   │   │   │   ├── kotlin/com/notcristi/vicountdown/MainActivity.kt
+│   │   │   │   └── res/
+│   │   │   │       ├── mipmap-hdpi/       # launcher + round icons
+│   │   │   │       ├── mipmap-mdpi/       # launcher + round icons
+│   │   │   │       ├── mipmap-xhdpi/      # launcher + round icons
+│   │   │   │       ├── mipmap-xxhdpi/     # launcher + round icons
+│   │   │   │       ├── mipmap-xxxhdpi/    # launcher + round icons
+│   │   │   │       └── values/styles.xml
+│   │   │   └── build.gradle
+│   │   ├── gradle/wrapper/
+│   │   │   ├── gradle-wrapper.jar
+│   │   │   └── gradle-wrapper.properties
+│   │   ├── gradle.properties
+│   │   ├── gradlew
+│   │   ├── gradlew.bat
+│   │   ├── local.properties
+│   │   ├── local.properties.example
+│   │   ├── build.gradle
+│   │   └── settings.gradle
+│   ├── ios/
+│   │   ├── VICountdown.xcodeproj/project.pbxproj
+│   │   └── VICountdown/
+│   │       ├── Assets.xcassets/
+│   │       │   ├── AppIcon.appiconset/
+│   │       │   │   ├── AppIcon-1024.png
+│   │       │   │   └── Contents.json
+│   │       │   └── Contents.json
+│   │       ├── AppDelegate.swift
+│   │       ├── Info.plist
+│   │       ├── SceneDelegate.swift
+│   │       └── ViewController.swift
 │   ├── assets/logo.png
 │   ├── generate_icons.sh
 │   └── README.md
-├── .github/workflows/
-│   ├── readme-integrity.yml   # every 4h + on source push
-│   ├── sync-backgrounds.yml
-│   ├── ensure-gradle-wrapper.yml
-│   ├── ios-build.yml
-│   └── desktop-build-release.yml
-└── README.md
+├── scripts/
+│   ├── doc-audit.js
+│   ├── dynamic-doc-audit.js
+│   ├── integrity-report.json
+│   ├── project-structure-audit.js
+│   ├── readme-integrity-check.js
+│   ├── release-audit.js
+│   ├── sync-backgrounds.js
+│   └── test-doc-audit.js
+├── test/
+│   ├── dynamic-doc-audit.test.js
+│   ├── project-structure-audit.test.js
+│   └── release-audit.test.js
+├── app.js
+├── backgrounds-api.js
+├── bg.jpeg
+├── github-api.js
+├── gta-vi-countdown.html
+├── logo.png
+├── music-discovery.js
+├── music.css
+├── music.js
+├── package.json
+├── README.md
+└── stats.json
 ```
 
 ---
