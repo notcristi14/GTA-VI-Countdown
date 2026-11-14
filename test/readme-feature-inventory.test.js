@@ -24,7 +24,7 @@ assert.match(root, /Launcher uses WebView2/);
 const mobile = buildFeatureInventoryMarkdown('mobile/README.md', checks);
 assert.match(mobile, /Android uses WebView/);
 assert.match(mobile, /iOS uses WKWebView/);
-assert.match(mobile, /\\*\\*FAIL\\*\\*/);
+assert.match(mobile, /\*\*FAIL\*\*/);
 assert.doesNotMatch(mobile, /All 15 regions configured/);
 
 const launcher = buildFeatureInventoryMarkdown('launcher/README.md', checks);
