@@ -48,7 +48,7 @@ jobs:
 
       - name: Configure runner Android SDK path
         working-directory: mobile/android
-        run: printf 'sdk.dir=%s\\n' "$ANDROID_HOME" > local.properties
+        run: printf 'sdk.dir=%s\n' "$ANDROID_HOME" > local.properties
 
       - name: Build Debug APK
         working-directory: mobile/android
