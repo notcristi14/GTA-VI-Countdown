@@ -1,12 +1,12 @@
 {
-  "lastContentUpdateAt": "2026-11-14T07:24:18.266Z",
-  "commit": "2b25c46b4ef6fbc6527a1e19e774ee3cc5c6e8a4",
-  "baseCommit": "eb5c3d662683cc82454ee30a3e4758261d8c14ac",
+  "lastContentUpdateAt": "2026-11-14T09:56:43.474Z",
+  "commit": "9f382d4ca415a88d09ded56a265952fae9ab2dfc",
+  "baseCommit": "b61c092a5884d1f7fe6fc858e147df4a7c9d4744",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
     "status": "complete",
-    "fileCount": 221,
+    "fileCount": 223,
     "directoryCount": 32,
     "files": [
       ".github/workflows/android-build.yml",
@@ -222,6 +222,7 @@
       "scripts/dynamic-doc-audit.js",
       "scripts/integrity-report.json",
       "scripts/project-structure-audit.js",
+      "scripts/readme-feature-inventory.js",
       "scripts/readme-integrity-check.js",
       "scripts/release-audit.js",
       "scripts/sync-backgrounds.js",
@@ -229,6 +230,7 @@
       "stats.json",
       "test/dynamic-doc-audit.test.js",
       "test/project-structure-audit.test.js",
+      "test/readme-feature-inventory.test.js",
       "test/release-audit.test.js"
     ],
     "directories": [
@@ -294,7 +296,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-14T07:26:30.299Z",
+    "checkedAt": "2026-11-14T09:56:45.336Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -842,8 +844,8 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "eb5c3d662683cc82454ee30a3e4758261d8c14ac",
-    "headCommit": "2b25c46b4ef6fbc6527a1e19e774ee3cc5c6e8a4",
+    "baseCommit": "b61c092a5884d1f7fe6fc858e147df4a7c9d4744",
+    "headCommit": "9f382d4ca415a88d09ded56a265952fae9ab2dfc",
     "changedFiles": 1,
     "analyzedFiles": 1,
     "skippedFiles": [],
@@ -856,7 +858,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": ".github/workflows/android-build.yml",
+        "path": "test/readme-feature-inventory.test.js",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -873,7 +875,7 @@
       "id": "project-structure-inventory",
       "claim": "Complete project file/directory inventory generated",
       "ok": true,
-      "detail": "221 files · 32 directories · 6 workflows",
+      "detail": "223 files · 32 directories · 6 workflows",
       "critical": false
     },
     {

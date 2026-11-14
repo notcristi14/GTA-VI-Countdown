@@ -144,14 +144,14 @@ If Match is **NO**, the native shell home URL does not match the intended root U
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-14T07:24:18.266Z** · commit `2b25c46` · **116/116 passed** · mobile
+Last content update: **2026-11-14T09:56:43.474Z** · commit `9f382d4` · **116/116 passed** · mobile
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
 
 | ID | Claim | Status | Detail |
 |----|-------|--------|--------|
-| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 221 files · 32 directories · 6 workflows |
+| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 223 files · 32 directories · 6 workflows |
 | `project-structure-readme` | Root README Structure section is present | PASS | complete |
 | `project-structure-tree` | Root README ASCII tree matches the complete recursive inventory | PASS | all included files and directories are listed |
 | `workflow-doc--github-workflows-android-build-yml` | Workflow documented: .github/workflows/android-build.yml | PASS | listed in root README Structure |
@@ -267,6 +267,30 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `expected-android-v1_0_0-asset` | Android release contains app-debug.apk | PASS | present |
 | `expected-android-v1_0_0-type` | Android asset has expected content type | PASS | actual=application/vnd.android.package-archive; expected=application/vnd.android.package-archive |
 | `expected-android-v1_0_0-release-state` | Android stable release is publicly published | PASS | draft=false; prerelease=false; published_at=2026-11-05T12:09:25Z |
+
+### Source-verified feature inventory
+
+_Generated from the current source tree and integrity checks; this section refreshes automatically in every discovered README._
+
+#### Android
+
+- **PASS** — Android HOME_URL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-cou tdow .o  e de .com/" expected="https://gta-vi-cou tdow .o  e de .com/")
+- **PASS** — Android uses android.webkit WebView (mobile/a d oid/app/s c/mai /kotli /com/ otc isti/vicou tdow /Mai Activity.kt)
+- **PASS** — Android loadUrl(HOME_URL) (loadU l(HOME_URL))
+- **PASS** — Android external links ACTION_VIEW (I te t.ACTION_VIEW)
+- **PASS** — Android ALLOWED_HOST is site host (actual="gta-vi-cou tdow .o  e de .com")
+- **PASS** — Android Gradle has no Flutter plugin (pu e G adle)
+- **PASS** — Gradle wrapper 8.7 (actual=8.7)
+
+#### iOS
+
+- **PASS** — iOS homeURL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-cou tdow .o  e de .com/" expected="https://gta-vi-cou tdow .o  e de .com/")
+- **PASS** — iOS uses WKWebView (mobile/ios/VICou tdow /ViewCo t olle .swift)
+- **PASS** — iOS loads homeURL into WKWebView (webView.load(URLRequest(u l: homeURL)))
+- **PASS** — iOS external UIApplication.shared.open (p ese t)
+- **PASS** — iOS allowedHost is site host (actual="gta-vi-cou tdow .o  e de .com")
+- **PASS** — iOS AppIcon-1024.png present (p ese t)
+
 ### Documentation audit
 
 No missing or outdated documentation findings from deterministic DOC_SPECS / API registration comparison.
@@ -274,7 +298,7 @@ No missing or outdated documentation findings from deterministic DOC_SPECS / API
 
 ### Project structure inventory
 
-Repository inventory: **221 files** across **32 directories** · **4 README.md files** discovered recursively.
+Repository inventory: **223 files** across **32 directories** · **4 README.md files** discovered recursively.
 
 ASCII tree synchronization: **PASS** · README tree matches every included file and directory.
 
@@ -306,7 +330,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `eb5c3d6`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `b61c092`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->

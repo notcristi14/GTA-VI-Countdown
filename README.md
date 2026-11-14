@@ -353,6 +353,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   ├── dynamic-doc-audit.js
 │   ├── integrity-report.json
 │   ├── project-structure-audit.js
+│   ├── readme-feature-inventory.js
 │   ├── readme-integrity-check.js
 │   ├── release-audit.js
 │   ├── sync-backgrounds.js
@@ -361,6 +362,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 └── test/
     ├── dynamic-doc-audit.test.js
     ├── project-structure-audit.test.js
+    ├── readme-feature-inventory.test.js
     └── release-audit.test.js
 ```
 
@@ -402,14 +404,14 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-14T07:24:18.266Z** · commit `2b25c46` · **116/116 passed** · root
+Last content update: **2026-11-14T09:56:43.474Z** · commit `9f382d4` · **116/116 passed** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
 
 | ID | Claim | Status | Detail |
 |----|-------|--------|--------|
-| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 221 files · 32 directories · 6 workflows |
+| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 223 files · 32 directories · 6 workflows |
 | `project-structure-readme` | Root README Structure section is present | PASS | complete |
 | `project-structure-tree` | Root README ASCII tree matches the complete recursive inventory | PASS | all included files and directories are listed |
 | `workflow-doc--github-workflows-android-build-yml` | Workflow documented: .github/workflows/android-build.yml | PASS | listed in root README Structure |
@@ -525,6 +527,63 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `expected-android-v1_0_0-asset` | Android release contains app-debug.apk | PASS | present |
 | `expected-android-v1_0_0-type` | Android asset has expected content type | PASS | actual=application/vnd.android.package-archive; expected=application/vnd.android.package-archive |
 | `expected-android-v1_0_0-release-state` | Android stable release is publicly published | PASS | draft=false; prerelease=false; published_at=2026-11-05T12:09:25Z |
+
+### Source-verified feature inventory
+
+_Generated from the current source tree and integrity checks; this section refreshes automatically in every discovered README._
+
+#### Website · countdown and regions
+
+- **PASS** — All 15 region slug+UTC pairs in HTML (15/15 impleme ted)
+- **PASS** — Default activeSlug is 'europe' (activeSlug = 'eu ope')
+- **PASS** — Region path + localStorage gtaRegion (ok)
+- **PASS** — requestAnimationFrame countdown (HTML)
+- **PASS** — Available now UI string (p ese t)
+- **PASS** — Pre-order UI in HTML (p ese t)
+
+#### Website · media, APIs and backgrounds
+
+- **PASS** — music.js + music.css (files)
+- **PASS** — Music panel CSS align-items:center (music.css)
+- **PASS** — Spotify album discovery registered (music-discove y.js)
+- **PASS** — Music cache ~30 minutes (MUSIC_CACHE_MS)
+- **PASS** — Trailers cache ~30 minutes (TRAILERS_CACHE_MS)
+- **PASS** — Backgrounds register + 6h check (backg ou ds-api.js)
+- **PASS** — Background images on disk (bgs/) (143 image files)
+- **PASS** — Web App Manifest standalone (HTML)
+- **PASS** — No service worker (document honestly) (ma ifest-o ly PWA)
+- **PASS** — Route registered /api/trailers (app.get fou d)
+- **PASS** — Route registered /api/music (app.get fou d)
+- **PASS** — Route registered /api/repo (app.get fou d)
+- **PASS** — Route registered /api/commits (app.get fou d)
+- **PASS** — Route registered /api/commit (app.get fou d)
+- **PASS** — Route registered /api/news (app.get fou d)
+- **PASS** — Route registered /api/stats (app.get fou d)
+- **PASS** — Route registered /api/backgrounds (app.get fou d)
+
+#### Native mobile apps
+
+- **PASS** — Android HOME_URL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-cou tdow .o  e de .com/" expected="https://gta-vi-cou tdow .o  e de .com/")
+- **PASS** — Android uses android.webkit WebView (mobile/a d oid/app/s c/mai /kotli /com/ otc isti/vicou tdow /Mai Activity.kt)
+- **PASS** — Android loadUrl(HOME_URL) (loadU l(HOME_URL))
+- **PASS** — Android external links ACTION_VIEW (I te t.ACTION_VIEW)
+- **PASS** — Android ALLOWED_HOST is site host (actual="gta-vi-cou tdow .o  e de .com")
+- **PASS** — Android Gradle has no Flutter plugin (pu e G adle)
+- **PASS** — Gradle wrapper 8.7 (actual=8.7)
+- **PASS** — iOS homeURL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-cou tdow .o  e de .com/" expected="https://gta-vi-cou tdow .o  e de .com/")
+- **PASS** — iOS uses WKWebView (mobile/ios/VICou tdow /ViewCo t olle .swift)
+- **PASS** — iOS loads homeURL into WKWebView (webView.load(URLRequest(u l: homeURL)))
+- **PASS** — iOS external UIApplication.shared.open (p ese t)
+- **PASS** — iOS allowedHost is site host (actual="gta-vi-cou tdow .o  e de .com")
+- **PASS** — iOS AppIcon-1024.png present (p ese t)
+
+#### Windows desktop launcher
+
+- **PASS** — launcher/GtaViCountdown.sln exists (p ese t)
+- **PASS** — AppWindow.cpp WebView2 usage (lau che /s c/AppWi dow.cpp)
+- **PASS** — Launcher navigation chrome in AppWindow (av patte  s fou d)
+- **PASS** — launcher/assets/GtaLogo.ico exists (p ese t)
+
 ### Documentation audit
 
 No missing or outdated documentation findings from deterministic DOC_SPECS / API registration comparison.
@@ -532,7 +591,7 @@ No missing or outdated documentation findings from deterministic DOC_SPECS / API
 
 ### Project structure inventory
 
-Repository inventory: **221 files** across **32 directories** · **4 README.md files** discovered recursively.
+Repository inventory: **223 files** across **32 directories** · **4 README.md files** discovered recursively.
 
 ASCII tree synchronization: **PASS** · README tree matches every included file and directory.
 
@@ -564,7 +623,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `eb5c3d6`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `b61c092`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->

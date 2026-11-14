@@ -41,14 +41,14 @@ See the [root README](../README.md) for:
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-14T07:24:18.266Z** · commit `2b25c46` · **116/116 passed** · launcher
+Last content update: **2026-11-14T09:56:43.474Z** · commit `9f382d4` · **116/116 passed** · launcher
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
 
 | ID | Claim | Status | Detail |
 |----|-------|--------|--------|
-| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 221 files · 32 directories · 6 workflows |
+| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 223 files · 32 directories · 6 workflows |
 | `project-structure-readme` | Root README Structure section is present | PASS | complete |
 | `project-structure-tree` | Root README ASCII tree matches the complete recursive inventory | PASS | all included files and directories are listed |
 | `workflow-doc--github-workflows-android-build-yml` | Workflow documented: .github/workflows/android-build.yml | PASS | listed in root README Structure |
@@ -164,6 +164,18 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `expected-android-v1_0_0-asset` | Android release contains app-debug.apk | PASS | present |
 | `expected-android-v1_0_0-type` | Android asset has expected content type | PASS | actual=application/vnd.android.package-archive; expected=application/vnd.android.package-archive |
 | `expected-android-v1_0_0-release-state` | Android stable release is publicly published | PASS | draft=false; prerelease=false; published_at=2026-11-05T12:09:25Z |
+
+### Source-verified feature inventory
+
+_Generated from the current source tree and integrity checks; this section refreshes automatically in every discovered README._
+
+#### Windows desktop launcher
+
+- **PASS** — launcher/GtaViCountdown.sln exists (p ese t)
+- **PASS** — AppWindow.cpp WebView2 usage (lau che /s c/AppWi dow.cpp)
+- **PASS** — Launcher navigation chrome in AppWindow (av patte  s fou d)
+- **PASS** — launcher/assets/GtaLogo.ico exists (p ese t)
+
 ### Documentation audit
 
 No missing or outdated documentation findings from deterministic DOC_SPECS / API registration comparison.
@@ -171,7 +183,7 @@ No missing or outdated documentation findings from deterministic DOC_SPECS / API
 
 ### Project structure inventory
 
-Repository inventory: **221 files** across **32 directories** · **4 README.md files** discovered recursively.
+Repository inventory: **223 files** across **32 directories** · **4 README.md files** discovered recursively.
 
 ASCII tree synchronization: **PASS** · README tree matches every included file and directory.
 
@@ -203,7 +215,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `eb5c3d6`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `b61c092`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
