@@ -1,7 +1,7 @@
 {
   "lastContentUpdateAt": "2026-11-14T09:56:43.474Z",
-  "commit": "c87232cc3205b7bf34c441b205c691a509d7ef7e",
-  "baseCommit": "98400c8983d34b3a295d96ce0fcd5cddc605561a",
+  "commit": "d0c9d01928ee35f06fea52fd3884ca25e9064549",
+  "baseCommit": "c87232cc3205b7bf34c441b205c691a509d7ef7e",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -296,7 +296,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-14T09:57:38.396Z",
+    "checkedAt": "2026-11-14T11:26:12.434Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -844,10 +844,10 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "98400c8983d34b3a295d96ce0fcd5cddc605561a",
-    "headCommit": "c87232cc3205b7bf34c441b205c691a509d7ef7e",
-    "changedFiles": 1,
-    "analyzedFiles": 1,
+    "baseCommit": "c87232cc3205b7bf34c441b205c691a509d7ef7e",
+    "headCommit": "d0c9d01928ee35f06fea52fd3884ca25e9064549",
+    "changedFiles": 5,
+    "analyzedFiles": 5,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
@@ -858,7 +858,39 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "scripts/readme-feature-inventory.js",
+        "path": "README.md",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "launcher/README.md",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "launcher/assets/README.md",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "mobile/README.md",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "scripts/integrity-report.json",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -1414,7 +1446,7 @@
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=1",
+      "detail": "status=complete analyzed=5",
       "critical": false
     },
     {
