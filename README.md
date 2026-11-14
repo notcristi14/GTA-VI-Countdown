@@ -404,7 +404,7 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-14T09:56:43.474Z** · commit `9f382d4` · **116/116 passed** · root
+Last content update: **2026-11-14T09:57:36.748Z** · commit `c87232c` · **116/116 passed** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -534,55 +534,55 @@ _Generated from the current source tree and integrity checks; this section refre
 
 #### Website · countdown and regions
 
-- **PASS** — All 15 region slug+UTC pairs in HTML (15/15 impleme ted)
-- **PASS** — Default activeSlug is 'europe' (activeSlug = 'eu ope')
+- **PASS** — All 15 region slug+UTC pairs in HTML (15/15 implemented)
+- **PASS** — Default activeSlug is 'europe' (activeSlug = 'europe')
 - **PASS** — Region path + localStorage gtaRegion (ok)
 - **PASS** — requestAnimationFrame countdown (HTML)
-- **PASS** — Available now UI string (p ese t)
-- **PASS** — Pre-order UI in HTML (p ese t)
+- **PASS** — Available now UI string (present)
+- **PASS** — Pre-order UI in HTML (present)
 
 #### Website · media, APIs and backgrounds
 
 - **PASS** — music.js + music.css (files)
 - **PASS** — Music panel CSS align-items:center (music.css)
-- **PASS** — Spotify album discovery registered (music-discove y.js)
+- **PASS** — Spotify album discovery registered (music-discovery.js)
 - **PASS** — Music cache ~30 minutes (MUSIC_CACHE_MS)
 - **PASS** — Trailers cache ~30 minutes (TRAILERS_CACHE_MS)
-- **PASS** — Backgrounds register + 6h check (backg ou ds-api.js)
+- **PASS** — Backgrounds register + 6h check (backgrounds-api.js)
 - **PASS** — Background images on disk (bgs/) (143 image files)
 - **PASS** — Web App Manifest standalone (HTML)
-- **PASS** — No service worker (document honestly) (ma ifest-o ly PWA)
-- **PASS** — Route registered /api/trailers (app.get fou d)
-- **PASS** — Route registered /api/music (app.get fou d)
-- **PASS** — Route registered /api/repo (app.get fou d)
-- **PASS** — Route registered /api/commits (app.get fou d)
-- **PASS** — Route registered /api/commit (app.get fou d)
-- **PASS** — Route registered /api/news (app.get fou d)
-- **PASS** — Route registered /api/stats (app.get fou d)
-- **PASS** — Route registered /api/backgrounds (app.get fou d)
+- **PASS** — No service worker (document honestly) (manifest-only PWA)
+- **PASS** — Route registered /api/trailers (app.get found)
+- **PASS** — Route registered /api/music (app.get found)
+- **PASS** — Route registered /api/repo (app.get found)
+- **PASS** — Route registered /api/commits (app.get found)
+- **PASS** — Route registered /api/commit (app.get found)
+- **PASS** — Route registered /api/news (app.get found)
+- **PASS** — Route registered /api/stats (app.get found)
+- **PASS** — Route registered /api/backgrounds (app.get found)
 
 #### Native mobile apps
 
-- **PASS** — Android HOME_URL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-cou tdow .o  e de .com/" expected="https://gta-vi-cou tdow .o  e de .com/")
-- **PASS** — Android uses android.webkit WebView (mobile/a d oid/app/s c/mai /kotli /com/ otc isti/vicou tdow /Mai Activity.kt)
-- **PASS** — Android loadUrl(HOME_URL) (loadU l(HOME_URL))
-- **PASS** — Android external links ACTION_VIEW (I te t.ACTION_VIEW)
-- **PASS** — Android ALLOWED_HOST is site host (actual="gta-vi-cou tdow .o  e de .com")
-- **PASS** — Android Gradle has no Flutter plugin (pu e G adle)
+- **PASS** — Android HOME_URL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/")
+- **PASS** — Android uses android.webkit WebView (mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt)
+- **PASS** — Android loadUrl(HOME_URL) (loadUrl(HOME_URL))
+- **PASS** — Android external links ACTION_VIEW (Intent.ACTION_VIEW)
+- **PASS** — Android ALLOWED_HOST is site host (actual="gta-vi-countdown.onrender.com")
+- **PASS** — Android Gradle has no Flutter plugin (pure Gradle)
 - **PASS** — Gradle wrapper 8.7 (actual=8.7)
-- **PASS** — iOS homeURL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-cou tdow .o  e de .com/" expected="https://gta-vi-cou tdow .o  e de .com/")
-- **PASS** — iOS uses WKWebView (mobile/ios/VICou tdow /ViewCo t olle .swift)
-- **PASS** — iOS loads homeURL into WKWebView (webView.load(URLRequest(u l: homeURL)))
-- **PASS** — iOS external UIApplication.shared.open (p ese t)
-- **PASS** — iOS allowedHost is site host (actual="gta-vi-cou tdow .o  e de .com")
-- **PASS** — iOS AppIcon-1024.png present (p ese t)
+- **PASS** — iOS homeURL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/")
+- **PASS** — iOS uses WKWebView (mobile/ios/VICountdown/ViewController.swift)
+- **PASS** — iOS loads homeURL into WKWebView (webView.load(URLRequest(url: homeURL)))
+- **PASS** — iOS external UIApplication.shared.open (present)
+- **PASS** — iOS allowedHost is site host (actual="gta-vi-countdown.onrender.com")
+- **PASS** — iOS AppIcon-1024.png present (present)
 
 #### Windows desktop launcher
 
-- **PASS** — launcher/GtaViCountdown.sln exists (p ese t)
-- **PASS** — AppWindow.cpp WebView2 usage (lau che /s c/AppWi dow.cpp)
-- **PASS** — Launcher navigation chrome in AppWindow (av patte  s fou d)
-- **PASS** — launcher/assets/GtaLogo.ico exists (p ese t)
+- **PASS** — launcher/GtaViCountdown.sln exists (present)
+- **PASS** — AppWindow.cpp WebView2 usage (launcher/src/AppWindow.cpp)
+- **PASS** — Launcher navigation chrome in AppWindow (nav patterns found)
+- **PASS** — launcher/assets/GtaLogo.ico exists (present)
 
 ### Documentation audit
 
@@ -623,7 +623,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `b61c092`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `98400c8`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->

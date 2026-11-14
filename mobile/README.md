@@ -144,7 +144,7 @@ If Match is **NO**, the native shell home URL does not match the intended root U
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-14T09:56:43.474Z** · commit `9f382d4` · **116/116 passed** · mobile
+Last content update: **2026-11-14T09:57:36.748Z** · commit `c87232c` · **116/116 passed** · mobile
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -274,22 +274,22 @@ _Generated from the current source tree and integrity checks; this section refre
 
 #### Android
 
-- **PASS** — Android HOME_URL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-cou tdow .o  e de .com/" expected="https://gta-vi-cou tdow .o  e de .com/")
-- **PASS** — Android uses android.webkit WebView (mobile/a d oid/app/s c/mai /kotli /com/ otc isti/vicou tdow /Mai Activity.kt)
-- **PASS** — Android loadUrl(HOME_URL) (loadU l(HOME_URL))
-- **PASS** — Android external links ACTION_VIEW (I te t.ACTION_VIEW)
-- **PASS** — Android ALLOWED_HOST is site host (actual="gta-vi-cou tdow .o  e de .com")
-- **PASS** — Android Gradle has no Flutter plugin (pu e G adle)
+- **PASS** — Android HOME_URL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/")
+- **PASS** — Android uses android.webkit WebView (mobile/android/app/src/main/kotlin/com/notcristi/vicountdown/MainActivity.kt)
+- **PASS** — Android loadUrl(HOME_URL) (loadUrl(HOME_URL))
+- **PASS** — Android external links ACTION_VIEW (Intent.ACTION_VIEW)
+- **PASS** — Android ALLOWED_HOST is site host (actual="gta-vi-countdown.onrender.com")
+- **PASS** — Android Gradle has no Flutter plugin (pure Gradle)
 - **PASS** — Gradle wrapper 8.7 (actual=8.7)
 
 #### iOS
 
-- **PASS** — iOS homeURL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-cou tdow .o  e de .com/" expected="https://gta-vi-cou tdow .o  e de .com/")
-- **PASS** — iOS uses WKWebView (mobile/ios/VICou tdow /ViewCo t olle .swift)
-- **PASS** — iOS loads homeURL into WKWebView (webView.load(URLRequest(u l: homeURL)))
-- **PASS** — iOS external UIApplication.shared.open (p ese t)
-- **PASS** — iOS allowedHost is site host (actual="gta-vi-cou tdow .o  e de .com")
-- **PASS** — iOS AppIcon-1024.png present (p ese t)
+- **PASS** — iOS homeURL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/")
+- **PASS** — iOS uses WKWebView (mobile/ios/VICountdown/ViewController.swift)
+- **PASS** — iOS loads homeURL into WKWebView (webView.load(URLRequest(url: homeURL)))
+- **PASS** — iOS external UIApplication.shared.open (present)
+- **PASS** — iOS allowedHost is site host (actual="gta-vi-countdown.onrender.com")
+- **PASS** — iOS AppIcon-1024.png present (present)
 
 ### Documentation audit
 
@@ -330,7 +330,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `b61c092`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `98400c8`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->

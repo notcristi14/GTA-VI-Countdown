@@ -1,7 +1,7 @@
 {
   "lastContentUpdateAt": "2026-11-14T09:56:43.474Z",
-  "commit": "9f382d4ca415a88d09ded56a265952fae9ab2dfc",
-  "baseCommit": "b61c092a5884d1f7fe6fc858e147df4a7c9d4744",
+  "commit": "c87232cc3205b7bf34c441b205c691a509d7ef7e",
+  "baseCommit": "98400c8983d34b3a295d96ce0fcd5cddc605561a",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -296,7 +296,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-14T09:56:45.336Z",
+    "checkedAt": "2026-11-14T09:57:38.396Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -844,8 +844,8 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "b61c092a5884d1f7fe6fc858e147df4a7c9d4744",
-    "headCommit": "9f382d4ca415a88d09ded56a265952fae9ab2dfc",
+    "baseCommit": "98400c8983d34b3a295d96ce0fcd5cddc605561a",
+    "headCommit": "c87232cc3205b7bf34c441b205c691a509d7ef7e",
     "changedFiles": 1,
     "analyzedFiles": 1,
     "skippedFiles": [],
@@ -858,7 +858,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "test/readme-feature-inventory.test.js",
+        "path": "scripts/readme-feature-inventory.js",
         "status": "M",
         "oldPath": null,
         "findings": 0,

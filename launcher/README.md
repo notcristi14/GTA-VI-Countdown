@@ -41,7 +41,7 @@ See the [root README](../README.md) for:
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-14T09:56:43.474Z** · commit `9f382d4` · **116/116 passed** · launcher
+Last content update: **2026-11-14T09:57:36.748Z** · commit `c87232c` · **116/116 passed** · launcher
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -171,10 +171,10 @@ _Generated from the current source tree and integrity checks; this section refre
 
 #### Windows desktop launcher
 
-- **PASS** — launcher/GtaViCountdown.sln exists (p ese t)
-- **PASS** — AppWindow.cpp WebView2 usage (lau che /s c/AppWi dow.cpp)
-- **PASS** — Launcher navigation chrome in AppWindow (av patte  s fou d)
-- **PASS** — launcher/assets/GtaLogo.ico exists (p ese t)
+- **PASS** — launcher/GtaViCountdown.sln exists (present)
+- **PASS** — AppWindow.cpp WebView2 usage (launcher/src/AppWindow.cpp)
+- **PASS** — Launcher navigation chrome in AppWindow (nav patterns found)
+- **PASS** — launcher/assets/GtaLogo.ico exists (present)
 
 ### Documentation audit
 
@@ -215,7 +215,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `b61c092`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `98400c8`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
