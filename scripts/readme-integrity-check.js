@@ -315,7 +315,7 @@ const report = {
 writeIfChanged('scripts/integrity-report.json', JSON.stringify(report, null, 2));
 function statusTable() { return '| ID | Claim | Status | Detail |\n|----|-------|--------|--------|\n' + checks.map((c) => '| `' + c.id + '` | ' + c.claim.replace(/\|/g, '/') + ' | ' + (c.ok ? 'PASS' : 'FAIL') + ' | ' + c.detail.replace(/\|/g, '/') + ' |').join('\n'); }
 function integritySection(scope, readmePath) {
-  const featureNote = '\\n\\n' + buildFeatureInventoryMarkdown(readmePath, checks) + '\\n';
+  const featureNote = '\n\n' + buildFeatureInventoryMarkdown(readmePath, checks) + '\n';
   const dynNote = dynSummary.status ? ('\n\n### Dynamic change audit\n\nStatus: **' + dynSummary.status + '** · changed files: ' + (dynSummary.changedFiles || 0) + ' · analyzed: ' + (dynSummary.analyzedFiles || 0) + ' · confirmed findings: ' + (dynSummary.confirmedFindings || 0) + ' · potential risks: ' + (dynSummary.potentialRisks || 0) + (dynSummary.baseCommit ? ' · base `' + String(dynSummary.baseCommit).slice(0, 7) + '`' : '') + '\n') : '';
   const structureNote = '\n\n' + formatProjectStructureMarkdown(structureAudit) + '\n';
   const releaseRows = releaseAudit.releases.map((r) => '| ' + r.platform + ' | `' + r.tag + '` | ' + (r.assets.length && r.assets.every((a) => a.bytesVerified) ? 'bytes + SHA-256 verified' : r.assets.length && r.assets.every((a) => a.size > 0) ? 'metadata only' : 'failed') + ' | ' + r.assets.length + ' asset(s) |').join('\n');
