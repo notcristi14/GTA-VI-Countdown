@@ -95,8 +95,9 @@ jobs:
           node test/dynamic-doc-audit.test.js
           node test/release-audit.test.js
           node test/project-structure-audit.test.js
+          node test/readme-feature-inventory.test.js
 
-      - name: Scan source and update integrity sections only
+      - name: Scan source, regenerate README feature inventories, and update integrity sections
         id: check
         env:
           DYNAMIC_AUDIT_BASE_SHA: ${{ github.event.before || github.event.pull_request.base.sha || '' }}
