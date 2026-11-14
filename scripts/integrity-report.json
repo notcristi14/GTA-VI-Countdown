@@ -1,14 +1,15 @@
 {
-  "lastContentUpdateAt": "2026-11-12T13:42:53.413Z",
-  "commit": "41bdb0c3d446aa7d2fb7f948aba10554867f5679",
-  "baseCommit": "638aaf596c771b80941d81d0bea0da1e7ab8def2",
+  "lastContentUpdateAt": "2026-11-14T07:24:18.266Z",
+  "commit": "8da6d5fe0b860f3c5e1f2e9d3fee0904a64900b7",
+  "baseCommit": "34097a281293eca718c203dc986b336942ba33c3",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
     "status": "complete",
-    "fileCount": 220,
+    "fileCount": 221,
     "directoryCount": 32,
     "files": [
+      ".github/workflows/android-build.yml",
       ".github/workflows/desktop-build-release.yml",
       ".github/workflows/ensure-gradle-wrapper.yml",
       ".github/workflows/ios-build.yml",
@@ -271,6 +272,7 @@
       "mobile/README.md"
     ],
     "workflows": [
+      ".github/workflows/android-build.yml",
       ".github/workflows/desktop-build-release.yml",
       ".github/workflows/ensure-gradle-wrapper.yml",
       ".github/workflows/ios-build.yml",
@@ -278,6 +280,7 @@
       ".github/workflows/sync-backgrounds.yml"
     ],
     "documentedWorkflows": [
+      ".github/workflows/android-build.yml",
       ".github/workflows/desktop-build-release.yml",
       ".github/workflows/ensure-gradle-wrapper.yml",
       ".github/workflows/ios-build.yml",
@@ -286,12 +289,12 @@
     ],
     "missingWorkflowDocs": [],
     "staleWorkflowDocs": [],
-    "workflowCoverage": 5,
-    "workflowCount": 5
+    "workflowCoverage": 6,
+    "workflowCount": 6
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-14T00:52:28.330Z",
+    "checkedAt": "2026-11-14T07:24:20.019Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -657,8 +660,8 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 115,
-    "passed": 115,
+    "total": 116,
+    "passed": 116,
     "failed": 0,
     "criticalFailed": 0,
     "documentationFindings": 0
@@ -839,10 +842,10 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "638aaf596c771b80941d81d0bea0da1e7ab8def2",
-    "headCommit": "41bdb0c3d446aa7d2fb7f948aba10554867f5679",
-    "changedFiles": 5,
-    "analyzedFiles": 5,
+    "baseCommit": "34097a281293eca718c203dc986b336942ba33c3",
+    "headCommit": "8da6d5fe0b860f3c5e1f2e9d3fee0904a64900b7",
+    "changedFiles": 1,
+    "analyzedFiles": 1,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
@@ -853,40 +856,8 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "launcher/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "launcher/assets/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "mobile/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "scripts/integrity-report.json",
-        "status": "M",
+        "path": ".github/workflows/android-build.yml",
+        "status": "A",
         "oldPath": null,
         "findings": 0,
         "relevant": false,
@@ -902,7 +873,7 @@
       "id": "project-structure-inventory",
       "claim": "Complete project file/directory inventory generated",
       "ok": true,
-      "detail": "220 files · 32 directories · 5 workflows",
+      "detail": "221 files · 32 directories · 6 workflows",
       "critical": false
     },
     {
@@ -918,6 +889,13 @@
       "ok": true,
       "detail": "all included files and directories are listed",
       "critical": true
+    },
+    {
+      "id": "workflow-doc--github-workflows-android-build-yml",
+      "claim": "Workflow documented: .github/workflows/android-build.yml",
+      "ok": true,
+      "detail": "listed in root README Structure",
+      "critical": false
     },
     {
       "id": "workflow-doc--github-workflows-desktop-build-release-yml",
@@ -1434,7 +1412,7 @@
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=5",
+      "detail": "status=complete analyzed=1",
       "critical": false
     },
     {
