@@ -41,7 +41,7 @@ function buildFeatureInventoryMarkdown(readmePath, checks) {
     const rows = group.ids.map((id) => checkMap.get(id)).filter(Boolean);
     if (!rows.length) continue;
     sections.push('#### ' + group.title + '\n\n' + rows.map((item) =>
-      '- **' + (item.ok ? 'PASS' : 'FAIL') + '** — ' + item.claim + ' (' + item.detail.replace(/[\\r\\n|]/g, ' ').trim() + ')'
+      '- **' + (item.ok ? 'PASS' : 'FAIL') + '** — ' + item.claim + ' (' + item.detail.replace(/[\r\n|]/g, ' ').trim() + ')'
     ).join('\n'));
   }
   return '### Source-verified feature inventory\n\n' +
