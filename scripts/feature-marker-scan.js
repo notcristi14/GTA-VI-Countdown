@@ -50,7 +50,7 @@ function scanFeatureMarkers(root) {
   const checks = [];
   const features = [];
   const seen = new Map();
-  const markerPattern = /^\s*(?:\/\/|\/\*|\*|<!--|#)\s*@feature\s+(.+?)\s*(?:-->\*\/)?\s*$/;
+  const markerPattern = /^\s*(?:\/\/|\/\*|\*|<!--|#)\s*@feature\s+(.+?)\s*(?:-->|\*\/)?\s*$/;
   for (const file of listSourceFiles(root)) {
     const relative = path.relative(root, file).split(path.sep).join('/');
     const lines = fs.readFileSync(file, 'utf8').split(/\r?\n/);
