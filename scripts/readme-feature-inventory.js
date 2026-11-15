@@ -39,7 +39,9 @@ function scopeForReadme(readmePath) {
 function buildFeatureInventoryMarkdown(readmePath, checks) {
   const scope = scopeForReadme(String(readmePath || 'README.md'));
   const checkMap = new Map((Array.isArray(checks) ? checks : []).map((item) => [item.id, item]));
-  // Every README receives the complete website feature inventory. Its own\n  // platform-specific checks are appended so local documentation stays relevant.\n  const groups = [...COMMON_GROUPS, ...(GROUPS[scope] || GROUPS.root)];
+  // Every README receives the complete website feature inventory. Its own
+  // platform-specific checks are appended so local documentation stays relevant.
+  const groups = [...COMMON_GROUPS, ...(GROUPS[scope] || GROUPS.root)];
   const sections = [];
   for (const group of groups) {
     const rows = group.ids.map((id) => checkMap.get(id)).filter(Boolean);
