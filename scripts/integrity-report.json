@@ -1,12 +1,12 @@
 {
-  "lastContentUpdateAt": "2026-11-15T06:22:19.330Z",
-  "commit": "9437f18542764419ec02362cd31946ae8e31bc53",
-  "baseCommit": "41b7ff78e747ad028b1b5ca378e1ad68330564a6",
+  "lastContentUpdateAt": "2026-11-15T06:29:48.910Z",
+  "commit": "8b79fcb431061ed61ee826315bd4bf722b4549df",
+  "baseCommit": "ce84e5678793b7d58f5b133d4bc38396e5968cde",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
     "status": "complete",
-    "fileCount": 223,
+    "fileCount": 225,
     "directoryCount": 32,
     "files": [
       ".github/workflows/android-build.yml",
@@ -220,6 +220,7 @@
       "package.json",
       "scripts/doc-audit.js",
       "scripts/dynamic-doc-audit.js",
+      "scripts/feature-marker-scan.js",
       "scripts/integrity-report.json",
       "scripts/project-structure-audit.js",
       "scripts/readme-feature-inventory.js",
@@ -229,6 +230,7 @@
       "scripts/test-doc-audit.js",
       "stats.json",
       "test/dynamic-doc-audit.test.js",
+      "test/feature-marker-scan.test.js",
       "test/project-structure-audit.test.js",
       "test/readme-feature-inventory.test.js",
       "test/release-audit.test.js"
@@ -296,7 +298,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-15T06:22:21.095Z",
+    "checkedAt": "2026-11-15T06:29:50.495Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -662,8 +664,8 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 130,
-    "passed": 130,
+    "total": 131,
+    "passed": 131,
     "failed": 0,
     "criticalFailed": 0,
     "documentationFindings": 0
@@ -691,6 +693,12 @@
     "iosExternal": true,
     "launcherWebView2": true,
     "launcherNav": true
+  },
+  "autoDiscoveredFeatures": [],
+  "featureMarkerScan": {
+    "sourceFilesScanned": 24,
+    "discovered": 0,
+    "invalidMarkers": 0
   },
   "apiEndpoints": {
     "/api/trailers": true,
@@ -844,10 +852,10 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "41b7ff78e747ad028b1b5ca378e1ad68330564a6",
-    "headCommit": "9437f18542764419ec02362cd31946ae8e31bc53",
-    "changedFiles": 5,
-    "analyzedFiles": 5,
+    "baseCommit": "ce84e5678793b7d58f5b133d4bc38396e5968cde",
+    "headCommit": "8b79fcb431061ed61ee826315bd4bf722b4549df",
+    "changedFiles": 1,
+    "analyzedFiles": 1,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
@@ -858,39 +866,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "launcher/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "launcher/assets/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "mobile/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "scripts/integrity-report.json",
+        "path": "scripts/readme-feature-inventory.js",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -907,7 +883,7 @@
       "id": "project-structure-inventory",
       "claim": "Complete project file/directory inventory generated",
       "ok": true,
-      "detail": "223 files · 32 directories · 6 workflows",
+      "detail": "225 files · 32 directories · 6 workflows",
       "critical": false
     },
     {
@@ -1464,6 +1440,13 @@
       "critical": false
     },
     {
+      "id": "feature-marker-scan-coverage",
+      "claim": "Automatic feature marker scan completed",
+      "ok": true,
+      "detail": "24 product source files scanned · 0 features discovered",
+      "critical": true
+    },
+    {
       "id": "readme-README_md-exists",
       "claim": "README.md exists and is readable",
       "ok": true,
@@ -1544,7 +1527,7 @@
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=5",
+      "detail": "status=complete analyzed=1",
       "critical": false
     },
     {
