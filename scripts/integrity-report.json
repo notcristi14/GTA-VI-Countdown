@@ -1,7 +1,7 @@
 {
   "lastContentUpdateAt": "2026-11-15T07:32:54.907Z",
-  "commit": "00a3d5a40fcf537e4bf7ffb2891d585b0a532cc9",
-  "baseCommit": "56b5543c7a30ce7e11d55e397bdddc67f8567977",
+  "commit": "5a8475ffa242518dbe360ac0dbb7c98ea054bc4d",
+  "baseCommit": "00a3d5a40fcf537e4bf7ffb2891d585b0a532cc9",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -303,7 +303,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-15T15:38:40.942Z",
+    "checkedAt": "2026-11-15T21:01:47.394Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -857,10 +857,10 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "56b5543c7a30ce7e11d55e397bdddc67f8567977",
-    "headCommit": "00a3d5a40fcf537e4bf7ffb2891d585b0a532cc9",
-    "changedFiles": 6,
-    "analyzedFiles": 6,
+    "baseCommit": "00a3d5a40fcf537e4bf7ffb2891d585b0a532cc9",
+    "headCommit": "5a8475ffa242518dbe360ac0dbb7c98ea054bc4d",
+    "changedFiles": 5,
+    "analyzedFiles": 5,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
@@ -896,14 +896,6 @@
       },
       {
         "path": "mobile/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "scripts/feature-discovery-report.json",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -1572,7 +1564,7 @@
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=6",
+      "detail": "status=complete analyzed=5",
       "critical": false
     },
     {
