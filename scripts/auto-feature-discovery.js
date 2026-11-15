@@ -37,8 +37,10 @@ function declarations(source, file) {
     ? [/^\s*(?:(?:public|private|internal|protected|override|open|final|suspend|inline|tailrec|operator|infix)\s+)*fun\s+([A-Za-z_][\w]*)\s*\(/]
     : file.endsWith('.swift')
       ? [/^\s*(?:(?:public|private|fileprivate|internal|open|override|static|class|final|mutating|nonmutating|async|throws)\s+)*func\s+([A-Za-z_][\w]*)\s*\(/]
-      : [/^\s*(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(/,
-         /^\s*(?:export\s+)?(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?(?:function\b|\([^)]*\)\s*=>|[A-Za-z_$][\w$]*\s*=>)/];
+      : (file.endsWith('.cpp') || file.endsWith('.cc') || file.endsWith('.c'))
+        ? [/^\s*(?:(?:static|inline|virtual|constexpr|const)\s+)*(?:[A-Za-z_][\w:<>&*]*\s+)+([A-Za-z_][\w]*)\s*\([^;]*\)\s*(?:const\s*)?(?:noexcept\s*)?\{/]
+        : [/^\s*(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(/,
+           /^\s*(?:export\s+)?(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?(?:function\b|\([^)]*\)\s*=>|[A-Za-z_$][\w$]*\s*=>)/];
   lines.forEach((line, index) => {
     for (const pattern of patterns) {
       const match = line.match(pattern);
