@@ -13,7 +13,8 @@ const checks = [
   { id: 'android-webview', claim: 'Android uses WebView', ok: true, detail: 'MainActivity.kt' },
   { id: 'ios-webview', claim: 'iOS uses WKWebView', ok: false, detail: 'missing' },
   { id: 'launcher-webview2', claim: 'Launcher uses WebView2', ok: true, detail: 'AppWindow.cpp' },
-  { id: 'launcher-ico', claim: 'Launcher icon exists', ok: true, detail: 'present' },\n  { id: 'auto-test-feature', claim: 'Automatically discovered feature', ok: true, detail: 'source: src/example.js:1', autoDiscovered: true, group: 'Newly discovered features', scopes: ['all'] }
+  { id: 'launcher-ico', claim: 'Launcher icon exists', ok: true, detail: 'present' },
+  { id: 'auto-test-feature', claim: 'Automatically discovered feature', ok: true, detail: 'source: src/example.js:1', autoDiscovered: true, group: 'Newly discovered features', scopes: ['all'] }
 ];
 
 assert.strictEqual(scopeForReadme('README.md'), 'root');
@@ -31,7 +32,8 @@ assert.match(root, /Rockstar Newswire panel/);
 assert.match(root, /Background gallery controls/);
 assert.match(root, /FPS counter/);
 assert.match(root, /Android uses WebView/);
-assert.match(root, /Launcher uses WebView2/);\nassert.match(root, /Automatically discovered feature/);
+assert.match(root, /Launcher uses WebView2/);
+assert.match(root, /Automatically discovered feature/);
 
 const mobile = buildFeatureInventoryMarkdown('mobile/README.md', checks);
 assert.match(mobile, /All 15 regions configured/);
@@ -46,13 +48,15 @@ assert.match(launcher, /All 15 regions configured/);
 assert.match(launcher, /Latest GitHub commit card/);
 assert.match(launcher, /Rockstar Newswire panel/);
 assert.match(launcher, /Launcher uses WebView2/);
-assert.doesNotMatch(launcher, /Android uses WebView/);\nassert.match(launcher, /Automatically discovered feature/);
+assert.doesNotMatch(launcher, /Android uses WebView/);
+assert.match(launcher, /Automatically discovered feature/);
 
 const assets = buildFeatureInventoryMarkdown('launcher/assets/README.md', checks);
 assert.match(assets, /All 15 regions configured/);
 assert.match(assets, /Latest GitHub commit card/);
 assert.match(assets, /Rockstar Newswire panel/);
 assert.match(assets, /Launcher icon exists/);
-assert.doesNotMatch(assets, /Launcher uses WebView2/);\nassert.match(assets, /Automatically discovered feature/);
+assert.doesNotMatch(assets, /Launcher uses WebView2/);
+assert.match(assets, /Automatically discovered feature/);
 
 console.log('README feature inventory tests: shared website features + scoped platform checks passed.');
