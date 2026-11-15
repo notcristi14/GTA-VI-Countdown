@@ -13,7 +13,7 @@ Related docs:
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-15T07:32:02.359Z** · commit `5d1e107` · **131/135 passed** · **4 dynamic findings** · launcher/assets
+Last content update: **2026-11-15T07:32:54.907Z** · commit `2abb4b0` · **131/131 passed** · launcher/assets
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -112,11 +112,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `readme-discovery` | At least one README.md discovered recursively | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
 | `readme-no-hardcoded-list` | README checks are driven by findReadmes() discovery | PASS | dynamic discovery of 4 README.md file(s) |
 | `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
-| `dyn-dyn-new-env-GEMINI_MODEL` | Dynamic doc impact: dyn-new-env-GEMINI_MODEL | FAIL | missing · README.md · Document `GEMINI_MODEL` in the environment section of the appropriate README, or confirm it is inter |
-| `dyn-dyn-new-env-FEATURE_DISCOVERY_BASE_SHA` | Dynamic doc impact: dyn-new-env-FEATURE_DISCOVERY_BASE_SHA | FAIL | missing · README.md · Document `FEATURE_DISCOVERY_BASE_SHA` in the environment section of the appropriate README, or confi |
-| `dyn-dyn-new-env-GITHUB_EVENT_BEFORE` | Dynamic doc impact: dyn-new-env-GITHUB_EVENT_BEFORE | FAIL | missing · README.md · Document `GITHUB_EVENT_BEFORE` in the environment section of the appropriate README, or confirm it i |
-| `dyn-dyn-new-env-GEMINI_API_KEY` | Dynamic doc impact: dyn-new-env-GEMINI_API_KEY | FAIL | missing · README.md · Document `GEMINI_API_KEY` in the environment section of the appropriate README, or confirm it is int |
-| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=3 |
+| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=1 |
 | `releases-api` | GitHub Releases API returned a valid release collection | PASS | 3 release(s) retrieved |
 | `releases-published-count` | At least one published GitHub Release exists | PASS | 3 published release(s) |
 | `release-desktop-v1_0_0-published` | Release desktop-v1.0.0 is published (not a draft) | PASS | draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z |
@@ -249,7 +245,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 3 · analyzed: 3 · confirmed findings: 0 · potential risks: 4 · base `a94d8a6`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `d522894`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
