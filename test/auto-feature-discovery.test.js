@@ -20,6 +20,11 @@ const swift = annotateSource('func refreshCountdown() {\n}\n', 'mobile/ios/VICou
 assert.strictEqual(swift.added[0].group, 'iOS');
 assert.match(swift.content, /\/\/ @feature id="refresh-countdown"/);
 
-const cpp = annotateSource('void AppWindow::refreshWindow() {\\n}\\n', 'launcher/src/AppWindow.cpp', '');\nassert.strictEqual(cpp.added[0].name, 'refreshWindow');\nassert.strictEqual(cpp.added[0].group, 'Windows desktop launcher');\n\nconst repeated = annotateSource(result.content, 'app.js', before);
+const cpp = annotateSource('void AppWindow::refreshWindow() {\n}\n', 'launcher/src/AppWindow.cpp', '');
+assert.strictEqual(cpp.added[0].name, 'refreshWindow');
+assert.strictEqual(cpp.added[0].group, 'Windows desktop launcher');
+assert.match(cpp.content, /\/\/ @feature id="refresh-window"/);
+
+const repeated = annotateSource(result.content, 'app.js', before);
 assert.strictEqual(repeated.added.length, 0);
-console.log('Automatic feature discovery tests: new feature candidates, metadata, language scope and idempotence passed.');
+console.log('Automatic feature discovery tests: JS, Swift, C++, metadata and idempotence passed.');
