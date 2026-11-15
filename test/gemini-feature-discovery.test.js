@@ -1,6 +1,6 @@
 'use strict';
 const assert = require('assert');
-const { parseModelFeatures } = require('../scripts/gemini-feature-discovery');
+const { parseModelFeatures, callGemini, validateGeminiAccess, MODEL } = require('../scripts/gemini-feature-discovery');
 
 const candidates = [
   { functionName: 'refreshNews', file: 'app.js', defaultGroup: 'Website · automatically discovered', context: 'function refreshNews() {}' },
@@ -27,4 +27,34 @@ assert.strictEqual(parsed[0].functionName, 'refreshNews');
 assert.strictEqual(parsed[0].id, 'refresh-news');
 assert.throws(() => parseModelFeatures({ candidates: [] }, candidates), /structured text/);
 assert.throws(() => parseModelFeatures({ candidates: [{ content: { parts: [{ text: 'not json' }] } }] }, candidates), /valid JSON/);
-console.log('Gemini feature discovery tests passed.');
+(async () => {
+  let requestUrl = '';
+  let requestOptions;
+  const modelPayload = {
+    models: [{ name: 'models/' + MODEL, supportedGenerationMethods: ['generateContent'] }]
+  };
+  const model = await validateGeminiAccess('unit-test-key', async (url, options) => {
+    requestUrl = url;
+    requestOptions = options;
+    return { ok: true, json: async () => modelPayload };
+  });
+  assert.strictEqual(requestUrl, 'https://generativelanguage.googleapis.com/v1beta/models');
+  assert.strictEqual(requestOptions.method, 'GET');
+  assert.strictEqual(requestOptions.headers['x-goog-api-key'], 'unit-test-key');
+  assert.strictEqual(model.name, 'models/' + MODEL);
+  await assert.rejects(
+    () => validateGeminiAccess('unit-test-key', async () => ({
+      ok: true,
+      json: async () => ({ models: [{ name: 'models/other-model', supportedGenerationMethods: ['generateContent'] }] })
+    })),
+    /not listed/
+  );
+  const emptyResponse = {
+    candidates: [{ content: { parts: [{ text: JSON.stringify({ features: [] }) }] } }]
+  };
+  const response = await callGemini('unit-test-key', [], async (url, options) => ({
+    ok: true, json: async () => emptyResponse
+  }));
+  assert.deepStrictEqual(parseModelFeatures(response, []), []);
+  console.log('Gemini feature discovery tests passed, including API key/model validation and generation request construction.');
+})().catch((error) => { console.error(error); process.exit(1); });
