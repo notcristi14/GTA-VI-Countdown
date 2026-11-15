@@ -401,6 +401,9 @@ npm start
 | --- | --- |
 | **`GITHUB_TOKEN`** (or `GH_TOKEN`) | Authenticated GitHub (~5k/hr). Without it: 60/hr per IP → often **403** on Render. |
 | `GITHUB_REPOSITORY` | GitHub Actions-provided `owner/repo` slug used by the Releases audit to inspect tags and downloadable assets. |
+| `GEMINI_API_KEY` | Optional GitHub Actions secret for Gemini-assisted semantic feature discovery. Add it under **Settings → Secrets and variables → Actions → New repository secret**; never commit the key. If absent or unavailable, deterministic feature discovery is used. |
+| `GEMINI_MODEL` | Optional model override for the feature-discovery workflow; defaults to `gemini-3.8-flash`. |
+| `FEATURE_DISCOVERY_BASE_SHA` / `GITHUB_EVENT_BEFORE` | Internal GitHub Actions commit references used to compare changed product source files; normally supplied automatically by the workflow. |
 | `GA_PROPERTY_ID` / `GA_CLIENT_EMAIL` / `GA_PRIVATE_KEY` | Optional GA4 panel |
 
 ---
