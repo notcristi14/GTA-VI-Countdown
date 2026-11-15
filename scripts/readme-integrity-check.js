@@ -6,7 +6,7 @@ const { runDocumentationAudit, formatDocFindingsMarkdown, DOC_SPECS } = require(
 const { runDynamicDocumentationAudit } = require('./dynamic-doc-audit');
 const { auditReleases } = require('./release-audit');
 const { scanProjectStructure, buildTree, replaceStructureCodeBlock, auditProjectStructure, formatProjectStructureMarkdown } = require('./project-structure-audit');
-const { buildFeatureInventoryMarkdown } = require('./readme-feature-inventory');
+const { buildFeatureInventoryMarkdown } = require('./readme-feature-inventory');\nconst { scanFeatureMarkers } = require('./feature-marker-scan');
 const ROOT = path.resolve(__dirname, '..');
 const now = new Date().toISOString();
 const commitSha = process.env.GITHUB_SHA || 'local';
@@ -197,7 +197,7 @@ check('ios-icon', 'iOS AppIcon-1024.png present', iosIcon, iosIcon ? 'present' :
 check('launcher-sln', 'launcher/GtaViCountdown.sln exists', launcherSln, launcherSln ? 'present' : 'MISSING', true);
 check('launcher-webview2', 'AppWindow.cpp WebView2 usage', features.launcherWebView2, features.launcherWebView2 ? APP_WINDOW : 'WebView2 patterns not found', true);
 check('launcher-nav', 'Launcher navigation chrome in AppWindow', features.launcherNav, features.launcherNav ? 'nav patterns found' : 'not detected (non-critical)', false);
-check('launcher-ico', 'launcher/assets/GtaLogo.ico exists', launcherIco, launcherIco ? 'present' : 'MISSING', false);
+check('launcher-ico', 'launcher/assets/GtaLogo.ico exists', launcherIco, launcherIco ? 'present' : 'MISSING', false);\n// Discover source-annotated product features; these checks feed every README Features table.\nconst featureMarkerScan = scanFeatureMarkers(ROOT);\nchecks.push(...featureMarkerScan.checks);\ncheck('feature-marker-scan-coverage', 'Automatic feature marker scan completed', featureMarkerScan.sourceFilesScanned > 0, featureMarkerScan.sourceFilesScanned + ' product source files scanned · ' + featureMarkerScan.features.length + ' features discovered', true);
 // Dynamic README validation — no hardcoded path list
 for (const rf of readmeFiles) {
   const safeId = 'readme-' + rf.replace(/\W/g, '_');
@@ -296,7 +296,7 @@ const report = {
   readmeFilesScanned: readmeFiles,
   readmeFileCount: readmeFiles.length,
   summary: { total: checks.length, passed, failed: failed.length, criticalFailed: criticalFailed.length, documentationFindings: docFindings.length + dynFindings.filter(f => !f.unreadable).length + structureFindings.length },
-  detectedFeatures: features,
+  detectedFeatures: features,\n  autoDiscoveredFeatures: featureMarkerScan.features,\n  featureMarkerScan: { sourceFilesScanned: featureMarkerScan.sourceFilesScanned, discovered: featureMarkerScan.features.length, invalidMarkers: featureMarkerScan.checks.filter((item) => !item.ok).length },
   apiEndpoints: apis,
   countdownRegions: regionImpl,
   regionsImplemented: regionsOkCount,
