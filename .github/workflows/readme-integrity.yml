@@ -37,6 +37,8 @@ on:
   schedule:
     - cron: '15 */4 * * *'
   workflow_dispatch:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
     paths:
@@ -153,7 +155,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Commit integrity sections when they changed
-        if: steps.tests.outcome == 'success' && steps.check.outputs.changed == 'true' && steps.check.outputs.exit_code == '0'
+        if: github.event_name != 'pull_request' && steps.tests.outcome == 'success' && steps.check.outputs.changed == 'true' && steps.check.outputs.exit_code == '0'
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
