@@ -1,7 +1,7 @@
 {
   "lastContentUpdateAt": "2026-11-15T07:32:54.907Z",
-  "commit": "2abb4b0be300429b43cb73abe4e9c1ed70ea83c1",
-  "baseCommit": "d52289418d122df02ae4f37256418a93b963dcf7",
+  "commit": "56b5543c7a30ce7e11d55e397bdddc67f8567977",
+  "baseCommit": "3d55b814a73038d415c9b7d073eb11c4e0bf37f9",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -303,7 +303,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-15T07:32:56.284Z",
+    "checkedAt": "2026-11-15T10:42:00.717Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -857,10 +857,10 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "d52289418d122df02ae4f37256418a93b963dcf7",
-    "headCommit": "2abb4b0be300429b43cb73abe4e9c1ed70ea83c1",
-    "changedFiles": 1,
-    "analyzedFiles": 1,
+    "baseCommit": "3d55b814a73038d415c9b7d073eb11c4e0bf37f9",
+    "headCommit": "56b5543c7a30ce7e11d55e397bdddc67f8567977",
+    "changedFiles": 5,
+    "analyzedFiles": 5,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
@@ -870,6 +870,38 @@
     "potentialRisks": 0,
     "confirmedFindings": 0,
     "perFileImpact": [
+      {
+        "path": ".github/workflows/readme-integrity.yml",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "README.md",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "scripts/gemini-feature-discovery.js",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "test/dynamic-doc-audit.test.js",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
       {
         "path": "test/gemini-feature-discovery.test.js",
         "status": "M",
@@ -1532,7 +1564,7 @@
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=1",
+      "detail": "status=complete analyzed=5",
       "critical": false
     },
     {

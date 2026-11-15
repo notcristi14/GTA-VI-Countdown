@@ -1,9 +1,10 @@
 {
-  "provider": "heuristic-fallback",
-  "model": null,
-  "status": "fallback",
+  "provider": "gemini",
+  "model": "gemini-3.8-flash",
+  "status": "success",
+  "validation": "api-key-and-model-list",
   "candidates": 0,
   "discovered": 0,
   "changedFiles": [],
-  "reason": "GEMINI_API_KEY is not configured; existing deterministic discovery was used."
+  "reason": "Gemini API key accepted; configured model is listed and supports generateContent. No newly introduced product functions to review."
 }
