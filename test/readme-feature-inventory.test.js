@@ -4,6 +4,12 @@ const { scopeForReadme, buildFeatureInventoryMarkdown } = require('../scripts/re
 
 const checks = [
   { id: 'regions-count', claim: 'All 15 regions configured', ok: true, detail: '15/15 implemented' },
+  { id: 'github-latest-commit', claim: 'Latest GitHub commit card', ok: true, detail: '60s refresh' },
+  { id: 'github-commit-history', claim: 'GitHub commit history', ok: true, detail: 'up to 15 commits' },
+  { id: 'github-repo-stats', claim: 'Live GitHub repository statistics', ok: true, detail: '60s refresh' },
+  { id: 'newswire-ui', claim: 'Rockstar Newswire panel', ok: true, detail: 'show/hide' },
+  { id: 'background-controls', claim: 'Background gallery controls', ok: true, detail: 'manual/reset/auto' },
+  { id: 'fps-toggle', claim: 'FPS counter', ok: true, detail: 'persistent toggle' },
   { id: 'android-webview', claim: 'Android uses WebView', ok: true, detail: 'MainActivity.kt' },
   { id: 'ios-webview', claim: 'iOS uses WKWebView', ok: false, detail: 'missing' },
   { id: 'launcher-webview2', claim: 'Launcher uses WebView2', ok: true, detail: 'AppWindow.cpp' },
@@ -18,6 +24,12 @@ assert.strictEqual(scopeForReadme('new-area/README.md'), 'root');
 
 const root = buildFeatureInventoryMarkdown('README.md', checks);
 assert.match(root, /All 15 regions configured/);
+assert.match(root, /Latest GitHub commit card/);
+assert.match(root, /GitHub commit history/);
+assert.match(root, /Live GitHub repository statistics/);
+assert.match(root, /Rockstar Newswire panel/);
+assert.match(root, /Background gallery controls/);
+assert.match(root, /FPS counter/);
 assert.match(root, /Android uses WebView/);
 assert.match(root, /Launcher uses WebView2/);
 
