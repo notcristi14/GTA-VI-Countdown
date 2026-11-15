@@ -237,4 +237,4 @@ if (require.main === module) {
     console.log(JSON.stringify(report, null, 2));
   }).catch((error) => { console.error(error); process.exit(1); });
 }
-module.exports = { run, collectCandidates, parseModelFeatures, annotate, callGemini, MODEL };
+module.exports = { run, collectCandidates, parseModelFeatures, annotate, callGemini, validateGeminiAccess, MODEL };
