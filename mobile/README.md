@@ -286,6 +286,52 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 
 _Generated from the current source tree and integrity checks; this section refreshes automatically in every discovered README._
 
+#### Website · countdown and regions
+
+- **PASS** — All 15 region slug+UTC pairs in HTML (15/15 implemented)
+- **PASS** — Default activeSlug is 'europe' (activeSlug = 'europe')
+- **PASS** — Region path + localStorage gtaRegion (ok)
+- **PASS** — requestAnimationFrame countdown (HTML)
+- **PASS** — Available now UI string (present)
+- **PASS** — Pre-order UI in HTML (present)
+
+#### Website · interface and live integrations
+
+- **PASS** — Animated welcome screen with Enter action (welcome overlay + Enter button)
+- **PASS** — Netflix GTA VI extended-look link (Netflix platform badge + social link)
+- **PASS** — Official trailer modal and YouTube embed (trailer button + overlay + iframe)
+- **PASS** — Optional GA4 analytics panel and backend integration (optional GA4 visitors, visits and events; hidden when unconfigured)
+- **PASS** — Latest GitHub commit card with live refresh (latest commit card + 60s refresh)
+- **PASS** — Scrollable GitHub commit history (up to 15) (commit history modal + 15-commit API)
+- **PASS** — Live GitHub repository statistics (stars, forks, watchers, issues and language; 60s refresh)
+- **PASS** — Live Rockstar Newswire panel with visibility toggle (Newswire feed + show/hide control)
+- **PASS** — Background gallery manual, reset and auto-switch controls (switch background, restore default and auto-switch)
+- **PASS** — Background selection and auto-switch preference persist (gtaBgIndex + gtaAutoBg localStorage)
+- **PASS** — Live FPS counter with persistent toggle (FPS measurement + gtaFps preference)
+- **PASS** — Newswire visibility preference persists (gtaNews localStorage preference)
+- **PASS** — Official Rockstar and project social links (social link collection includes Rockstar channels and GitHub)
+- **PASS** — Shared animated press feedback on interactive controls (shared pulse feedback handler)
+
+#### Website · media, APIs and backgrounds
+
+- **PASS** — music.js + music.css (files)
+- **PASS** — Music panel CSS align-items:center (music.css)
+- **PASS** — Spotify album discovery registered (music-discovery.js)
+- **PASS** — Music cache ~30 minutes (MUSIC_CACHE_MS)
+- **PASS** — Trailers cache ~30 minutes (TRAILERS_CACHE_MS)
+- **PASS** — Backgrounds register + 6h check (backgrounds-api.js)
+- **PASS** — Background images on disk (bgs/) (143 image files)
+- **PASS** — Web App Manifest standalone (HTML)
+- **PASS** — No service worker (document honestly) (manifest-only PWA)
+- **PASS** — Route registered /api/trailers (app.get found)
+- **PASS** — Route registered /api/music (app.get found)
+- **PASS** — Route registered /api/repo (app.get found)
+- **PASS** — Route registered /api/commits (app.get found)
+- **PASS** — Route registered /api/commit (app.get found)
+- **PASS** — Route registered /api/news (app.get found)
+- **PASS** — Route registered /api/stats (app.get found)
+- **PASS** — Route registered /api/backgrounds (app.get found)
+
 #### Android
 
 - **PASS** — Android HOME_URL is https://gta-vi-countdown.onrender.com/ (actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/")
