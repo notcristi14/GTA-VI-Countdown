@@ -95,7 +95,8 @@ jobs:
           node test/dynamic-doc-audit.test.js
           node test/release-audit.test.js
           node test/project-structure-audit.test.js
-          node test/readme-feature-inventory.test.js\n          node test/feature-marker-scan.test.js
+          node test/readme-feature-inventory.test.js
+          node test/feature-marker-scan.test.js
 
       - name: Scan source, regenerate README feature inventories, and update integrity sections
         id: check
