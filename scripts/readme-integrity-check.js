@@ -201,7 +201,8 @@ check('launcher-nav', 'Launcher navigation chrome in AppWindow', features.launch
 check('launcher-ico', 'launcher/assets/GtaLogo.ico exists', launcherIco, launcherIco ? 'present' : 'MISSING', false);
 // Discover source-annotated product features; these checks feed every README Features table.
 const featureMarkerScan = scanFeatureMarkers(ROOT);
-checks.push(...featureMarkerScan.checks);\ncheck('feature-marker-scan-coverage', 'Automatic feature marker scan completed', featureMarkerScan.sourceFilesScanned > 0, featureMarkerScan.sourceFilesScanned + ' product source files scanned · ' + featureMarkerScan.features.length + ' features discovered', true);
+checks.push(...featureMarkerScan.checks);
+check('feature-marker-scan-coverage', 'Automatic feature marker scan completed', featureMarkerScan.sourceFilesScanned > 0, featureMarkerScan.sourceFilesScanned + ' product source files scanned · ' + featureMarkerScan.features.length + ' features discovered', true);
 // Dynamic README validation — no hardcoded path list
 for (const rf of readmeFiles) {
   const safeId = 'readme-' + rf.replace(/\W/g, '_');
