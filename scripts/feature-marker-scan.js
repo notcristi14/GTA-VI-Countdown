@@ -15,7 +15,7 @@ const VALID_SCOPES = new Set(['root', 'mobile', 'launcher', 'assets', 'all']);
 
 /**
  * Product-source annotation:
- * // @feature id="unique-id" title="Human-readable feature" group="Feature group" scopes="all"
+ * Annotation format: a comment marker with id, title, group and scopes attributes.
  *
  * Add one annotation beside the implementation. The integrity workflow discovers it,
  * validates its metadata, and includes it in every applicable generated README table.
