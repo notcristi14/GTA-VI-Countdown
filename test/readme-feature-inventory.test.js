@@ -34,17 +34,26 @@ assert.match(root, /Android uses WebView/);
 assert.match(root, /Launcher uses WebView2/);
 
 const mobile = buildFeatureInventoryMarkdown('mobile/README.md', checks);
+assert.match(mobile, /All 15 regions configured/);
+assert.match(mobile, /Latest GitHub commit card/);
+assert.match(mobile, /Rockstar Newswire panel/);
 assert.match(mobile, /Android uses WebView/);
 assert.match(mobile, /iOS uses WKWebView/);
 assert.match(mobile, /\*\*FAIL\*\*/);
 assert.doesNotMatch(mobile, /All 15 regions configured/);
 
 const launcher = buildFeatureInventoryMarkdown('launcher/README.md', checks);
+assert.match(launcher, /All 15 regions configured/);
+assert.match(launcher, /Latest GitHub commit card/);
+assert.match(launcher, /Rockstar Newswire panel/);
 assert.match(launcher, /Launcher uses WebView2/);
 assert.doesNotMatch(launcher, /Android uses WebView/);
 
 const assets = buildFeatureInventoryMarkdown('launcher/assets/README.md', checks);
+assert.match(assets, /All 15 regions configured/);
+assert.match(assets, /Latest GitHub commit card/);
+assert.match(assets, /Rockstar Newswire panel/);
 assert.match(assets, /Launcher icon exists/);
 assert.doesNotMatch(assets, /Launcher uses WebView2/);
 
-console.log('README feature inventory tests: 5 assertions passed.');
+console.log('README feature inventory tests: shared website features + scoped platform checks passed.');
