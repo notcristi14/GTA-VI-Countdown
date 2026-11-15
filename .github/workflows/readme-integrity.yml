@@ -88,6 +88,20 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Automatically detect new product functions and annotate source
+        id: feature_discovery
+        env:
+          FEATURE_DISCOVERY_BASE_SHA: ${{ github.event.before || github.event.pull_request.base.sha || '' }}
+        run: |
+          if [ -z "$FEATURE_DISCOVERY_BASE_SHA" ] || [ "$FEATURE_DISCOVERY_BASE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            FEATURE_DISCOVERY_BASE_SHA="$(git rev-parse HEAD^ 2>/dev/null || true)"
+          fi
+          if [ -n "$FEATURE_DISCOVERY_BASE_SHA" ]; then
+            FEATURE_DISCOVERY_BASE_SHA="$FEATURE_DISCOVERY_BASE_SHA" node scripts/auto-feature-discovery.js
+          else
+            echo "No parent commit available; automatic discovery skipped on initial commit."
+          fi
+
       - name: Run documentation, dynamic Git, feature discovery, and release audit tests
         id: tests
         run: |
@@ -97,6 +111,7 @@ jobs:
           node test/project-structure-audit.test.js
           node test/readme-feature-inventory.test.js
           node test/feature-marker-scan.test.js
+          node test/auto-feature-discovery.test.js
 
       - name: Scan source, regenerate README feature inventories, and update integrity sections
         id: check
@@ -138,6 +153,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # Stage every README.md discovered in the tree (dynamic; exclusions match findReadmes)
           git add scripts/integrity-report.json
+          git add -u
           while IFS= read -r -d '' f; do git add -- "$f"; done < <(find . -type f -name 'README.md' \
             -not -path './.git/*' \
             -not -path './node_modules/*' -not -path '*/node_modules/*' \
