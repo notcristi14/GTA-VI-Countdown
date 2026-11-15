@@ -104,6 +104,27 @@ function annotate(root, features) {
   }
   return changedFiles;
 }
+async function validateGeminiAccess(apiKey, fetchImpl) {
+  const request = fetchImpl || fetch;
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models';
+  const response = await request(url, {
+    method: 'GET',
+    headers: { 'x-goog-api-key': apiKey },
+    signal: AbortSignal.timeout(15000)
+  });
+  if (!response.ok) {
+    const detail = (await response.text()).slice(0, 300);
+    throw new Error('Gemini Models API HTTP ' + response.status + ': ' + detail);
+  }
+  const payload = await response.json();
+  const expectedName = 'models/' + MODEL;
+  const model = Array.isArray(payload.models) ? payload.models.find((item) => item && item.name === expectedName) : null;
+  if (!model) throw new Error('Configured Gemini model is not listed for this API key: ' + MODEL);
+  const methods = Array.isArray(model.supportedGenerationMethods) ? model.supportedGenerationMethods : [];
+  if (!methods.includes('generateContent')) throw new Error('Configured Gemini model does not advertise generateContent: ' + MODEL);
+  return model;
+}
+
 async function callGemini(apiKey, candidates, fetchImpl) {
   const request = fetchImpl || fetch;
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(MODEL) + ':generateContent';
@@ -186,17 +207,25 @@ async function run(options = {}) {
     // Even when no product functions changed, validate the configured API key
     // and model with a minimal structured request. This prevents a false
     // "Gemini success" based only on skipping the API call.
+    if (!candidates.length) {
+      await validateGeminiAccess(apiKey, options.fetch);
+      report.provider = 'gemini';
+      report.model = MODEL;
+      report.status = 'success';
+      report.validation = 'api-key-and-model-list';
+      report.reason = 'Gemini API key accepted; configured model is listed and supports generateContent. No newly introduced product functions to review.';
+      return report;
+    }
+
     const payload = await callGemini(apiKey, candidates, options.fetch);
     const features = parseModelFeatures(payload, candidates);
     report.provider = 'gemini';
     report.model = MODEL;
     report.status = 'success';
-    report.validation = candidates.length ? 'live-feature-analysis' : 'live-api-probe';
+    report.validation = 'live-feature-analysis';
     report.discovered = features.length;
     report.changedFiles = annotate(root, features);
-    report.reason = candidates.length
-      ? (features.length ? null : 'Gemini found no new README-worthy product features.')
-      : 'Live Gemini API validation succeeded; no newly introduced product functions to review.';
+    report.reason = features.length ? null : 'Gemini found no new README-worthy product features.';
   } catch (error) {
     useFallback('Gemini unavailable or invalid response; deterministic fallback used: ' + String(error.message || error).slice(0, 300));
   }
