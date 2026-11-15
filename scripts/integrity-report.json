@@ -1,7 +1,7 @@
 {
-  "lastContentUpdateAt": "2026-11-15T06:12:25.878Z",
-  "commit": "41b7ff78e747ad028b1b5ca378e1ad68330564a6",
-  "baseCommit": "b9993df5eff1b799a5a08130af64be8461cfce85",
+  "lastContentUpdateAt": "2026-11-15T06:22:19.330Z",
+  "commit": "9437f18542764419ec02362cd31946ae8e31bc53",
+  "baseCommit": "41b7ff78e747ad028b1b5ca378e1ad68330564a6",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -296,7 +296,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-15T06:17:27.533Z",
+    "checkedAt": "2026-11-15T06:22:21.095Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -322,13 +322,13 @@
         "assets": [
           {
             "name": "GTA-VI-Countdown-Windows-x64.zip",
-            "size": 332892,
+            "size": 332888,
             "state": "uploaded",
             "contentType": "application/zip",
-            "digest": "sha256:9471f0d1e67b55fa032224dee024dd3e16f67ecc45c9b77f581d3555e7291b00",
+            "digest": "sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2",
             "downloadUrl": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/desktop-v1.0.0/GTA-VI-Countdown-Windows-x64.zip",
             "bytesVerified": true,
-            "actualSha256": "sha256:9471f0d1e67b55fa032224dee024dd3e16f67ecc45c9b77f581d3555e7291b00"
+            "actualSha256": "sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2"
           }
         ]
       },
@@ -424,14 +424,14 @@
         "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-size",
         "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip has a non-zero size",
         "ok": true,
-        "detail": "332892 bytes",
+        "detail": "332888 bytes",
         "critical": true
       },
       {
         "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest",
         "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest",
         "ok": true,
-        "detail": "sha256:9471f0d1e67b55fa032224dee024dd3e16f67ecc45c9b77f581d3555e7291b00",
+        "detail": "sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2",
         "critical": true
       },
       {
@@ -445,7 +445,7 @@
         "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-bytes",
         "claim": "Downloaded bytes for GTA-VI-Countdown-Windows-x64.zip match GitHub size and SHA-256",
         "ok": true,
-        "detail": "downloaded=332892 bytes; API size=332892; digest=MATCH",
+        "detail": "downloaded=332888 bytes; API size=332888; digest=MATCH",
         "critical": true
       },
       {
@@ -844,10 +844,10 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "b9993df5eff1b799a5a08130af64be8461cfce85",
-    "headCommit": "41b7ff78e747ad028b1b5ca378e1ad68330564a6",
-    "changedFiles": 1,
-    "analyzedFiles": 1,
+    "baseCommit": "41b7ff78e747ad028b1b5ca378e1ad68330564a6",
+    "headCommit": "9437f18542764419ec02362cd31946ae8e31bc53",
+    "changedFiles": 5,
+    "analyzedFiles": 5,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
@@ -858,7 +858,39 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "test/readme-feature-inventory.test.js",
+        "path": "README.md",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "launcher/README.md",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "launcher/assets/README.md",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "mobile/README.md",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "scripts/integrity-report.json",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -1512,7 +1544,7 @@
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=1",
+      "detail": "status=complete analyzed=5",
       "critical": false
     },
     {
@@ -1554,14 +1586,14 @@
       "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-size",
       "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip has a non-zero size",
       "ok": true,
-      "detail": "332892 bytes",
+      "detail": "332888 bytes",
       "critical": true
     },
     {
       "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest",
       "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest",
       "ok": true,
-      "detail": "sha256:9471f0d1e67b55fa032224dee024dd3e16f67ecc45c9b77f581d3555e7291b00",
+      "detail": "sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2",
       "critical": true
     },
     {
@@ -1575,7 +1607,7 @@
       "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-bytes",
       "claim": "Downloaded bytes for GTA-VI-Countdown-Windows-x64.zip match GitHub size and SHA-256",
       "ok": true,
-      "detail": "downloaded=332892 bytes; API size=332892; digest=MATCH",
+      "detail": "downloaded=332888 bytes; API size=332888; digest=MATCH",
       "critical": true
     },
     {

@@ -13,7 +13,7 @@ Related docs:
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-15T06:12:25.878Z** · commit `41b7ff7` · **130/130 passed** · launcher/assets
+Last content update: **2026-11-15T06:22:19.330Z** · commit `9437f18` · **130/130 passed** · launcher/assets
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -111,16 +111,16 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `readme-discovery` | At least one README.md discovered recursively | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
 | `readme-no-hardcoded-list` | README checks are driven by findReadmes() discovery | PASS | dynamic discovery of 4 README.md file(s) |
 | `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
-| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=1 |
+| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=5 |
 | `releases-api` | GitHub Releases API returned a valid release collection | PASS | 3 release(s) retrieved |
 | `releases-published-count` | At least one published GitHub Release exists | PASS | 3 published release(s) |
 | `release-desktop-v1_0_0-published` | Release desktop-v1.0.0 is published (not a draft) | PASS | draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z |
 | `release-desktop-v1_0_0-tag` | Release desktop-v1.0.0 points to an existing Git tag | PASS | tag ref resolves to commit 9c5dd99da15efd4f7726a282f7ec39cc2f7394e3 |
 | `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-uploaded` | Release asset GTA-VI-Countdown-Windows-x64.zip is uploaded | PASS | state=uploaded |
-| `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-size` | Release asset GTA-VI-Countdown-Windows-x64.zip has a non-zero size | PASS | 332892 bytes |
-| `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest` | Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest | PASS | sha256:9471f0d1e67b55fa032224dee024dd3e16f67ecc45c9b77f581d3555e7291b00 |
+| `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-size` | Release asset GTA-VI-Countdown-Windows-x64.zip has a non-zero size | PASS | 332888 bytes |
+| `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest` | Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest | PASS | sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2 |
 | `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-url` | Release asset GTA-VI-Countdown-Windows-x64.zip has a valid GitHub download URL | PASS | https://github.com/notcristi14/GTA-VI-Countdown/releases/download/desktop-v1.0.0/GTA-VI-Countdown-Windows-x64.zip |
-| `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-bytes` | Downloaded bytes for GTA-VI-Countdown-Windows-x64.zip match GitHub size and SHA-256 | PASS | downloaded=332892 bytes; API size=332892; digest=MATCH |
+| `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-bytes` | Downloaded bytes for GTA-VI-Countdown-Windows-x64.zip match GitHub size and SHA-256 | PASS | downloaded=332888 bytes; API size=332888; digest=MATCH |
 | `release-desktop-v1_0_0-assets` | Release desktop-v1.0.0 contains at least one downloadable asset | PASS | 1 asset(s) |
 | `release-ios-v1_0_0-published` | Release ios-v1.0.0 is published (not a draft) | PASS | draft=false; prerelease=false; published_at=2026-11-05T12:09:26Z |
 | `release-ios-v1_0_0-tag` | Release ios-v1.0.0 points to an existing Git tag | PASS | tag ref resolves to commit 4f09f049882af8a0f8168636af3cd7c220d06526 |
@@ -244,7 +244,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `b9993df`
+Status: **complete** · changed files: 5 · analyzed: 5 · confirmed findings: 0 · potential risks: 0 · base `41b7ff7`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
