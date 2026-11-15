@@ -71,7 +71,8 @@ permissions:
 
 concurrency:
   group: readme-integrity
-  cancel-in-progress: true
+  # Let the active audit finish; newer pushes wait instead of cancelling its commit/push phase.
+  cancel-in-progress: false
 
 jobs:
   integrity:
@@ -80,13 +81,14 @@ jobs:
     if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
+          package-manager-cache: false
 
       - name: Automatically detect new product functions and annotate source
         id: feature_discovery
@@ -141,7 +143,7 @@ jobs:
           tail -40 /tmp/integrity-out.txt
           echo "$code" > /tmp/integrity-exit-code
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: integrity-report
@@ -175,7 +177,29 @@ jobs:
             exit 0
           fi
           git commit -m "chore(docs): sync README integrity sections [skip ci]"
-          git push
+
+          # A human/code push can still advance main while this job is running.
+          # Retry by rebasing this generated-doc commit; never force-push.
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo "Generated documentation commit pushed successfully (attempt $attempt)."
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "::error::Push remained rejected after 3 safe attempts; no force-push was attempted."
+              exit 1
+            fi
+
+            echo "Push race detected; fetching main and rebasing (attempt $attempt)."
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "::error::Safe rebase conflicted with newer main content. Leaving remote unchanged for the next scheduled audit."
+              exit 1
+            fi
+          done
+          exit 1
 
       - name: Fail job on critical integrity failures
         if: always()
