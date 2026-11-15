@@ -51,7 +51,7 @@ function buildFeatureInventoryMarkdown(readmePath, checks) {
     ).join('\n'));
   }
   return '### Source-verified feature inventory\n\n' +
-    '_Generated from the current source tree and integrity checks; this section refreshes automatically in every discovered README._\n\n' +
+    '_Generated from source checks and `@feature` annotations; add `// @feature id="unique-id" title="Feature name" group="Feature group" scopes="all"` beside a new implementation. The workflow discovers it and refreshes every applicable README automatically._\n\n' +
     (sections.length ? sections.join('\n\n') : '_No scoped feature checks are currently defined._');
 }
 
