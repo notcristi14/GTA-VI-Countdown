@@ -12,9 +12,9 @@ const valid = {
       parts: [{
         text: JSON.stringify({
           features: [
-            { functionName: 'refreshNews', id: 'refresh-news', title: 'Refresh News', group: 'Website', scopes: ['root'] },
-            { functionName: 'not-a-real-function', id: 'fake-feature', title: 'Fake', group: 'Website', scopes: ['all'] },
-            { functionName: 'tinyHelper', id: 'bad id', title: 'Invalid', group: 'Website', scopes: ['root'] }
+            { functionName: 'refreshNews', file: 'app.js', id: 'refresh-news', title: 'Refresh News', group: 'Website', scopes: ['root'] },
+            { functionName: 'not-a-real-function', file: 'app.js', id: 'fake-feature', title: 'Fake', group: 'Website', scopes: ['all'] },
+            { functionName: 'tinyHelper', file: 'app.js', id: 'bad id', title: 'Invalid', group: 'Website', scopes: ['root'] }
           ]
         })
       }]
