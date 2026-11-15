@@ -41,7 +41,19 @@ function buildFeatureInventoryMarkdown(readmePath, checks) {
   const checkMap = new Map((Array.isArray(checks) ? checks : []).map((item) => [item.id, item]));
   // Every README receives the complete website feature inventory. Its own
   // platform-specific checks are appended so local documentation stays relevant.
+  // Source-annotated features are grouped dynamically and filtered by README scope.
   const groups = [...COMMON_GROUPS, ...(GROUPS[scope] || GROUPS.root)];
+  const discoveredGroups = new Map();
+  for (const item of (Array.isArray(checks) ? checks : [])) {
+    if (!item.autoDiscovered || !item.ok) continue;
+    if (!item.scopes.includes('all') && !item.scopes.includes(scope)) continue;
+    const groupTitle = item.group || 'Auto-discovered features';
+    if (!discoveredGroups.has(groupTitle)) discoveredGroups.set(groupTitle, []);
+    discoveredGroups.get(groupTitle).push(item);
+  }
+  for (const [title, items] of discoveredGroups) {
+    groups.push({ title, ids: items.map((item) => item.id) });
+  }
   const sections = [];
   for (const group of groups) {
     const rows = group.ids.map((id) => checkMap.get(id)).filter(Boolean);
