@@ -61,5 +61,15 @@ test('deleted package.json reports removed documented dependencies and scripts',
   assert.ok(result.findings.some(f => f.id === 'dyn-removed-script-legacy'));
 }));
 
+test('new environment variables already documented in README are not flagged', () => withRepo(r => {
+  put(r, 'config.js', 'const model = process.env.GEMINI_MODEL;');
+  const base = commit(r, 'base');
+  put(r, 'config.js', 'const model = process.env.GEMINI_MODEL;\nconst key = process.env.GEMINI_API_KEY;');
+  const head = commit(r, 'head');
+  const docs = { 'README.md': '| GEMINI_MODEL | Optional model override |\n| GEMINI_API_KEY | Optional secret |' };
+  const result = runDynamicDocumentationAudit(r, docs, { baseSha: base, headSha: head });
+  assert.ok(!result.findings.some(f => f.id === 'dyn-new-env-GEMINI_API_KEY'));
+}));
+
 console.log('\nDynamic documentation Git integration tests: '+passed+' passed, '+failed+' failed.');
 if (failed) process.exit(1);
