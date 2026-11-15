@@ -352,7 +352,9 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   ├── auto-feature-discovery.js
 │   ├── doc-audit.js
 │   ├── dynamic-doc-audit.js
+│   ├── feature-discovery-report.json
 │   ├── feature-marker-scan.js
+│   ├── gemini-feature-discovery.js
 │   ├── integrity-report.json
 │   ├── project-structure-audit.js
 │   ├── readme-feature-inventory.js
@@ -365,6 +367,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
     ├── auto-feature-discovery.test.js
     ├── dynamic-doc-audit.test.js
     ├── feature-marker-scan.test.js
+    ├── gemini-feature-discovery.test.js
     ├── project-structure-audit.test.js
     ├── readme-feature-inventory.test.js
     └── release-audit.test.js
@@ -408,14 +411,14 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-15T06:39:39.237Z** · commit `1454ecf` · **131/131 passed** · root
+Last content update: **2026-11-15T07:32:02.359Z** · commit `5d1e107` · **131/135 passed** · **4 dynamic findings** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
 
 | ID | Claim | Status | Detail |
 |----|-------|--------|--------|
-| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 227 files · 32 directories · 6 workflows |
+| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 230 files · 32 directories · 6 workflows |
 | `project-structure-readme` | Root README Structure section is present | PASS | complete |
 | `project-structure-tree` | Root README ASCII tree matches the complete recursive inventory | PASS | all included files and directories are listed |
 | `workflow-doc--github-workflows-android-build-yml` | Workflow documented: .github/workflows/android-build.yml | PASS | listed in root README Structure |
@@ -495,7 +498,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `launcher-webview2` | AppWindow.cpp WebView2 usage | PASS | launcher/src/AppWindow.cpp |
 | `launcher-nav` | Launcher navigation chrome in AppWindow | PASS | nav patterns found |
 | `launcher-ico` | launcher/assets/GtaLogo.ico exists | PASS | present |
-| `feature-marker-scan-coverage` | Automatic feature marker scan completed | PASS | 25 product source files scanned · 0 features discovered |
+| `feature-marker-scan-coverage` | Automatic feature marker scan completed | PASS | 26 product source files scanned · 0 features discovered |
 | `readme-README_md-exists` | README.md exists and is readable | PASS | present |
 | `readme-README_md-markers` | README.md has ordered AUTO-GENERATED integrity markers | PASS | markers ordered |
 | `readme-launcher_README_md-exists` | launcher/README.md exists and is readable | PASS | present |
@@ -507,7 +510,11 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `readme-discovery` | At least one README.md discovered recursively | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
 | `readme-no-hardcoded-list` | README checks are driven by findReadmes() discovery | PASS | dynamic discovery of 4 README.md file(s) |
 | `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
-| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=1 |
+| `dyn-dyn-new-env-GEMINI_MODEL` | Dynamic doc impact: dyn-new-env-GEMINI_MODEL | FAIL | missing · README.md · Document `GEMINI_MODEL` in the environment section of the appropriate README, or confirm it is inter |
+| `dyn-dyn-new-env-FEATURE_DISCOVERY_BASE_SHA` | Dynamic doc impact: dyn-new-env-FEATURE_DISCOVERY_BASE_SHA | FAIL | missing · README.md · Document `FEATURE_DISCOVERY_BASE_SHA` in the environment section of the appropriate README, or confi |
+| `dyn-dyn-new-env-GITHUB_EVENT_BEFORE` | Dynamic doc impact: dyn-new-env-GITHUB_EVENT_BEFORE | FAIL | missing · README.md · Document `GITHUB_EVENT_BEFORE` in the environment section of the appropriate README, or confirm it i |
+| `dyn-dyn-new-env-GEMINI_API_KEY` | Dynamic doc impact: dyn-new-env-GEMINI_API_KEY | FAIL | missing · README.md · Document `GEMINI_API_KEY` in the environment section of the appropriate README, or confirm it is int |
+| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=3 |
 | `releases-api` | GitHub Releases API returned a valid release collection | PASS | 3 release(s) retrieved |
 | `releases-published-count` | At least one published GitHub Release exists | PASS | 3 published release(s) |
 | `release-desktop-v1_0_0-published` | Release desktop-v1.0.0 is published (not a draft) | PASS | draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z |
@@ -627,7 +634,7 @@ No missing or outdated documentation findings from deterministic DOC_SPECS / API
 
 ### Project structure inventory
 
-Repository inventory: **227 files** across **32 directories** · **4 README.md files** discovered recursively.
+Repository inventory: **230 files** across **32 directories** · **4 README.md files** discovered recursively.
 
 ASCII tree synchronization: **PASS** · README tree matches every included file and directory.
 
@@ -659,7 +666,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `20b4911`
+Status: **complete** · changed files: 3 · analyzed: 3 · confirmed findings: 0 · potential risks: 4 · base `a94d8a6`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->

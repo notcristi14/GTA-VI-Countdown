@@ -1,12 +1,12 @@
 {
-  "lastContentUpdateAt": "2026-11-15T06:39:39.237Z",
-  "commit": "1454ecf256b611a6cb437a61c616f99e827a0fe5",
-  "baseCommit": "20b4911acc44e9068a6164427f3cb620b4427182",
+  "lastContentUpdateAt": "2026-11-15T07:32:02.359Z",
+  "commit": "5d1e10727491b1da293dbe11a211cdc684c13bcf",
+  "baseCommit": "a94d8a63625c209cfc266afba41a2b583d28ef74",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
     "status": "complete",
-    "fileCount": 227,
+    "fileCount": 230,
     "directoryCount": 32,
     "files": [
       ".github/workflows/android-build.yml",
@@ -221,7 +221,9 @@
       "scripts/auto-feature-discovery.js",
       "scripts/doc-audit.js",
       "scripts/dynamic-doc-audit.js",
+      "scripts/feature-discovery-report.json",
       "scripts/feature-marker-scan.js",
+      "scripts/gemini-feature-discovery.js",
       "scripts/integrity-report.json",
       "scripts/project-structure-audit.js",
       "scripts/readme-feature-inventory.js",
@@ -233,6 +235,7 @@
       "test/auto-feature-discovery.test.js",
       "test/dynamic-doc-audit.test.js",
       "test/feature-marker-scan.test.js",
+      "test/gemini-feature-discovery.test.js",
       "test/project-structure-audit.test.js",
       "test/readme-feature-inventory.test.js",
       "test/release-audit.test.js"
@@ -300,7 +303,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-15T06:39:41.709Z",
+    "checkedAt": "2026-11-15T07:32:04.001Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -666,11 +669,11 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 131,
+    "total": 135,
     "passed": 131,
-    "failed": 0,
+    "failed": 4,
     "criticalFailed": 0,
-    "documentationFindings": 0
+    "documentationFindings": 4
   },
   "detectedFeatures": {
     "regions15": true,
@@ -698,7 +701,7 @@
   },
   "autoDiscoveredFeatures": [],
   "featureMarkerScan": {
-    "sourceFilesScanned": 25,
+    "sourceFilesScanned": 26,
     "discovered": 0,
     "invalidMarkers": 0
   },
@@ -846,7 +849,60 @@
     "webView2": true,
     "source": "launcher/src/AppWindow.cpp"
   },
-  "missingOrOutdatedDocumentation": [],
+  "missingOrOutdatedDocumentation": [
+    {
+      "id": "dyn-new-env-GEMINI_MODEL",
+      "severity": "low",
+      "documentationFile": "README.md",
+      "sourceFile": "scripts/gemini-feature-discovery.js",
+      "problem": "Environment variable GEMINI_MODEL is newly referenced in scripts/gemini-feature-discovery.js and is not mentioned in any README.",
+      "suggestedCorrection": "Document `GEMINI_MODEL` in the environment section of the appropriate README, or confirm it is internal-only.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": false,
+      "potentialRisk": true,
+      "changeType": "A"
+    },
+    {
+      "id": "dyn-new-env-FEATURE_DISCOVERY_BASE_SHA",
+      "severity": "low",
+      "documentationFile": "README.md",
+      "sourceFile": "scripts/gemini-feature-discovery.js",
+      "problem": "Environment variable FEATURE_DISCOVERY_BASE_SHA is newly referenced in scripts/gemini-feature-discovery.js and is not mentioned in any README.",
+      "suggestedCorrection": "Document `FEATURE_DISCOVERY_BASE_SHA` in the environment section of the appropriate README, or confirm it is internal-only.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": false,
+      "potentialRisk": true,
+      "changeType": "A"
+    },
+    {
+      "id": "dyn-new-env-GITHUB_EVENT_BEFORE",
+      "severity": "low",
+      "documentationFile": "README.md",
+      "sourceFile": "scripts/gemini-feature-discovery.js",
+      "problem": "Environment variable GITHUB_EVENT_BEFORE is newly referenced in scripts/gemini-feature-discovery.js and is not mentioned in any README.",
+      "suggestedCorrection": "Document `GITHUB_EVENT_BEFORE` in the environment section of the appropriate README, or confirm it is internal-only.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": false,
+      "potentialRisk": true,
+      "changeType": "A"
+    },
+    {
+      "id": "dyn-new-env-GEMINI_API_KEY",
+      "severity": "low",
+      "documentationFile": "README.md",
+      "sourceFile": "scripts/gemini-feature-discovery.js",
+      "problem": "Environment variable GEMINI_API_KEY is newly referenced in scripts/gemini-feature-discovery.js and is not mentioned in any README.",
+      "suggestedCorrection": "Document `GEMINI_API_KEY` in the environment section of the appropriate README, or confirm it is internal-only.",
+      "kind": "missing",
+      "deterministic": true,
+      "confirmed": false,
+      "potentialRisk": true,
+      "changeType": "A"
+    }
+  ],
   "documentationAudit": {
     "deterministic": true,
     "specsEvaluated": 21,
@@ -854,22 +910,38 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "20b4911acc44e9068a6164427f3cb620b4427182",
-    "headCommit": "1454ecf256b611a6cb437a61c616f99e827a0fe5",
-    "changedFiles": 1,
-    "analyzedFiles": 1,
+    "baseCommit": "a94d8a63625c209cfc266afba41a2b583d28ef74",
+    "headCommit": "5d1e10727491b1da293dbe11a211cdc684c13bcf",
+    "changedFiles": 3,
+    "analyzedFiles": 3,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
-    "documentationRelevantChanges": 0,
+    "documentationRelevantChanges": 1,
     "missingDocumentationFindings": 0,
     "outdatedDocumentationFindings": 0,
-    "potentialRisks": 0,
+    "potentialRisks": 4,
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "scripts/auto-feature-discovery.js",
+        "path": ".github/workflows/readme-integrity.yml",
         "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
+      {
+        "path": "scripts/gemini-feature-discovery.js",
+        "status": "A",
+        "oldPath": null,
+        "findings": 4,
+        "relevant": true,
+        "unreadable": false
+      },
+      {
+        "path": "test/gemini-feature-discovery.test.js",
+        "status": "A",
         "oldPath": null,
         "findings": 0,
         "relevant": false,
@@ -879,13 +951,38 @@
     "status": "complete",
     "error": null
   },
-  "failedChecks": [],
+  "failedChecks": [
+    {
+      "id": "dyn-dyn-new-env-GEMINI_MODEL",
+      "claim": "Dynamic doc impact: dyn-new-env-GEMINI_MODEL",
+      "detail": "missing · README.md · Document `GEMINI_MODEL` in the environment section of the appropriate README, or confirm it is inter",
+      "critical": false
+    },
+    {
+      "id": "dyn-dyn-new-env-FEATURE_DISCOVERY_BASE_SHA",
+      "claim": "Dynamic doc impact: dyn-new-env-FEATURE_DISCOVERY_BASE_SHA",
+      "detail": "missing · README.md · Document `FEATURE_DISCOVERY_BASE_SHA` in the environment section of the appropriate README, or confi",
+      "critical": false
+    },
+    {
+      "id": "dyn-dyn-new-env-GITHUB_EVENT_BEFORE",
+      "claim": "Dynamic doc impact: dyn-new-env-GITHUB_EVENT_BEFORE",
+      "detail": "missing · README.md · Document `GITHUB_EVENT_BEFORE` in the environment section of the appropriate README, or confirm it i",
+      "critical": false
+    },
+    {
+      "id": "dyn-dyn-new-env-GEMINI_API_KEY",
+      "claim": "Dynamic doc impact: dyn-new-env-GEMINI_API_KEY",
+      "detail": "missing · README.md · Document `GEMINI_API_KEY` in the environment section of the appropriate README, or confirm it is int",
+      "critical": false
+    }
+  ],
   "checks": [
     {
       "id": "project-structure-inventory",
       "claim": "Complete project file/directory inventory generated",
       "ok": true,
-      "detail": "227 files · 32 directories · 6 workflows",
+      "detail": "230 files · 32 directories · 6 workflows",
       "critical": false
     },
     {
@@ -1445,7 +1542,7 @@
       "id": "feature-marker-scan-coverage",
       "claim": "Automatic feature marker scan completed",
       "ok": true,
-      "detail": "25 product source files scanned · 0 features discovered",
+      "detail": "26 product source files scanned · 0 features discovered",
       "critical": true
     },
     {
@@ -1526,10 +1623,38 @@
       "critical": false
     },
     {
+      "id": "dyn-dyn-new-env-GEMINI_MODEL",
+      "claim": "Dynamic doc impact: dyn-new-env-GEMINI_MODEL",
+      "ok": false,
+      "detail": "missing · README.md · Document `GEMINI_MODEL` in the environment section of the appropriate README, or confirm it is inter",
+      "critical": false
+    },
+    {
+      "id": "dyn-dyn-new-env-FEATURE_DISCOVERY_BASE_SHA",
+      "claim": "Dynamic doc impact: dyn-new-env-FEATURE_DISCOVERY_BASE_SHA",
+      "ok": false,
+      "detail": "missing · README.md · Document `FEATURE_DISCOVERY_BASE_SHA` in the environment section of the appropriate README, or confi",
+      "critical": false
+    },
+    {
+      "id": "dyn-dyn-new-env-GITHUB_EVENT_BEFORE",
+      "claim": "Dynamic doc impact: dyn-new-env-GITHUB_EVENT_BEFORE",
+      "ok": false,
+      "detail": "missing · README.md · Document `GITHUB_EVENT_BEFORE` in the environment section of the appropriate README, or confirm it i",
+      "critical": false
+    },
+    {
+      "id": "dyn-dyn-new-env-GEMINI_API_KEY",
+      "claim": "Dynamic doc impact: dyn-new-env-GEMINI_API_KEY",
+      "ok": false,
+      "detail": "missing · README.md · Document `GEMINI_API_KEY` in the environment section of the appropriate README, or confirm it is int",
+      "critical": false
+    },
+    {
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=1",
+      "detail": "status=complete analyzed=3",
       "critical": false
     },
     {

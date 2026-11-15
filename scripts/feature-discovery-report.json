@@ -1,0 +1,9 @@
+{
+  "provider": "heuristic-fallback",
+  "model": null,
+  "status": "fallback",
+  "candidates": 0,
+  "discovered": 0,
+  "changedFiles": [],
+  "reason": "GEMINI_API_KEY is not configured; existing deterministic discovery was used."
+}
