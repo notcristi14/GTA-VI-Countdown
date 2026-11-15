@@ -143,7 +143,7 @@ async function callGemini(apiKey, candidates, fetchImpl) {
     headers: { 'content-type': 'application/json', 'x-goog-api-key': apiKey },
     body: JSON.stringify({
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.1, responseMimeType: 'application/json', responseSchema: schema, maxOutputTokens: 4096 }
+      generationConfig: { temperature: 0.1, responseMimeType: 'application/json', responseSchema: schema, maxOutputTokens: candidates.length ? 4096 : 256 }
     }),
     signal: AbortSignal.timeout(45000)
   });
@@ -157,7 +157,7 @@ async function run(options = {}) {
   const root = options.root || ROOT;
   const baseSha = options.baseSha || process.env.FEATURE_DISCOVERY_BASE_SHA || process.env.GITHUB_EVENT_BEFORE || '';
   const apiKey = options.apiKey === undefined ? process.env.GEMINI_API_KEY : options.apiKey;
-  const report = { provider: 'heuristic-fallback', model: null, status: 'fallback', candidates: 0, discovered: 0, changedFiles: [], reason: null };
+  const report = { provider: 'heuristic-fallback', model: null, status: 'fallback', validation: 'not-run', candidates: 0, discovered: 0, changedFiles: [], reason: null };
   if (!baseSha || /^0+$/.test(baseSha)) {
     report.status = 'skipped';
     report.reason = 'No valid base commit supplied.';
@@ -165,36 +165,40 @@ async function run(options = {}) {
   }
   const candidates = collectCandidates(root, baseSha);
   report.candidates = candidates.length;
-  if (!apiKey) {
-    const { runAutoDiscovery } = require('./auto-feature-discovery');
+  const { runAutoDiscovery } = require('./auto-feature-discovery');
+  const useFallback = (reason) => {
     const fallback = runAutoDiscovery(root, baseSha);
-    report.reason = 'GEMINI_API_KEY is not configured; existing deterministic discovery was used.';
+    report.provider = 'heuristic-fallback';
+    report.model = null;
+    report.status = 'fallback';
+    report.validation = 'failed-or-unavailable';
+    report.reason = reason;
     report.discovered = fallback.added.length;
     report.changedFiles = fallback.changedFiles;
+  };
+
+  if (!apiKey) {
+    useFallback('GEMINI_API_KEY is not configured; deterministic discovery was used.');
     return report;
   }
-  if (!candidates.length) {
-    report.provider = 'gemini';
-    report.model = MODEL;
-    report.status = 'success';
-    report.reason = 'No newly introduced product functions to review.';
-    return report;
-  }
+
   try {
+    // Even when no product functions changed, validate the configured API key
+    // and model with a minimal structured request. This prevents a false
+    // "Gemini success" based only on skipping the API call.
     const payload = await callGemini(apiKey, candidates, options.fetch);
     const features = parseModelFeatures(payload, candidates);
     report.provider = 'gemini';
     report.model = MODEL;
     report.status = 'success';
+    report.validation = candidates.length ? 'live-feature-analysis' : 'live-api-probe';
     report.discovered = features.length;
     report.changedFiles = annotate(root, features);
-    report.reason = features.length ? null : 'Gemini found no new README-worthy product features.';
+    report.reason = candidates.length
+      ? (features.length ? null : 'Gemini found no new README-worthy product features.')
+      : 'Live Gemini API validation succeeded; no newly introduced product functions to review.';
   } catch (error) {
-    const { runAutoDiscovery } = require('./auto-feature-discovery');
-    const fallback = runAutoDiscovery(root, baseSha);
-    report.reason = 'Gemini unavailable or invalid response; deterministic fallback used: ' + String(error.message || error).slice(0, 300);
-    report.discovered = fallback.added.length;
-    report.changedFiles = fallback.changedFiles;
+    useFallback('Gemini unavailable or invalid response; deterministic fallback used: ' + String(error.message || error).slice(0, 300));
   }
   return report;
 }
