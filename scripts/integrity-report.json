@@ -1,7 +1,7 @@
 {
-  "lastContentUpdateAt": "2026-11-14T09:56:43.474Z",
-  "commit": "f0512bf66d6211090bae05a548594e709b74f2a1",
-  "baseCommit": "83c2c8405cfcc8b5a80c4c0fa04e5ddcc1d52419",
+  "lastContentUpdateAt": "2026-11-15T06:12:25.878Z",
+  "commit": "ce001de076af3f9903c3ca94c61dafce438bbbda",
+  "baseCommit": "abd541c56be382086a9ea70891f106fd21650686",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -296,7 +296,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-14T23:53:45.520Z",
+    "checkedAt": "2026-11-15T06:12:27.784Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -662,8 +662,8 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 116,
-    "passed": 116,
+    "total": 130,
+    "passed": 130,
     "failed": 0,
     "criticalFailed": 0,
     "documentationFindings": 0
@@ -844,10 +844,10 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "83c2c8405cfcc8b5a80c4c0fa04e5ddcc1d52419",
-    "headCommit": "f0512bf66d6211090bae05a548594e709b74f2a1",
-    "changedFiles": 5,
-    "analyzedFiles": 5,
+    "baseCommit": "abd541c56be382086a9ea70891f106fd21650686",
+    "headCommit": "ce001de076af3f9903c3ca94c61dafce438bbbda",
+    "changedFiles": 1,
+    "analyzedFiles": 1,
     "skippedFiles": [],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
@@ -858,39 +858,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "launcher/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "launcher/assets/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "mobile/README.md",
-        "status": "M",
-        "oldPath": null,
-        "findings": 0,
-        "relevant": false,
-        "unreadable": false
-      },
-      {
-        "path": "scripts/integrity-report.json",
+        "path": "test/readme-feature-inventory.test.js",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -1125,6 +1093,104 @@
       "claim": "Pre-order UI in HTML",
       "ok": true,
       "detail": "present",
+      "critical": false
+    },
+    {
+      "id": "welcome-screen",
+      "claim": "Animated welcome screen with Enter action",
+      "ok": true,
+      "detail": "welcome overlay + Enter button",
+      "critical": false
+    },
+    {
+      "id": "netflix-link",
+      "claim": "Netflix GTA VI extended-look link",
+      "ok": true,
+      "detail": "Netflix platform badge + social link",
+      "critical": false
+    },
+    {
+      "id": "trailers-ui",
+      "claim": "Official trailer modal and YouTube embed",
+      "ok": true,
+      "detail": "trailer button + overlay + iframe",
+      "critical": false
+    },
+    {
+      "id": "ga4-analytics",
+      "claim": "Optional GA4 analytics panel and backend integration",
+      "ok": true,
+      "detail": "optional GA4 visitors, visits and events; hidden when unconfigured",
+      "critical": false
+    },
+    {
+      "id": "github-latest-commit",
+      "claim": "Latest GitHub commit card with live refresh",
+      "ok": true,
+      "detail": "latest commit card + 60s refresh",
+      "critical": false
+    },
+    {
+      "id": "github-commit-history",
+      "claim": "Scrollable GitHub commit history (up to 15)",
+      "ok": true,
+      "detail": "commit history modal + 15-commit API",
+      "critical": false
+    },
+    {
+      "id": "github-repo-stats",
+      "claim": "Live GitHub repository statistics",
+      "ok": true,
+      "detail": "stars, forks, watchers, issues and language; 60s refresh",
+      "critical": false
+    },
+    {
+      "id": "newswire-ui",
+      "claim": "Live Rockstar Newswire panel with visibility toggle",
+      "ok": true,
+      "detail": "Newswire feed + show/hide control",
+      "critical": false
+    },
+    {
+      "id": "background-controls",
+      "claim": "Background gallery manual, reset and auto-switch controls",
+      "ok": true,
+      "detail": "switch background, restore default and auto-switch",
+      "critical": false
+    },
+    {
+      "id": "background-auto-persist",
+      "claim": "Background selection and auto-switch preference persist",
+      "ok": true,
+      "detail": "gtaBgIndex + gtaAutoBg localStorage",
+      "critical": false
+    },
+    {
+      "id": "fps-toggle",
+      "claim": "Live FPS counter with persistent toggle",
+      "ok": true,
+      "detail": "FPS measurement + gtaFps preference",
+      "critical": false
+    },
+    {
+      "id": "news-toggle-persist",
+      "claim": "Newswire visibility preference persists",
+      "ok": true,
+      "detail": "gtaNews localStorage preference",
+      "critical": false
+    },
+    {
+      "id": "social-links",
+      "claim": "Official Rockstar and project social links",
+      "ok": true,
+      "detail": "social link collection includes Rockstar channels and GitHub",
+      "critical": false
+    },
+    {
+      "id": "shared-button-feedback",
+      "claim": "Shared animated press feedback on interactive controls",
+      "ok": true,
+      "detail": "shared pulse feedback handler",
       "critical": false
     },
     {
@@ -1446,7 +1512,7 @@
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=5",
+      "detail": "status=complete analyzed=1",
       "critical": false
     },
     {

@@ -144,7 +144,7 @@ If Match is **NO**, the native shell home URL does not match the intended root U
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-14T09:57:36.748Z** · commit `f0512bf` · **116/116 passed** · mobile
+Last content update: **2026-11-15T06:12:25.878Z** · commit `ce001de` · **130/130 passed** · mobile
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -183,6 +183,20 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `digit-reels` | requestAnimationFrame countdown | PASS | HTML |
 | `available-now` | Available now UI string | PASS | present |
 | `preorder` | Pre-order UI in HTML | PASS | present |
+| `welcome-screen` | Animated welcome screen with Enter action | PASS | welcome overlay + Enter button |
+| `netflix-link` | Netflix GTA VI extended-look link | PASS | Netflix platform badge + social link |
+| `trailers-ui` | Official trailer modal and YouTube embed | PASS | trailer button + overlay + iframe |
+| `ga4-analytics` | Optional GA4 analytics panel and backend integration | PASS | optional GA4 visitors, visits and events; hidden when unconfigured |
+| `github-latest-commit` | Latest GitHub commit card with live refresh | PASS | latest commit card + 60s refresh |
+| `github-commit-history` | Scrollable GitHub commit history (up to 15) | PASS | commit history modal + 15-commit API |
+| `github-repo-stats` | Live GitHub repository statistics | PASS | stars, forks, watchers, issues and language; 60s refresh |
+| `newswire-ui` | Live Rockstar Newswire panel with visibility toggle | PASS | Newswire feed + show/hide control |
+| `background-controls` | Background gallery manual, reset and auto-switch controls | PASS | switch background, restore default and auto-switch |
+| `background-auto-persist` | Background selection and auto-switch preference persist | PASS | gtaBgIndex + gtaAutoBg localStorage |
+| `fps-toggle` | Live FPS counter with persistent toggle | PASS | FPS measurement + gtaFps preference |
+| `news-toggle-persist` | Newswire visibility preference persists | PASS | gtaNews localStorage preference |
+| `social-links` | Official Rockstar and project social links | PASS | social link collection includes Rockstar channels and GitHub |
+| `shared-button-feedback` | Shared animated press feedback on interactive controls | PASS | shared pulse feedback handler |
 | `music-files` | music.js + music.css | PASS | files |
 | `music-center` | Music panel CSS align-items:center | PASS | music.css |
 | `music-discovery` | Spotify album discovery registered | PASS | music-discovery.js |
@@ -228,7 +242,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `readme-discovery` | At least one README.md discovered recursively | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
 | `readme-no-hardcoded-list` | README checks are driven by findReadmes() discovery | PASS | dynamic discovery of 4 README.md file(s) |
 | `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
-| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=5 |
+| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=1 |
 | `releases-api` | GitHub Releases API returned a valid release collection | PASS | 3 release(s) retrieved |
 | `releases-published-count` | At least one published GitHub Release exists | PASS | 3 published release(s) |
 | `release-desktop-v1_0_0-published` | Release desktop-v1.0.0 is published (not a draft) | PASS | draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z |
@@ -330,7 +344,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 5 · analyzed: 5 · confirmed findings: 0 · potential risks: 0 · base `83c2c84`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `abd541c`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
