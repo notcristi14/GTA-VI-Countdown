@@ -349,6 +349,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 ├── package.json
 ├── README.md
 ├── scripts/
+│   ├── auto-feature-discovery.js
 │   ├── doc-audit.js
 │   ├── dynamic-doc-audit.js
 │   ├── feature-marker-scan.js
@@ -361,6 +362,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   └── test-doc-audit.js
 ├── stats.json
 └── test/
+    ├── auto-feature-discovery.test.js
     ├── dynamic-doc-audit.test.js
     ├── feature-marker-scan.test.js
     ├── project-structure-audit.test.js
@@ -406,14 +408,14 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-15T06:29:48.910Z** · commit `8b79fcb` · **131/131 passed** · root
+Last content update: **2026-11-15T06:39:39.237Z** · commit `1454ecf` · **131/131 passed** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
 
 | ID | Claim | Status | Detail |
 |----|-------|--------|--------|
-| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 225 files · 32 directories · 6 workflows |
+| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 227 files · 32 directories · 6 workflows |
 | `project-structure-readme` | Root README Structure section is present | PASS | complete |
 | `project-structure-tree` | Root README ASCII tree matches the complete recursive inventory | PASS | all included files and directories are listed |
 | `workflow-doc--github-workflows-android-build-yml` | Workflow documented: .github/workflows/android-build.yml | PASS | listed in root README Structure |
@@ -493,7 +495,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `launcher-webview2` | AppWindow.cpp WebView2 usage | PASS | launcher/src/AppWindow.cpp |
 | `launcher-nav` | Launcher navigation chrome in AppWindow | PASS | nav patterns found |
 | `launcher-ico` | launcher/assets/GtaLogo.ico exists | PASS | present |
-| `feature-marker-scan-coverage` | Automatic feature marker scan completed | PASS | 24 product source files scanned · 0 features discovered |
+| `feature-marker-scan-coverage` | Automatic feature marker scan completed | PASS | 25 product source files scanned · 0 features discovered |
 | `readme-README_md-exists` | README.md exists and is readable | PASS | present |
 | `readme-README_md-markers` | README.md has ordered AUTO-GENERATED integrity markers | PASS | markers ordered |
 | `readme-launcher_README_md-exists` | launcher/README.md exists and is readable | PASS | present |
@@ -625,7 +627,7 @@ No missing or outdated documentation findings from deterministic DOC_SPECS / API
 
 ### Project structure inventory
 
-Repository inventory: **225 files** across **32 directories** · **4 README.md files** discovered recursively.
+Repository inventory: **227 files** across **32 directories** · **4 README.md files** discovered recursively.
 
 ASCII tree synchronization: **PASS** · README tree matches every included file and directory.
 
@@ -657,7 +659,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `ce84e56`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `20b4911`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
