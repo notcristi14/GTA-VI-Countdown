@@ -414,7 +414,7 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-15T07:32:54.907Z** · commit `765105d` · **131/131 passed** · root
+Last content update: **2026-11-15T07:32:54.907Z** · commit `4b7737e` · **131/131 passed** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -665,7 +665,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 5 · analyzed: 5 · confirmed findings: 0 · potential risks: 0 · base `5a8475f`
+Status: **complete** · changed files: 5 · analyzed: 5 · confirmed findings: 0 · potential risks: 0 · base `765105d`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
