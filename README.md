@@ -53,7 +53,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - ✨ Smooth tab switch animation; “Open on YouTube” link; Escape / click-outside to close.
 
 ### 🎵 Music (soundtrack) — every released song playable + auto-discovery
-- 🎧 **Play Music** — Compact neon panel centered on every screen (mobile + desktop); live **Days · Hrs · Mins · Secs** countdown to album unlock on Spotify (Nov 20) with smooth digit-reel animation + second progress bar (matches main timer style); larger touch targets; **official Spotify embeds** only (no pirated audio).
+- 🎧 **Play Music** — Compact neon panel centered on every screen (mobile + desktop); live **Days · Hrs · Mins · Secs** album available on Spotify with smooth digit-reel animation + second progress bar (matches main timer style); larger touch targets; **official Spotify embeds** only (no pirated audio).
 - 🔎 **Auto-check for new tracks** — Server scrapes the official Spotify album embed (`Grand Theft Auto VI: The Album`, id `5BYKG4MHfySZthe2W6r7n4`) every **30 minutes**, merges any newly playable singles into the list, and exposes them via **`/api/music`**. Client also polls every 30 minutes and on tab focus (`visibilitychange`).
 - 💿 Seeded released singles (always present even if discovery fails):
   1. **That’s It** — Yung Lean feat. Future & Metro Boomin
@@ -66,7 +66,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
   8. **Don’t Chart** — Cardi B
   9. **Bright Lights, Big City** — Keith Richards
 - 🎹 **Score preview** — **Pusher** (Justice feat. Gesaffelstein) from the Original Score.
-- 💿 **Full album embed** — Spotify album player with cover-art fallback when the pre-release embed renders blank; singles remain playable. Full album unlocks on Spotify **Nov 20, 2026** (34 tracks total).
+- 💿 **Full album embed** — Spotify album player. Full album is available on Spotify (34 tracks total).
 - 🪄 New playable album tracks discovered after a single drop are added automatically (no redeploy required).
 - 📱 Scrollable tab strip, smooth switch animation, “Open on Spotify” link, Escape / click-outside to close.
 - 📻 Radio station full playlists are not mirrored (licensed in-game only).
@@ -414,7 +414,7 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-19T17:44:55.956Z** · commit `345ad91` · **141/141 passed** · root
+Last content update: **2026-11-19T19:48:26.921Z** · commit `local` · **129/140 passed** · **10 critical failures** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -432,23 +432,23 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `workflow-doc--github-workflows-sync-backgrounds-yml` | Workflow documented: .github/workflows/sync-backgrounds.yml | PASS | listed in root README Structure |
 | `file-html` | gta-vi-countdown.html exists | PASS | present |
 | `file-app` | app.js Express entry exists | PASS | present |
-| `regions-count` | All 15 region slug+UTC pairs in HTML | PASS | 15/15 implemented |
+| `regions-count` | All 15 region slug+UTC pairs in HTML | FAIL | 6/15 implemented |
 | `region-new-zealand` | Region new-zealand configured | PASS | 2026-11-18T11:00:00Z |
 | `region-australia` | Region australia configured | PASS | 2026-11-18T13:00:00Z |
-| `region-japan-korea` | Region japan-korea configured | PASS | 2026-11-18T15:00:00Z |
-| `region-asia-pacific` | Region asia-pacific configured | PASS | 2026-11-18T16:00:00Z |
-| `region-indonesia-thailand` | Region indonesia-thailand configured | PASS | 2026-11-18T17:00:00Z |
+| `region-japan-korea` | Region japan-korea configured | FAIL | slugPresent=false targetPresent=true |
+| `region-asia-pacific` | Region asia-pacific configured | FAIL | slugPresent=false targetPresent=true |
+| `region-indonesia-thailand` | Region indonesia-thailand configured | FAIL | slugPresent=false targetPresent=true |
 | `region-india` | Region india configured | PASS | 2026-11-18T18:30:00Z |
 | `region-uae` | Region uae configured | PASS | 2026-11-18T20:00:00Z |
-| `region-saudi-turkey` | Region saudi-turkey configured | PASS | 2026-11-18T21:00:00Z |
+| `region-saudi-turkey` | Region saudi-turkey configured | FAIL | slugPresent=false targetPresent=true |
 | `region-eastern-europe` | Region eastern-europe configured | PASS | 2026-11-18T22:00:00Z |
-| `region-europe` | Region europe configured | PASS | 2026-11-18T23:00:00Z |
+| `region-europe` | Region europe configured | FAIL | slugPresent=false targetPresent=true |
 | `region-uk` | Region uk configured | PASS | 2026-11-19T00:00:00Z |
-| `region-south-america` | Region south-america configured | PASS | 2026-11-19T03:00:00Z |
-| `region-bolivia` | Region bolivia configured | PASS | 2026-11-19T04:00:00Z |
-| `region-us-canada` | Region us-canada configured | PASS | 2026-11-19T05:00:00Z |
-| `region-mexico` | Region mexico configured | PASS | 2026-11-19T06:00:00Z |
-| `default-europe` | Default activeSlug is 'europe' | PASS | activeSlug = 'europe' |
+| `region-south-america` | Region south-america configured | FAIL | slugPresent=false targetPresent=true |
+| `region-bolivia` | Region bolivia configured | FAIL | slugPresent=false targetPresent=false |
+| `region-us-canada` | Region us-canada configured | FAIL | slugPresent=false targetPresent=true |
+| `region-mexico` | Region mexico configured | FAIL | slugPresent=false targetPresent=false |
+| `default-europe` | Default activeSlug is 'europe' | FAIL | not found |
 | `region-persist` | Region path + localStorage gtaRegion | PASS | ok |
 | `digit-reels` | requestAnimationFrame countdown | PASS | HTML |
 | `available-now` | Available now UI string | PASS | present |
@@ -501,17 +501,16 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `launcher-webview2` | AppWindow.cpp WebView2 usage | PASS | launcher/src/AppWindow.cpp |
 | `launcher-nav` | Launcher navigation chrome in AppWindow | PASS | nav patterns found |
 | `launcher-ico` | launcher/assets/GtaLogo.ico exists | PASS | present |
-| `feature-marker-update-album-fallback` | Auto-discovered feature: Update Album Fallback | PASS | registered from music.js:49 |
-| `feature-marker-set-active` | Auto-discovered feature: Set Active | PASS | registered from music.js:67 |
-| `feature-marker-build-tabs` | Auto-discovered feature: Build Tabs | PASS | registered from music.js:92 |
-| `feature-marker-apply-songs` | Auto-discovered feature: Apply Songs | PASS | registered from music.js:117 |
-| `feature-marker-load-music` | Auto-discovered feature: Load Music | PASS | registered from music.js:137 |
-| `feature-marker-open-music` | Auto-discovered feature: Open Music | PASS | registered from music.js:149 |
-| `feature-marker-close-music` | Auto-discovered feature: Close Music | PASS | registered from music.js:158 |
-| `feature-marker-build-reel` | Auto-discovered feature: Build Reel | PASS | registered from music.js:194 |
-| `feature-marker-set-animated-value` | Auto-discovered feature: Set Animated Value | PASS | registered from music.js:222 |
-| `feature-marker-start-music-countdown` | Auto-discovered feature: Start Music Countdown | PASS | registered from music.js:285 |
-| `feature-marker-scan-coverage` | Automatic feature marker scan completed | PASS | 26 product source files scanned · 10 features discovered |
+| `feature-marker-set-active` | Auto-discovered feature: Set Active | PASS | registered from music.js:44 |
+| `feature-marker-build-tabs` | Auto-discovered feature: Build Tabs | PASS | registered from music.js:68 |
+| `feature-marker-apply-songs` | Auto-discovered feature: Apply Songs | PASS | registered from music.js:93 |
+| `feature-marker-load-music` | Auto-discovered feature: Load Music | PASS | registered from music.js:113 |
+| `feature-marker-open-music` | Auto-discovered feature: Open Music | PASS | registered from music.js:125 |
+| `feature-marker-close-music` | Auto-discovered feature: Close Music | PASS | registered from music.js:134 |
+| `feature-marker-build-reel` | Auto-discovered feature: Build Reel | PASS | registered from music.js:170 |
+| `feature-marker-set-animated-value` | Auto-discovered feature: Set Animated Value | PASS | registered from music.js:198 |
+| `feature-marker-start-music-countdown` | Auto-discovered feature: Start Music Countdown | PASS | registered from music.js:261 |
+| `feature-marker-scan-coverage` | Automatic feature marker scan completed | PASS | 26 product source files scanned · 9 features discovered |
 | `readme-README_md-exists` | README.md exists and is readable | PASS | present |
 | `readme-README_md-markers` | README.md has ordered AUTO-GENERATED integrity markers | PASS | markers ordered |
 | `readme-launcher_README_md-exists` | launcher/README.md exists and is readable | PASS | present |
@@ -523,7 +522,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `readme-discovery` | At least one README.md discovered recursively | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
 | `readme-no-hardcoded-list` | README checks are driven by findReadmes() discovery | PASS | dynamic discovery of 4 README.md file(s) |
 | `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
-| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=3 |
+| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=1 |
 | `releases-api` | GitHub Releases API returned a valid release collection | PASS | 3 release(s) retrieved |
 | `releases-published-count` | At least one published GitHub Release exists | PASS | 3 published release(s) |
 | `release-desktop-v1_0_0-published` | Release desktop-v1.0.0 is published (not a draft) | PASS | draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z |
@@ -569,8 +568,8 @@ _Generated from source checks and `@feature` annotations; add `// @feature id="u
 
 #### Website · countdown and regions
 
-- **PASS** — All 15 region slug+UTC pairs in HTML (15/15 implemented)
-- **PASS** — Default activeSlug is 'europe' (activeSlug = 'europe')
+- **FAIL** — All 15 region slug+UTC pairs in HTML (6/15 implemented)
+- **FAIL** — Default activeSlug is 'europe' (not found)
 - **PASS** — Region path + localStorage gtaRegion (ok)
 - **PASS** — requestAnimationFrame countdown (HTML)
 - **PASS** — Available now UI string (present)
@@ -638,16 +637,15 @@ _Generated from source checks and `@feature` annotations; add `// @feature id="u
 
 #### Website · automatically discovered
 
-- **PASS** — Auto-discovered feature: Update Album Fallback (registered from music.js:49)
-- **PASS** — Auto-discovered feature: Set Active (registered from music.js:67)
-- **PASS** — Auto-discovered feature: Build Tabs (registered from music.js:92)
-- **PASS** — Auto-discovered feature: Apply Songs (registered from music.js:117)
-- **PASS** — Auto-discovered feature: Load Music (registered from music.js:137)
-- **PASS** — Auto-discovered feature: Open Music (registered from music.js:149)
-- **PASS** — Auto-discovered feature: Close Music (registered from music.js:158)
-- **PASS** — Auto-discovered feature: Build Reel (registered from music.js:194)
-- **PASS** — Auto-discovered feature: Set Animated Value (registered from music.js:222)
-- **PASS** — Auto-discovered feature: Start Music Countdown (registered from music.js:285)
+- **PASS** — Auto-discovered feature: Set Active (registered from music.js:44)
+- **PASS** — Auto-discovered feature: Build Tabs (registered from music.js:68)
+- **PASS** — Auto-discovered feature: Apply Songs (registered from music.js:93)
+- **PASS** — Auto-discovered feature: Load Music (registered from music.js:113)
+- **PASS** — Auto-discovered feature: Open Music (registered from music.js:125)
+- **PASS** — Auto-discovered feature: Close Music (registered from music.js:134)
+- **PASS** — Auto-discovered feature: Build Reel (registered from music.js:170)
+- **PASS** — Auto-discovered feature: Set Animated Value (registered from music.js:198)
+- **PASS** — Auto-discovered feature: Start Music Countdown (registered from music.js:261)
 
 ### Documentation audit
 
@@ -688,7 +686,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 3 · analyzed: 3 · confirmed findings: 0 · potential risks: 0 · base `f153fb2`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `ddf7640`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->

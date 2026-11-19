@@ -214,50 +214,6 @@
 }
 .music-frame-wrap.album iframe{height:min(300px,40vh,40dvh)}
 
-/* Cover-art fallback when Spotify album embed renders black/empty */
-.music-embed-fallback{
-  display:none;
-  position:absolute;
-  inset:0;
-  z-index:1;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  padding:16px 14px;
-  background:linear-gradient(160deg,#0d0d12 0%,#1a1025 55%,#0a0a0f 100%);
-  pointer-events:none;
-}
-.music-embed-fallback.is-visible{
-  display:flex;
-  z-index:3;
-  pointer-events:auto;
-}
-.music-frame-wrap.has-fallback iframe,
-.music-embed-fallback.is-visible ~ iframe{
-  position:relative;
-  z-index:1;
-  opacity:0;
-  pointer-events:none;
-}
-.music-embed-cover{
-  width:min(160px,42%);
-  height:auto;
-  aspect-ratio:1;
-  border-radius:8px;
-  box-shadow:0 8px 28px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08);
-  object-fit:cover;
-}
-.music-embed-hint{
-  margin:0;
-  max-width:28em;
-  text-align:center;
-  font-size:clamp(.62rem,1.4vw,.72rem);
-  line-height:1.4;
-  color:#c4b5fd;
-  opacity:.92;
-}
-
 .music-meta{
   margin-top:8px;
   font-size:clamp(.68rem,1.5vw,.78rem);

@@ -41,29 +41,6 @@
       return 'https://open.spotify.com/embed/' + song.spotify + '?utm_source=generator&theme=0';
     }
 
-    const ALBUM_COVER = 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02b6a36f9f6b443ea9590de20c';
-    const fallback = document.getElementById('musicEmbedFallback');
-    const fallbackImg = document.getElementById('musicEmbedCover');
-    const fallbackHint = document.getElementById('musicEmbedHint');
-
-    // @feature id="update-album-fallback" title="Update Album Fallback" group="Website · automatically discovered" scopes="all"
-    function updateAlbumFallback(song) {
-      if (!fallback) return;
-      const isAlbum = !!(song && song.album);
-      fallback.classList.toggle('is-visible', isAlbum);
-      fallback.setAttribute('aria-hidden', isAlbum ? 'false' : 'true');
-      if (fallbackImg && isAlbum) {
-        fallbackImg.src = ALBUM_COVER;
-        fallbackImg.alt = 'Grand Theft Auto VI: The Album cover';
-      }
-      if (fallbackHint) {
-        fallbackHint.textContent = isAlbum
-          ? 'If the Spotify player stays blank, open the album on Spotify — pre-release embeds often render empty until the platform unlocks playback (Nov 20).'
-          : '';
-      }
-      if (wrap) wrap.classList.toggle('has-fallback', isAlbum);
-    }
-
     // @feature id="set-active" title="Set Active" group="Website · automatically discovered" scopes="all"
     function setActive(song, animate) {
       if (!song) return;
@@ -76,7 +53,6 @@
         spLink.href = 'https://open.spotify.com/' + song.spotify;
         spLink.textContent = song.album ? 'Open album on Spotify' : 'Open track on Spotify';
       }
-      updateAlbumFallback(song);
       if (animate && frame) {
         if (wrap) wrap.classList.add('is-switching');
         clearTimeout(switchTimer);
