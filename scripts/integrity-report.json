@@ -1,12 +1,12 @@
 {
-  "lastContentUpdateAt": "2026-11-19T20:01:34.799Z",
-  "commit": "a70b9810504f27df5b051735c97672160aa55074",
-  "baseCommit": "4b942cc3c17451bbbcdf043d0feb62dbd4c82637",
+  "lastContentUpdateAt": "2026-11-19T23:02:09.947Z",
+  "commit": "0943ae675946d83ce36351a7c3f863b4be2e1f51",
+  "baseCommit": "f77736ce3bc055f19ee91c779a9e48358fabb36a",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
     "status": "complete",
-    "fileCount": 230,
+    "fileCount": 234,
     "directoryCount": 32,
     "files": [
       ".github/workflows/android-build.yml",
@@ -44,6 +44,8 @@
       "bgs/Cal_Hampton_square.jpg",
       "bgs/Cal_Hampton_tablet.jpg",
       "bgs/Cal_Hampton_ultrawide.jpg",
+      "bgs/Cover_Art_Poster.jpg",
+      "bgs/Cover_Art_Poster_Printable.jpg",
       "bgs/DreQuan_Priest_landscape.jpg",
       "bgs/DreQuan_Priest_phone.jpg",
       "bgs/DreQuan_Priest_portrait.jpg",
@@ -123,6 +125,8 @@
       "bgs/Leonida_Keys_Postcard_square.jpg",
       "bgs/Leonida_Keys_Postcard_tablet.jpg",
       "bgs/Leonida_Keys_Postcard_ultrawide.jpg",
+      "bgs/Leonida_Map_Poster.jpg",
+      "bgs/Leonida_Map_Poster_Printable.jpg",
       "bgs/Mount_Kalaga_National_Park_Postcard_landscape.jpg",
       "bgs/Mount_Kalaga_National_Park_Postcard_phone.jpg",
       "bgs/Mount_Kalaga_National_Park_Postcard_portrait.jpg",
@@ -303,7 +307,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-19T20:01:36.826Z",
+    "checkedAt": "2026-11-19T23:02:13.818Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -670,10 +674,10 @@
   "readmeFileCount": 4,
   "summary": {
     "total": 140,
-    "passed": 140,
-    "failed": 0,
+    "passed": 139,
+    "failed": 1,
     "criticalFailed": 0,
-    "documentationFindings": 0
+    "documentationFindings": 1
   },
   "detectedFeatures": {
     "regions15": true,
@@ -923,7 +927,7 @@
     }
   },
   "regionsImplemented": 15,
-  "backgroundImageCount": 143,
+  "backgroundImageCount": 147,
   "mobile": {
     "expectedHome": "https://gta-vi-countdown.onrender.com/",
     "androidHome": "https://gta-vi-countdown.onrender.com/",
@@ -949,7 +953,19 @@
     "webView2": true,
     "source": "launcher/src/AppWindow.cpp"
   },
-  "missingOrOutdatedDocumentation": [],
+  "missingOrOutdatedDocumentation": [
+    {
+      "id": "doc-root-bgs-count-not-inflated",
+      "severity": "low",
+      "documentationFile": "README.md",
+      "section": "Background gallery",
+      "sourceFile": "bgs/",
+      "problem": "If README states an exact image file count, it must match disk — documentation value does not match source.",
+      "suggestedCorrection": "Update the background image file count in the root README to match bgs/ on disk (147 files).",
+      "kind": "outdated",
+      "deterministic": true
+    }
+  ],
   "documentationAudit": {
     "deterministic": true,
     "specsEvaluated": 21,
@@ -957,11 +973,28 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "4b942cc3c17451bbbcdf043d0feb62dbd4c82637",
-    "headCommit": "a70b9810504f27df5b051735c97672160aa55074",
-    "changedFiles": 1,
-    "analyzedFiles": 1,
-    "skippedFiles": [],
+    "baseCommit": "f77736ce3bc055f19ee91c779a9e48358fabb36a",
+    "headCommit": "0943ae675946d83ce36351a7c3f863b4be2e1f51",
+    "changedFiles": 6,
+    "analyzedFiles": 2,
+    "skippedFiles": [
+      {
+        "path": "bgs/Cover_Art_Poster.jpg",
+        "reason": "binary or generated asset"
+      },
+      {
+        "path": "bgs/Cover_Art_Poster_Printable.jpg",
+        "reason": "binary or generated asset"
+      },
+      {
+        "path": "bgs/Leonida_Map_Poster.jpg",
+        "reason": "binary or generated asset"
+      },
+      {
+        "path": "bgs/Leonida_Map_Poster_Printable.jpg",
+        "reason": "binary or generated asset"
+      }
+    ],
     "unreadableFiles": 0,
     "readmeFilesDiscovered": 4,
     "documentationRelevantChanges": 0,
@@ -970,6 +1003,14 @@
     "potentialRisks": 0,
     "confirmedFindings": 0,
     "perFileImpact": [
+      {
+        "path": "bgs/.rockstar-meta.json",
+        "status": "M",
+        "oldPath": null,
+        "findings": 0,
+        "relevant": false,
+        "unreadable": false
+      },
       {
         "path": "gta-vi-countdown.html",
         "status": "M",
@@ -982,13 +1023,20 @@
     "status": "complete",
     "error": null
   },
-  "failedChecks": [],
+  "failedChecks": [
+    {
+      "id": "doc-finding-doc-root-bgs-count-not-inflated",
+      "claim": "Documentation issue: doc-root-bgs-count-not-inflated",
+      "detail": "outdated · README.md · Update the background image file count in the root README to match bgs/ on disk (147 files).",
+      "critical": false
+    }
+  ],
   "checks": [
     {
       "id": "project-structure-inventory",
       "claim": "Complete project file/directory inventory generated",
       "ok": true,
-      "detail": "230 files · 32 directories · 6 workflows",
+      "detail": "234 files · 32 directories · 6 workflows",
       "critical": false
     },
     {
@@ -1408,7 +1456,7 @@
       "id": "bgs-disk",
       "claim": "Background images on disk (bgs/)",
       "ok": true,
-      "detail": "143 image files",
+      "detail": "147 image files",
       "critical": false
     },
     {
@@ -1739,17 +1787,17 @@
       "critical": false
     },
     {
-      "id": "doc-audit-clean",
-      "claim": "Documentation audit: no missing/outdated deterministic issues",
-      "ok": true,
-      "detail": "DOC_SPECS (21) + API claim scan clean",
+      "id": "doc-finding-doc-root-bgs-count-not-inflated",
+      "claim": "Documentation issue: doc-root-bgs-count-not-inflated",
+      "ok": false,
+      "detail": "outdated · README.md · Update the background image file count in the root README to match bgs/ on disk (147 files).",
       "critical": false
     },
     {
       "id": "dyn-audit-coverage",
       "claim": "Dynamic audit analyzed all relevant changed files",
       "ok": true,
-      "detail": "status=complete analyzed=1",
+      "detail": "status=complete analyzed=2",
       "critical": false
     },
     {

@@ -151,6 +151,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   ├── Cal_Hampton_square.jpg
 │   ├── Cal_Hampton_tablet.jpg
 │   ├── Cal_Hampton_ultrawide.jpg
+│   ├── Cover_Art_Poster_Printable.jpg
+│   ├── Cover_Art_Poster.jpg
 │   ├── DreQuan_Priest_landscape.jpg
 │   ├── DreQuan_Priest_phone.jpg
 │   ├── DreQuan_Priest_portrait.jpg
@@ -230,6 +232,8 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 │   ├── Leonida_Keys_Postcard_square.jpg
 │   ├── Leonida_Keys_Postcard_tablet.jpg
 │   ├── Leonida_Keys_Postcard_ultrawide.jpg
+│   ├── Leonida_Map_Poster_Printable.jpg
+│   ├── Leonida_Map_Poster.jpg
 │   ├── main.jpeg
 │   ├── Mount_Kalaga_National_Park_Postcard_landscape.jpg
 │   ├── Mount_Kalaga_National_Park_Postcard_phone.jpg
@@ -414,14 +418,14 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-19T20:01:34.799Z** · commit `a70b981` · **140/140 passed** · root
+Last content update: **2026-11-19T23:02:09.947Z** · commit `0943ae6` · **139/140 passed** · **1 doc findings** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
 
 | ID | Claim | Status | Detail |
 |----|-------|--------|--------|
-| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 230 files · 32 directories · 6 workflows |
+| `project-structure-inventory` | Complete project file/directory inventory generated | PASS | 234 files · 32 directories · 6 workflows |
 | `project-structure-readme` | Root README Structure section is present | PASS | complete |
 | `project-structure-tree` | Root README ASCII tree matches the complete recursive inventory | PASS | all included files and directories are listed |
 | `workflow-doc--github-workflows-android-build-yml` | Workflow documented: .github/workflows/android-build.yml | PASS | listed in root README Structure |
@@ -481,7 +485,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `api-apinews` | Route registered /api/news | PASS | app.get found |
 | `api-apistats` | Route registered /api/stats | PASS | app.get found |
 | `api-apibackgrounds` | Route registered /api/backgrounds | PASS | app.get found |
-| `bgs-disk` | Background images on disk (bgs/) | PASS | 143 image files |
+| `bgs-disk` | Background images on disk (bgs/) | PASS | 147 image files |
 | `pwa-manifest` | Web App Manifest standalone | PASS | HTML |
 | `no-service-worker` | No service worker (document honestly) | PASS | manifest-only PWA |
 | `android-home-url` | Android HOME_URL is https://gta-vi-countdown.onrender.com/ | PASS | actual="https://gta-vi-countdown.onrender.com/" expected="https://gta-vi-countdown.onrender.com/" |
@@ -521,8 +525,8 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `readme-mobile_README_md-markers` | mobile/README.md has ordered AUTO-GENERATED integrity markers | PASS | markers ordered |
 | `readme-discovery` | At least one README.md discovered recursively | PASS | 4 files: README.md, launcher/README.md, launcher/assets/README.md, mobile/README.md |
 | `readme-no-hardcoded-list` | README checks are driven by findReadmes() discovery | PASS | dynamic discovery of 4 README.md file(s) |
-| `doc-audit-clean` | Documentation audit: no missing/outdated deterministic issues | PASS | DOC_SPECS (21) + API claim scan clean |
-| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=1 |
+| `doc-finding-doc-root-bgs-count-not-inflated` | Documentation issue: doc-root-bgs-count-not-inflated | FAIL | outdated · README.md · Update the background image file count in the root README to match bgs/ on disk (147 files). |
+| `dyn-audit-coverage` | Dynamic audit analyzed all relevant changed files | PASS | status=complete analyzed=2 |
 | `releases-api` | GitHub Releases API returned a valid release collection | PASS | 3 release(s) retrieved |
 | `releases-published-count` | At least one published GitHub Release exists | PASS | 3 published release(s) |
 | `release-desktop-v1_0_0-published` | Release desktop-v1.0.0 is published (not a draft) | PASS | draft=false; prerelease=false; published_at=2026-11-12T12:05:39Z |
@@ -600,7 +604,7 @@ _Generated from source checks and `@feature` annotations; add `// @feature id="u
 - **PASS** — Music cache ~30 minutes (MUSIC_CACHE_MS)
 - **PASS** — Trailers cache ~30 minutes (TRAILERS_CACHE_MS)
 - **PASS** — Backgrounds register + 6h check (backgrounds-api.js)
-- **PASS** — Background images on disk (bgs/) (143 image files)
+- **PASS** — Background images on disk (bgs/) (147 image files)
 - **PASS** — Web App Manifest standalone (HTML)
 - **PASS** — No service worker (document honestly) (manifest-only PWA)
 - **PASS** — Route registered /api/trailers (app.get found)
@@ -647,14 +651,16 @@ _Generated from source checks and `@feature` annotations; add `// @feature id="u
 - **PASS** — Auto-discovered feature: Set Animated Value (registered from music.js:198)
 - **PASS** — Auto-discovered feature: Start Music Countdown (registered from music.js:261)
 
-### Documentation audit
+### Documentation audit (1 finding)
 
-No missing or outdated documentation findings from deterministic DOC_SPECS / API registration comparison.
+| ID | Severity | README | Problem | Suggested correction |
+|----|----------|--------|---------|----------------------|
+| `doc-root-bgs-count-not-inflated` | low | README.md | If README states an exact image file count, it must match disk — documentation value does not match source. | Update the background image file count in the root README to match bgs/ on disk (147 files). |
 
 
 ### Project structure inventory
 
-Repository inventory: **230 files** across **32 directories** · **4 README.md files** discovered recursively.
+Repository inventory: **234 files** across **32 directories** · **4 README.md files** discovered recursively.
 
 ASCII tree synchronization: **PASS** · README tree matches every included file and directory.
 
@@ -686,7 +692,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `4b942cc`
+Status: **complete** · changed files: 6 · analyzed: 2 · confirmed findings: 0 · potential risks: 0 · base `f77736c`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
