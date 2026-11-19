@@ -96,69 +96,62 @@
   height:2px;
   width:0%;
   border-radius:99px;
-  background:linear-gradient(90deg,#1ed760,#86efac);
-  box-shadow:0 0 8px rgba(30,215,96,.55);
+  background:linear-gradient(90deg,#4ade80,#22c55e);
   transition:width 1s linear;
-  pointer-events:none;
   z-index:1;
 }
 .music-countdown .mc-seg{
   display:flex;
   flex-direction:column;
   align-items:center;
-  min-width:2.6em;
-  position:relative;
-  z-index:2;
+  min-width:2.4em;
 }
 .music-countdown .mc-num{
-  display:inline-flex;
-  justify-content:center;
-  height:1.15em;
-  overflow:hidden;
-  font-size:clamp(.95rem,2.2vw,1.15rem);
+  font-size:clamp(.95rem,2.4vw,1.15rem);
   font-weight:700;
   color:#86efac;
+  letter-spacing:.04em;
+  height:1.15em;
+  overflow:hidden;
+  display:inline-flex;
+  align-items:flex-start;
   line-height:1.15;
-  letter-spacing:.02em;
-  text-shadow:0 0 10px rgba(30,215,96,.35);
 }
 .music-countdown .mc-digit{
-  display:block;
+  display:inline-block;
   height:1.15em;
-  width:.62em;
   overflow:hidden;
+  width:0.62em;
+  text-align:center;
 }
 .music-countdown .mc-reel{
   display:block;
-  transition:transform .55s cubic-bezier(0.22, 0.82, 0.24, 1);
-  will-change:transform;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1);
 }
 .music-countdown .mc-reel span{
   display:block;
   height:1.15em;
   line-height:1.15;
-  text-align:center;
 }
 .music-countdown .mc-seg small{
-  font-size:clamp(.55rem,1.2vw,.62rem);
+  font-size:.58rem;
+  letter-spacing:.12em;
   text-transform:uppercase;
-  letter-spacing:.08em;
-  color:#a7f3d0;
-  opacity:.85;
-  margin-top:3px;
+  color:#86efac;
+  opacity:.7;
+  margin-top:2px;
 }
 .music-countdown .mc-sep{
-  color:rgba(134,239,172,.4);
   font-size:1rem;
+  color:#4ade80;
+  opacity:.7;
+  padding-bottom:12px;
   font-weight:600;
-  padding-bottom:14px;
-  position:relative;
-  z-index:2;
 }
 .music-countdown.is-live .mc-num{color:#bbf7d0}
 .music-countdown.is-done .mc-num{
-  color:#e0b0ff;
-  text-shadow:0 0 10px rgba(224,176,255,.35);
+  color:#86efac;
+  opacity:.85;
 }
 .music-countdown.is-done .mc-sec-fill{width:0!important;opacity:0}
 @media (prefers-reduced-motion:reduce){
@@ -169,44 +162,31 @@
 .music-tabs{
   display:flex;
   flex-wrap:wrap;
-  align-content:flex-start;
-  gap:6px;
-  margin-bottom:10px;
+  gap:7px;
+  margin-bottom:12px;
   max-height:min(170px,26vh,26dvh);
-  overflow-y:auto;
-  padding:2px 4px 6px 1px;
-  scrollbar-gutter:stable;
+  overflow:auto;
+  overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
+  padding:2px;
 }
-.music-tabs::-webkit-scrollbar{width:5px;height:5px}
-.music-tabs::-webkit-scrollbar-thumb{background:rgba(30,215,96,.38);border-radius:4px}
-.music-tabs::-webkit-scrollbar-track{background:transparent}
-
 .music-tab{
-  background:rgba(30,215,96,.08);
-  border:1px solid rgba(30,215,96,.28);
-  color:#d1fae5;
+  appearance:none;
+  border:1px solid rgba(167,139,250,.32);
+  background:rgba(88,28,135,.28);
+  color:#e9d5ff;
   border-radius:999px;
-  padding:6px 11px;
-  min-height:32px;
-  font-size:clamp(.68rem,1.45vw,.76rem);
-  line-height:1.25;
+  padding:8px 13px;
+  font-size:clamp(.7rem,1.6vw,.78rem);
+  font-weight:600;
   cursor:pointer;
-  transition:background .18s,border-color .18s,opacity .18s,transform .18s,color .18s,box-shadow .18s;
-  white-space:nowrap;
+  transition:background .15s,border-color .15s,color .15s,transform .12s,opacity .15s;
+  min-height:36px;
   touch-action:manipulation;
-  user-select:none;
-  -webkit-user-select:none;
+  white-space:nowrap;
 }
-.music-tab:hover{
-  background:rgba(30,215,96,.2);
-  border-color:rgba(30,215,96,.5);
-  color:#fff;
-}
-.music-tab:focus-visible{
-  outline:2px solid rgba(30,215,96,.85);
-  outline-offset:2px;
-}
+.music-tab:hover{border-color:rgba(192,132,252,.55);background:rgba(109,40,217,.36)}
+.music-tab:focus-visible{outline:2px solid #c084fc;outline-offset:2px}
 .music-tab.active{
   background:rgba(30,215,96,.34);
   border-color:rgba(30,215,96,.78);
@@ -223,6 +203,7 @@
   background:#0a0a0a;
   transition:opacity .25s ease;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+  position:relative;
 }
 .music-frame-wrap.is-switching{opacity:.3}
 .music-frame-wrap iframe{
@@ -232,6 +213,50 @@
   display:block;
 }
 .music-frame-wrap.album iframe{height:min(300px,40vh,40dvh)}
+
+/* Cover-art fallback when Spotify album embed renders black/empty */
+.music-embed-fallback{
+  display:none;
+  position:absolute;
+  inset:0;
+  z-index:1;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:16px 14px;
+  background:linear-gradient(160deg,#0d0d12 0%,#1a1025 55%,#0a0a0f 100%);
+  pointer-events:none;
+}
+.music-embed-fallback.is-visible{
+  display:flex;
+  z-index:3;
+  pointer-events:auto;
+}
+.music-frame-wrap.has-fallback iframe,
+.music-embed-fallback.is-visible ~ iframe{
+  position:relative;
+  z-index:1;
+  opacity:0;
+  pointer-events:none;
+}
+.music-embed-cover{
+  width:min(160px,42%);
+  height:auto;
+  aspect-ratio:1;
+  border-radius:8px;
+  box-shadow:0 8px 28px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08);
+  object-fit:cover;
+}
+.music-embed-hint{
+  margin:0;
+  max-width:28em;
+  text-align:center;
+  font-size:clamp(.62rem,1.4vw,.72rem);
+  line-height:1.4;
+  color:#c4b5fd;
+  opacity:.92;
+}
 
 .music-meta{
   margin-top:8px;
