@@ -2,7 +2,7 @@
   // Official Spotify embeds only. Seeds + auto-discovered playable tracks from
   // Grand Theft Auto VI: The Album via /api/music (refreshes every 30 minutes).
   const FALLBACK_SONGS = [
-    { id: 'album', title: 'Full Album (preview)', artist: '34 tracks · Atlantic / Rockstar · unlocks Nov 19', spotify: 'album/5BYKG4MHfySZthe2W6r7n4', album: true },
+    { id: 'album', title: 'Full Album', artist: '34 tracks · Atlantic / Rockstar · Spotify unlock Nov 20', spotify: 'album/5BYKG4MHfySZthe2W6r7n4', album: true },
     { id: 'thats-it', title: "That's It", artist: 'Yung Lean feat. Future & Metro Boomin', spotify: 'track/6dUXpM7mnGr7cSpCUQewCs' },
     { id: 'rhyno', title: 'RHYNO', artist: 'Travis Scott (prod. Guy-Manuel de Homem-Christo)', spotify: 'track/2NliF6CtlWolNA0Jzkw4ba' },
     { id: 'sexy-magic', title: 'Sexy Magic', artist: 'CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.. & Étienne de Crécy', spotify: 'track/5AIwo9vC79ce0A7u3DgB1N' },
@@ -41,6 +41,30 @@
       return 'https://open.spotify.com/embed/' + song.spotify + '?utm_source=generator&theme=0';
     }
 
+    const ALBUM_COVER = 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02b6a36f9f6b443ea9590de20c';
+    const fallback = document.getElementById('musicEmbedFallback');
+    const fallbackImg = document.getElementById('musicEmbedCover');
+    const fallbackHint = document.getElementById('musicEmbedHint');
+
+    // @feature id="update-album-fallback" title="Update Album Fallback" group="Website · automatically discovered" scopes="all"
+    function updateAlbumFallback(song) {
+      if (!fallback) return;
+      const isAlbum = !!(song && song.album);
+      fallback.classList.toggle('is-visible', isAlbum);
+      fallback.setAttribute('aria-hidden', isAlbum ? 'false' : 'true');
+      if (fallbackImg && isAlbum) {
+        fallbackImg.src = ALBUM_COVER;
+        fallbackImg.alt = 'Grand Theft Auto VI: The Album cover';
+      }
+      if (fallbackHint) {
+        fallbackHint.textContent = isAlbum
+          ? 'If the Spotify player stays blank, open the album on Spotify — pre-release embeds often render empty until the platform unlocks playback (Nov 20).'
+          : '';
+      }
+      if (wrap) wrap.classList.toggle('has-fallback', isAlbum);
+    }
+
+    // @feature id="set-active" title="Set Active" group="Website · automatically discovered" scopes="all"
     function setActive(song, animate) {
       if (!song) return;
       activeId = song.id;
@@ -52,6 +76,7 @@
         spLink.href = 'https://open.spotify.com/' + song.spotify;
         spLink.textContent = song.album ? 'Open album on Spotify' : 'Open track on Spotify';
       }
+      updateAlbumFallback(song);
       if (animate && frame) {
         if (wrap) wrap.classList.add('is-switching');
         clearTimeout(switchTimer);
@@ -64,6 +89,7 @@
       }
     }
 
+    // @feature id="build-tabs" title="Build Tabs" group="Website · automatically discovered" scopes="all"
     function buildTabs() {
       tabs.innerHTML = '';
       songs.forEach(function (s) {
@@ -88,6 +114,7 @@
       });
     }
 
+    // @feature id="apply-songs" title="Apply Songs" group="Website · automatically discovered" scopes="all"
     function applySongs(list) {
       if (!Array.isArray(list) || !list.length) return;
       const prev = activeId;
@@ -107,6 +134,7 @@
       setActive(songs.find(function (x) { return x.id === activeId; }) || songs[0], false);
     }
 
+    // @feature id="load-music" title="Load Music" group="Website · automatically discovered" scopes="all"
     function loadMusic() {
       fetch('/api/music', { cache: 'no-store' })
         .then(function (r) { return r.ok ? r.json() : null; })
@@ -118,6 +146,7 @@
         .catch(function () {});
     }
 
+    // @feature id="open-music" title="Open Music" group="Website · automatically discovered" scopes="all"
     function openMusic() {
       overlay.classList.add('open');
       overlay.setAttribute('aria-hidden', 'false');
@@ -126,6 +155,7 @@
       loadMusic();
     }
 
+    // @feature id="close-music" title="Close Music" group="Website · automatically discovered" scopes="all"
     function closeMusic() {
       overlay.classList.remove('open');
       overlay.setAttribute('aria-hidden', 'true');
@@ -133,8 +163,8 @@
       if (frame) frame.src = '';
     }
 
-    // Live countdown to album / game release (UTC midnight 19 Nov 2026)
-    const RELEASE_MS = Date.UTC(2026, 10, 19, 0, 0, 0); // month 10 = November
+    // Live countdown to album unlock on Spotify (UTC midnight 20 Nov 2026)
+    const RELEASE_MS = Date.UTC(2026, 10, 20, 0, 0, 0);
     let elCd = document.getElementById('musicCountdown');
     if (!elCd) {
       const sub = overlay.querySelector('.music-sub');
@@ -161,6 +191,7 @@
 
     function pad2(n) { return n < 10 ? '0' + n : String(n); }
 
+    // @feature id="build-reel" title="Build Reel" group="Website · automatically discovered" scopes="all"
     function buildReel(digits) {
       const frag = document.createDocumentFragment();
       String(digits).split('').forEach(function (ch) {
@@ -173,7 +204,6 @@
           s.textContent = String(i);
           reel.appendChild(s);
         }
-        // non-digit (e.g. long day count) — single static cell
         if (ch < '0' || ch > '9') {
           reel.innerHTML = '';
           const s = document.createElement('span');
@@ -189,12 +219,12 @@
       return frag;
     }
 
+    // @feature id="set-animated-value" title="Set Animated Value" group="Website · automatically discovered" scopes="all"
     function setAnimatedValue(el, next) {
       if (!el) return;
       const prev = el.getAttribute('data-val');
       if (prev === next) return;
       el.setAttribute('data-val', next);
-      // rebuild structure if digit count changed
       if (!el.querySelector('.mc-reel') || String(prev || '').length !== String(next).length) {
         el.innerHTML = '';
         el.appendChild(buildReel(next));
@@ -242,11 +272,9 @@
       setAnimatedValue(elMins, pad2(mins));
       setAnimatedValue(elSecs, pad2(secs));
       if (elSecFill) {
-        // progress through the current second (smooth bar)
         const pct = Math.max(0, Math.min(100, ((1000 - msInSec) / 1000) * 100));
         elSecFill.style.transition = 'none';
         elSecFill.style.width = pct + '%';
-        // force reflow then animate to 100% over remaining ms
         void elSecFill.offsetWidth;
         elSecFill.style.transition = 'width ' + Math.max(50, 1000 - msInSec) + 'ms linear';
         elSecFill.style.width = '100%';
@@ -254,12 +282,12 @@
       if (elCd) elCd.classList.add('is-live');
     }
 
+    // @feature id="start-music-countdown" title="Start Music Countdown" group="Website · automatically discovered" scopes="all"
     function startMusicCountdown() {
       tickMusicCountdown();
       if (cdTimer) clearInterval(cdTimer);
       cdTimer = setInterval(tickMusicCountdown, 1000);
     }
-
 
     openBtn.addEventListener('click', openMusic);
     if (closeBtn) closeBtn.addEventListener('click', closeMusic);
@@ -274,7 +302,6 @@
     setActive(songs[0], false);
     loadMusic();
     startMusicCountdown();
-    // Client poll every 30 minutes (server also refreshes in the background)
     pollTimer = setInterval(loadMusic, 30 * 60 * 1000);
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'visible') loadMusic();
