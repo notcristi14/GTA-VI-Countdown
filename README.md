@@ -53,7 +53,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
 - ✨ Smooth tab switch animation; “Open on YouTube” link; Escape / click-outside to close.
 
 ### 🎵 Music (soundtrack) — every released song playable + auto-discovery
-- 🎧 **Play Music** — Compact neon panel centered on every screen (mobile + desktop); live **Days · Hrs · Mins · Secs** countdown to album unlock (Nov 19) with smooth digit-reel animation + second progress bar (matches main timer style); larger touch targets; **official Spotify embeds** only (no pirated audio).
+- 🎧 **Play Music** — Compact neon panel centered on every screen (mobile + desktop); live **Days · Hrs · Mins · Secs** countdown to album unlock on Spotify (Nov 20) with smooth digit-reel animation + second progress bar (matches main timer style); larger touch targets; **official Spotify embeds** only (no pirated audio).
 - 🔎 **Auto-check for new tracks** — Server scrapes the official Spotify album embed (`Grand Theft Auto VI: The Album`, id `5BYKG4MHfySZthe2W6r7n4`) every **30 minutes**, merges any newly playable singles into the list, and exposes them via **`/api/music`**. Client also polls every 30 minutes and on tab focus (`visibilitychange`).
 - 💿 Seeded released singles (always present even if discovery fails):
   1. **That’s It** — Yung Lean feat. Future & Metro Boomin
@@ -66,7 +66,7 @@ Real-time, responsive countdown for **Grand Theft Auto VI** with regional unlock
   8. **Don’t Chart** — Cardi B
   9. **Bright Lights, Big City** — Keith Richards
 - 🎹 **Score preview** — **Pusher** (Justice feat. Gesaffelstein) from the Original Score.
-- 💿 **Full album embed** — Spotify album player; remaining placeholder tracks unlock when the album releases **Nov 19, 2026** (34 tracks total).
+- 💿 **Full album embed** — Spotify album player with cover-art fallback when the pre-release embed renders blank; singles remain playable. Full album unlocks on Spotify **Nov 20, 2026** (34 tracks total).
 - 🪄 New playable album tracks discovered after a single drop are added automatically (no redeploy required).
 - 📱 Scrollable tab strip, smooth switch animation, “Open on Spotify” link, Escape / click-outside to close.
 - 📻 Radio station full playlists are not mirrored (licensed in-game only).

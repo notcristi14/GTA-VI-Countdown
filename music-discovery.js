@@ -15,7 +15,7 @@ module.exports = function registerMusicAndTrailerJobs(app, deps) {
   let musicCache = { at: 0, data: null };
 
   const SEED_MUSIC = [
-    { id: 'album', title: 'Full Album (preview)', artist: '34 tracks \u00b7 Atlantic / Rockstar \u00b7 unlocks Nov 19', spotify: 'album/' + SPOTIFY_ALBUM_ID, album: true },
+    { id: 'album', title: 'Full Album', artist: '34 tracks \u00b7 Atlantic / Rockstar \u00b7 Spotify unlock Nov 20', spotify: 'album/' + SPOTIFY_ALBUM_ID, album: true },
     { id: 'thats-it', title: "That's It", artist: 'Yung Lean feat. Future & Metro Boomin', spotify: 'track/6dUXpM7mnGr7cSpCUQewCs' },
     { id: 'rhyno', title: 'RHYNO', artist: 'Travis Scott (prod. Guy-Manuel de Homem-Christo)', spotify: 'track/2NliF6CtlWolNA0Jzkw4ba' },
     { id: 'sexy-magic', title: 'Sexy Magic', artist: 'CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.. & \u00c9tienne de Cr\u00e9cy', spotify: 'track/5AIwo9vC79ce0A7u3DgB1N' },
@@ -84,7 +84,7 @@ module.exports = function registerMusicAndTrailerJobs(app, deps) {
   function mergeMusicTracks(discovered) {
     const bySpotify = new Map();
     const album = SEED_MUSIC.find(function (s) { return s.album; }) || {
-      id: 'album', title: 'Full Album (preview)', artist: '34 tracks \u00b7 Atlantic / Rockstar \u00b7 unlocks Nov 19',
+      id: 'album', title: 'Full Album', artist: '34 tracks \u00b7 Atlantic / Rockstar \u00b7 Spotify unlock Nov 20',
       spotify: 'album/' + SPOTIFY_ALBUM_ID, album: true
     };
     bySpotify.set(album.spotify, Object.assign({}, album));
