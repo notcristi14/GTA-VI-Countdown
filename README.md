@@ -414,7 +414,7 @@ Fan-made countdown. Grand Theft Auto, Rockstar Games and related marks are trade
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-19T17:41:02.875Z** · commit `68855de` · **141/141 passed** · root
+Last content update: **2026-11-19T17:44:10.273Z** · commit `e260028` · **140/141 passed** · root
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -468,7 +468,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `social-links` | Official Rockstar and project social links | PASS | social link collection includes Rockstar channels and GitHub |
 | `shared-button-feedback` | Shared animated press feedback on interactive controls | PASS | shared pulse feedback handler |
 | `music-files` | music.js + music.css | PASS | files |
-| `music-center` | Music panel CSS align-items:center | PASS | music.css |
+| `music-center` | Music panel CSS align-items:center | FAIL | not centered |
 | `music-discovery` | Spotify album discovery registered | PASS | music-discovery.js |
 | `music-cache` | Music cache ~30 minutes | PASS | MUSIC_CACHE_MS |
 | `trailers-cache` | Trailers cache ~30 minutes | PASS | TRAILERS_CACHE_MS |
@@ -596,7 +596,7 @@ _Generated from source checks and `@feature` annotations; add `// @feature id="u
 #### Website · media, APIs and backgrounds
 
 - **PASS** — music.js + music.css (files)
-- **PASS** — Music panel CSS align-items:center (music.css)
+- **FAIL** — Music panel CSS align-items:center (not centered)
 - **PASS** — Spotify album discovery registered (music-discovery.js)
 - **PASS** — Music cache ~30 minutes (MUSIC_CACHE_MS)
 - **PASS** — Trailers cache ~30 minutes (TRAILERS_CACHE_MS)
@@ -688,7 +688,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `daf86fc`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `7686051`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
