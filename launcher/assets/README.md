@@ -13,7 +13,7 @@ Related docs:
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-15T07:32:54.907Z** · commit `4c8ece5` · **131/131 passed** · launcher/assets
+Last content update: **2026-11-19T17:41:02.875Z** · commit `68855de` · **141/141 passed** · launcher/assets
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -100,7 +100,17 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `launcher-webview2` | AppWindow.cpp WebView2 usage | PASS | launcher/src/AppWindow.cpp |
 | `launcher-nav` | Launcher navigation chrome in AppWindow | PASS | nav patterns found |
 | `launcher-ico` | launcher/assets/GtaLogo.ico exists | PASS | present |
-| `feature-marker-scan-coverage` | Automatic feature marker scan completed | PASS | 26 product source files scanned · 0 features discovered |
+| `feature-marker-update-album-fallback` | Auto-discovered feature: Update Album Fallback | PASS | registered from music.js:49 |
+| `feature-marker-set-active` | Auto-discovered feature: Set Active | PASS | registered from music.js:67 |
+| `feature-marker-build-tabs` | Auto-discovered feature: Build Tabs | PASS | registered from music.js:92 |
+| `feature-marker-apply-songs` | Auto-discovered feature: Apply Songs | PASS | registered from music.js:117 |
+| `feature-marker-load-music` | Auto-discovered feature: Load Music | PASS | registered from music.js:137 |
+| `feature-marker-open-music` | Auto-discovered feature: Open Music | PASS | registered from music.js:149 |
+| `feature-marker-close-music` | Auto-discovered feature: Close Music | PASS | registered from music.js:158 |
+| `feature-marker-build-reel` | Auto-discovered feature: Build Reel | PASS | registered from music.js:194 |
+| `feature-marker-set-animated-value` | Auto-discovered feature: Set Animated Value | PASS | registered from music.js:222 |
+| `feature-marker-start-music-countdown` | Auto-discovered feature: Start Music Countdown | PASS | registered from music.js:285 |
+| `feature-marker-scan-coverage` | Automatic feature marker scan completed | PASS | 26 product source files scanned · 10 features discovered |
 | `readme-README_md-exists` | README.md exists and is readable | PASS | present |
 | `readme-README_md-markers` | README.md has ordered AUTO-GENERATED integrity markers | PASS | markers ordered |
 | `readme-launcher_README_md-exists` | launcher/README.md exists and is readable | PASS | present |
@@ -206,6 +216,19 @@ _Generated from source checks and `@feature` annotations; add `// @feature id="u
 
 - **PASS** — launcher/assets/GtaLogo.ico exists (present)
 
+#### Website · automatically discovered
+
+- **PASS** — Auto-discovered feature: Update Album Fallback (registered from music.js:49)
+- **PASS** — Auto-discovered feature: Set Active (registered from music.js:67)
+- **PASS** — Auto-discovered feature: Build Tabs (registered from music.js:92)
+- **PASS** — Auto-discovered feature: Apply Songs (registered from music.js:117)
+- **PASS** — Auto-discovered feature: Load Music (registered from music.js:137)
+- **PASS** — Auto-discovered feature: Open Music (registered from music.js:149)
+- **PASS** — Auto-discovered feature: Close Music (registered from music.js:158)
+- **PASS** — Auto-discovered feature: Build Reel (registered from music.js:194)
+- **PASS** — Auto-discovered feature: Set Animated Value (registered from music.js:222)
+- **PASS** — Auto-discovered feature: Start Music Countdown (registered from music.js:285)
+
 ### Documentation audit
 
 No missing or outdated documentation findings from deterministic DOC_SPECS / API registration comparison.
@@ -245,7 +268,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `1cae3b3`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `daf86fc`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->

@@ -1,7 +1,7 @@
 {
-  "lastContentUpdateAt": "2026-11-15T07:32:54.907Z",
-  "commit": "4c8ece57157efb928037d0090c0454c3a11a8aca",
-  "baseCommit": "1cae3b37ab2b1fb1bf5d00d073d8903b9cd98254",
+  "lastContentUpdateAt": "2026-11-19T17:41:02.875Z",
+  "commit": "68855de7b9efa44804c06c60828f4204e85994a1",
+  "baseCommit": "daf86fcc8c919c1dc034f217bdfbde4314054911",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -303,7 +303,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-19T17:38:36.319Z",
+    "checkedAt": "2026-11-19T17:41:05.179Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -669,8 +669,8 @@
   ],
   "readmeFileCount": 4,
   "summary": {
-    "total": 131,
-    "passed": 131,
+    "total": 141,
+    "passed": 141,
     "failed": 0,
     "criticalFailed": 0,
     "documentationFindings": 0
@@ -699,10 +699,121 @@
     "launcherWebView2": true,
     "launcherNav": true
   },
-  "autoDiscoveredFeatures": [],
+  "autoDiscoveredFeatures": [
+    {
+      "id": "update-album-fallback",
+      "claim": "Update Album Fallback",
+      "ok": true,
+      "detail": "source: music.js:49",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "set-active",
+      "claim": "Set Active",
+      "ok": true,
+      "detail": "source: music.js:67",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "build-tabs",
+      "claim": "Build Tabs",
+      "ok": true,
+      "detail": "source: music.js:92",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "apply-songs",
+      "claim": "Apply Songs",
+      "ok": true,
+      "detail": "source: music.js:117",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "load-music",
+      "claim": "Load Music",
+      "ok": true,
+      "detail": "source: music.js:137",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "open-music",
+      "claim": "Open Music",
+      "ok": true,
+      "detail": "source: music.js:149",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "close-music",
+      "claim": "Close Music",
+      "ok": true,
+      "detail": "source: music.js:158",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "build-reel",
+      "claim": "Build Reel",
+      "ok": true,
+      "detail": "source: music.js:194",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "set-animated-value",
+      "claim": "Set Animated Value",
+      "ok": true,
+      "detail": "source: music.js:222",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "start-music-countdown",
+      "claim": "Start Music Countdown",
+      "ok": true,
+      "detail": "source: music.js:285",
+      "autoDiscovered": true,
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    }
+  ],
   "featureMarkerScan": {
     "sourceFilesScanned": 26,
-    "discovered": 0,
+    "discovered": 10,
     "invalidMarkers": 0
   },
   "apiEndpoints": {
@@ -857,8 +968,8 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "1cae3b37ab2b1fb1bf5d00d073d8903b9cd98254",
-    "headCommit": "4c8ece57157efb928037d0090c0454c3a11a8aca",
+    "baseCommit": "daf86fcc8c919c1dc034f217bdfbde4314054911",
+    "headCommit": "68855de7b9efa44804c06c60828f4204e85994a1",
     "changedFiles": 1,
     "analyzedFiles": 1,
     "skippedFiles": [],
@@ -1445,10 +1556,140 @@
       "critical": false
     },
     {
+      "id": "feature-marker-update-album-fallback",
+      "claim": "Auto-discovered feature: Update Album Fallback",
+      "ok": true,
+      "detail": "registered from music.js:49",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "update-album-fallback",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "feature-marker-set-active",
+      "claim": "Auto-discovered feature: Set Active",
+      "ok": true,
+      "detail": "registered from music.js:67",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "set-active",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "feature-marker-build-tabs",
+      "claim": "Auto-discovered feature: Build Tabs",
+      "ok": true,
+      "detail": "registered from music.js:92",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "build-tabs",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "feature-marker-apply-songs",
+      "claim": "Auto-discovered feature: Apply Songs",
+      "ok": true,
+      "detail": "registered from music.js:117",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "apply-songs",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "feature-marker-load-music",
+      "claim": "Auto-discovered feature: Load Music",
+      "ok": true,
+      "detail": "registered from music.js:137",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "load-music",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "feature-marker-open-music",
+      "claim": "Auto-discovered feature: Open Music",
+      "ok": true,
+      "detail": "registered from music.js:149",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "open-music",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "feature-marker-close-music",
+      "claim": "Auto-discovered feature: Close Music",
+      "ok": true,
+      "detail": "registered from music.js:158",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "close-music",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "feature-marker-build-reel",
+      "claim": "Auto-discovered feature: Build Reel",
+      "ok": true,
+      "detail": "registered from music.js:194",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "build-reel",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "feature-marker-set-animated-value",
+      "claim": "Auto-discovered feature: Set Animated Value",
+      "ok": true,
+      "detail": "registered from music.js:222",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "set-animated-value",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
+      "id": "feature-marker-start-music-countdown",
+      "claim": "Auto-discovered feature: Start Music Countdown",
+      "ok": true,
+      "detail": "registered from music.js:285",
+      "critical": false,
+      "autoDiscovered": true,
+      "featureId": "start-music-countdown",
+      "group": "Website · automatically discovered",
+      "scopes": [
+        "all"
+      ]
+    },
+    {
       "id": "feature-marker-scan-coverage",
       "claim": "Automatic feature marker scan completed",
       "ok": true,
-      "detail": "26 product source files scanned · 0 features discovered",
+      "detail": "26 product source files scanned · 10 features discovered",
       "critical": true
     },
     {

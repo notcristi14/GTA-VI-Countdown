@@ -46,6 +46,7 @@
     const fallbackImg = document.getElementById('musicEmbedCover');
     const fallbackHint = document.getElementById('musicEmbedHint');
 
+    // @feature id="update-album-fallback" title="Update Album Fallback" group="Website · automatically discovered" scopes="all"
     function updateAlbumFallback(song) {
       if (!fallback) return;
       const isAlbum = !!(song && song.album);
@@ -63,6 +64,7 @@
       if (wrap) wrap.classList.toggle('has-fallback', isAlbum);
     }
 
+    // @feature id="set-active" title="Set Active" group="Website · automatically discovered" scopes="all"
     function setActive(song, animate) {
       if (!song) return;
       activeId = song.id;
@@ -87,6 +89,7 @@
       }
     }
 
+    // @feature id="build-tabs" title="Build Tabs" group="Website · automatically discovered" scopes="all"
     function buildTabs() {
       tabs.innerHTML = '';
       songs.forEach(function (s) {
@@ -111,6 +114,7 @@
       });
     }
 
+    // @feature id="apply-songs" title="Apply Songs" group="Website · automatically discovered" scopes="all"
     function applySongs(list) {
       if (!Array.isArray(list) || !list.length) return;
       const prev = activeId;
@@ -130,6 +134,7 @@
       setActive(songs.find(function (x) { return x.id === activeId; }) || songs[0], false);
     }
 
+    // @feature id="load-music" title="Load Music" group="Website · automatically discovered" scopes="all"
     function loadMusic() {
       fetch('/api/music', { cache: 'no-store' })
         .then(function (r) { return r.ok ? r.json() : null; })
@@ -141,6 +146,7 @@
         .catch(function () {});
     }
 
+    // @feature id="open-music" title="Open Music" group="Website · automatically discovered" scopes="all"
     function openMusic() {
       overlay.classList.add('open');
       overlay.setAttribute('aria-hidden', 'false');
@@ -149,6 +155,7 @@
       loadMusic();
     }
 
+    // @feature id="close-music" title="Close Music" group="Website · automatically discovered" scopes="all"
     function closeMusic() {
       overlay.classList.remove('open');
       overlay.setAttribute('aria-hidden', 'true');
@@ -184,6 +191,7 @@
 
     function pad2(n) { return n < 10 ? '0' + n : String(n); }
 
+    // @feature id="build-reel" title="Build Reel" group="Website · automatically discovered" scopes="all"
     function buildReel(digits) {
       const frag = document.createDocumentFragment();
       String(digits).split('').forEach(function (ch) {
@@ -211,6 +219,7 @@
       return frag;
     }
 
+    // @feature id="set-animated-value" title="Set Animated Value" group="Website · automatically discovered" scopes="all"
     function setAnimatedValue(el, next) {
       if (!el) return;
       const prev = el.getAttribute('data-val');
@@ -273,6 +282,7 @@
       if (elCd) elCd.classList.add('is-live');
     }
 
+    // @feature id="start-music-countdown" title="Start Music Countdown" group="Website · automatically discovered" scopes="all"
     function startMusicCountdown() {
       tickMusicCountdown();
       if (cdTimer) clearInterval(cdTimer);
