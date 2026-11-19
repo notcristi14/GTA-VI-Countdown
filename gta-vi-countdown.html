@@ -57,23 +57,6 @@
     box-sizing: border-box; 
   }
 
-  /* Reliable touch targets and native tap handling across the entire page. */
-  :where(button, a[href], select, input, [role="button"], [role="link"][tabindex]) {
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-  :where(button, select, [role="button"], [role="link"][tabindex]) {
-    -webkit-appearance: none;
-    appearance: none;
-    min-height: 44px;
-  }
-  :where(button, a[href], select, [role="button"], [role="link"][tabindex]) {
-    pointer-events: auto;
-  }
-  button:active, a[href]:active, [role="button"]:active, [role="link"][tabindex]:active {
-    filter: brightness(1.15);
-  }
-
   html, body {
     width: 100%;
     max-width: 100vw;
@@ -1337,40 +1320,6 @@
     letter-spacing: 0;
     margin-left: 6px;
   }
-
-  /* Mobile-first touch responsiveness */
-  button, a, select, [role="button"], .platform-badge, .bg-btn, .region-card {
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-  button, .bg-btn, .welcome-btn, .preorder-btn, .preorder-choice, .preorder-close,
-  .platform-badge, .trailer-tab, .music-tab, .region-selector select { min-height: 44px; }
-  button, .bg-btn, .welcome-btn, .preorder-btn, .preorder-choice, .preorder-close,
-  .platform-badge, .trailer-tab, .music-tab { transition-duration: 0.14s; }
-  button:active, .bg-btn:active, .welcome-btn:active, .preorder-btn:active,
-  .preorder-choice:active, .preorder-close:active, .platform-badge:active,
-  .trailer-tab:active, .music-tab:active, .social-link:active {
-    transform: scale(0.975); filter: brightness(1.18);
-  }
-  .region-selector select { padding: 10px 14px; font-size: 16px; min-width: min(250px, 72vw); }
-  .region-grid-wrap { width: 100%; max-width: 800px; margin: 26px 0 4px; }
-  .region-grid-heading { margin-bottom: 12px; color: #e0b0ff; font-size: .76rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
-  .region-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 10px; text-align: left; }
-  .region-card { min-width: 0; padding: 13px 14px; border-radius: 15px; border: 1px solid rgba(255,140,200,.32); background: linear-gradient(145deg,rgba(35,16,61,.86),rgba(20,10,40,.72)); box-shadow: 0 7px 24px rgba(0,0,0,.22); }
-  .region-card.is-home { border-color: rgba(255,105,180,.8); box-shadow: 0 0 18px rgba(255,105,180,.15); }
-  .region-card-name { color: #fff; font-size: .86rem; font-weight: 750; line-height: 1.25; }
-  .region-card-time { margin-top: 5px; color: #c4b5fd; font-size: .68rem; letter-spacing: .02em; }
-  .region-card-status { margin-top: 9px; color: #86efac; font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-shadow: 0 0 12px rgba(74,222,128,.25); }
-  @media (hover: none) and (pointer: coarse) {
-    .platform-badge:hover, .bg-btn:hover, .preorder-btn:hover, .preorder-choice:hover, .news-item:hover, .repo-update:hover { transform: none; }
-  }
-  @media (max-width: 480px) {
-    .region-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-    .region-card { padding: 11px 10px; }
-    .region-card-name { font-size: .78rem; }
-    .region-card-time, .region-card-status { font-size: .62rem; }
-  }
-
 </style>
   <link rel="stylesheet" href="/music.css">
 </head>
@@ -1446,11 +1395,6 @@
       <div class="unit"><div class="num" id="s">--</div><div class="sec-track" aria-hidden="true"><div class="sec-fill" id="secFill"></div></div><div class="label">Secs</div></div>
     </div>
 
-    <div class="region-grid-wrap">
-      <div class="region-grid-heading">ALL 28 LAUNCH REGIONS</div>
-      <div class="region-grid" id="regionGrid" aria-live="polite"></div>
-    </div>
-
         
 
     <div class="repo-update" id="repoUpdate" role="link" tabindex="0" title="Open commit on GitHub">
@@ -1519,7 +1463,6 @@
       <a class="social-link" href="https://github.com/notcristi14/GTA-VI-Countdown" target="_blank" rel="noopener" title="Source code on GitHub">
         <img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub">
       </a>
-    </div>
 
     <div class="bg-switcher">
       <button class="bg-btn" id="bgCycleBtn">Switch Background</button>
@@ -1602,49 +1545,38 @@
 
 <script>
   const regions = {
-    'new-zealand': { name: "New Zealand", target: '2026-11-18T11:00:00Z' },
-    'australia': { name: "Australia (Sydney)", target: '2026-11-18T13:00:00Z' },
-    'japan': { name: "Japan", target: '2026-11-18T15:00:00Z' },
-    'south-korea': { name: "South Korea", target: '2026-11-18T15:00:00Z' },
-    'hong-kong': { name: "Hong Kong", target: '2026-11-18T16:00:00Z' },
-    'taiwan': { name: "Taiwan", target: '2026-11-18T16:00:00Z' },
-    'singapore': { name: "Singapore", target: '2026-11-18T16:00:00Z' },
-    'malaysia': { name: "Malaysia", target: '2026-11-18T16:00:00Z' },
-    'indonesia': { name: "Indonesia (Jakarta)", target: '2026-11-18T17:00:00Z' },
-    'thailand': { name: "Thailand", target: '2026-11-18T17:00:00Z' },
-    'india': { name: "India", target: '2026-11-18T18:30:00Z' },
-    'uae': { name: "United Arab Emirates", target: '2026-11-18T20:00:00Z' },
-    'saudi-arabia': { name: "Saudi Arabia", target: '2026-11-18T21:00:00Z' },
-    'turkey': { name: "Turkey", target: '2026-11-18T21:00:00Z' },
-    'romania': { name: "Romania", target: '2026-11-18T22:00:00Z' },
-    'greece': { name: "Greece", target: '2026-11-18T22:00:00Z' },
-    'finland': { name: "Finland", target: '2026-11-18T22:00:00Z' },
-    'south-africa': { name: "South Africa", target: '2026-11-18T22:00:00Z' },
-    'germany': { name: "Germany", target: '2026-11-18T23:00:00Z' },
-    'france': { name: "France", target: '2026-11-18T23:00:00Z' },
-    'spain': { name: "Spain", target: '2026-11-18T23:00:00Z' },
-    'italy': { name: "Italy", target: '2026-11-18T23:00:00Z' },
-    'uk': { name: "United Kingdom", target: '2026-11-19T00:00:00Z' },
-    'ireland': { name: "Ireland", target: '2026-11-19T00:00:00Z' },
-    'portugal': { name: "Portugal", target: '2026-11-19T00:00:00Z' },
-    'brazil': { name: "Brazil", target: '2026-11-19T03:00:00Z' },
-    'argentina': { name: "Argentina", target: '2026-11-19T03:00:00Z' },
-    'us-canada-east': { name: "United States & Canada (Eastern)", target: '2026-11-19T05:00:00Z' }
+    'new-zealand': { name: 'New Zealand', target: '2026-11-18T11:00:00Z' },
+    'australia': { name: 'Australia', target: '2026-11-18T13:00:00Z' },
+    'japan-korea': { name: 'Japan & South Korea', target: '2026-11-18T15:00:00Z' },
+    'asia-pacific': { name: 'Hong Kong, Taiwan, Singapore, Malaysia', target: '2026-11-18T16:00:00Z' },
+    'indonesia-thailand': { name: 'Indonesia & Thailand', target: '2026-11-18T17:00:00Z' },
+    'india': { name: 'India', target: '2026-11-18T18:30:00Z' },
+    'uae': { name: 'United Arab Emirates', target: '2026-11-18T20:00:00Z' },
+    'saudi-turkey': { name: 'Saudi Arabia & Turkey', target: '2026-11-18T21:00:00Z' },
+    'eastern-europe': { name: 'Eastern Europe / UTC+2 (Greece, Romania, Finland, Israel, South Africa, etc.)', target: '2026-11-18T22:00:00Z' },
+    'europe': { name: 'Central Europe (CET)', target: '2026-11-18T23:00:00Z' },
+    'uk': { name: 'United Kingdom, Ireland, Iceland, Portugal', target: '2026-11-19T00:00:00Z' },
+    'south-america': { name: 'Brazil, Argentina, Chile, Paraguay, Uruguay', target: '2026-11-19T03:00:00Z' },
+    'bolivia': { name: 'Bolivia', target: '2026-11-19T04:00:00Z' },
+    'us-canada': { name: 'United States, Canada + Colombia, Ecuador, Panama, Peru', target: '2026-11-19T05:00:00Z' },
+    'mexico': { name: 'Mexico & Central America', target: '2026-11-19T06:00:00Z' }
   };
 
-  const pathSlugRaw = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
-  const pathSlug = pathSlugRaw === 'eastern-europe' ? 'romania' : pathSlugRaw;
-  const savedRegionRaw = localStorage.getItem('gtaRegion');
-  const savedRegion = savedRegionRaw === 'eastern-europe' ? 'romania' : savedRegionRaw;
-  let activeSlug = 'romania';
+  const pathSlug = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+  const savedRegion = localStorage.getItem('gtaRegion');
+  let activeSlug = 'europe';
   if (pathSlug && regions[pathSlug]) {
     activeSlug = pathSlug;
     localStorage.setItem('gtaRegion', pathSlug);
   } else if (savedRegion && regions[savedRegion]) {
     activeSlug = savedRegion;
-    if (pathSlug !== activeSlug) history.replaceState(null, '', '/' + activeSlug);
+    // Redirect to saved region path so URL stays consistent
+    if (pathSlug !== activeSlug) {
+      history.replaceState(null, '', '/' + activeSlug);
+    }
   }
   const currentRegion = regions[activeSlug];
+
   const selectEl = document.getElementById('regionSelect');
   Object.keys(regions).forEach(slug => {
     const opt = document.createElement('option');
@@ -1653,29 +1585,17 @@
     if (slug === activeSlug) opt.selected = true;
     selectEl.appendChild(opt);
   });
+
   selectEl.addEventListener('change', () => {
     const val = selectEl.value;
     localStorage.setItem('gtaRegion', val);
     location.href = '/' + val;
   });
-  document.title = 'GTA VI Countdown - ' + currentRegion.name;
-  document.getElementById('subText').textContent = 'Available now! · ' + currentRegion.name;
-  const regionGrid = document.getElementById('regionGrid');
-  const regionFormatter = new Intl.DateTimeFormat('ro-RO', { timeZone: 'Europe/Bucharest', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
-  function renderRegionCards() {
-    if (!regionGrid) return;
-    regionGrid.innerHTML = Object.entries(regions).map(([slug, region]) => {
-      const localTime = regionFormatter.format(new Date(region.target));
-      return '<article class="region-card' + (slug === 'romania' ? ' is-home' : '') + '" data-region="' + slug + '">' +
-        '<div class="region-card-name">' + region.name + '</div>' +
-        '<div class="region-card-time">Ora României · ' + localTime + '</div>' +
-        '<div class="region-card-status">Available now!</div>' +
-      '</article>';
-    }).join('');
-  }
-  renderRegionCards();
 
-    const targetTime = new Date(currentRegion.target).getTime();
+  document.title = `GTA VI Countdown - ${currentRegion.name}`;
+  document.getElementById('subText').textContent = `Releasing Nov 19, 2026 · ${currentRegion.name}`;
+
+  const targetTime = new Date(currentRegion.target).getTime();
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function ensureReel(slot) {
