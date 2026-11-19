@@ -57,6 +57,23 @@
     box-sizing: border-box; 
   }
 
+  /* Reliable touch targets and native tap handling across the entire page. */
+  :where(button, a[href], select, input, [role="button"], [role="link"][tabindex]) {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  :where(button, select, [role="button"], [role="link"][tabindex]) {
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 44px;
+  }
+  :where(button, a[href], select, [role="button"], [role="link"][tabindex]) {
+    pointer-events: auto;
+  }
+  button:active, a[href]:active, [role="button"]:active, [role="link"][tabindex]:active {
+    filter: brightness(1.15);
+  }
+
   html, body {
     width: 100%;
     max-width: 100vw;
@@ -1427,10 +1444,12 @@
       <div class="unit"><div class="num" id="h">--</div><div class="label">Hours</div></div>
       <div class="unit"><div class="num" id="m">--</div><div class="label">Mins</div></div>
       <div class="unit"><div class="num" id="s">--</div><div class="sec-track" aria-hidden="true"><div class="sec-fill" id="secFill"></div></div><div class="label">Secs</div></div>
-    </
+    </div>
 
-    <div class="region-grid-wrap"><div class="region-grid-heading">ALL 28 LAUNCH REGIONS</div><div class="region-grid" id="regionGrid" aria-live="polite"></div></div>
-div>
+    <div class="region-grid-wrap">
+      <div class="region-grid-heading">ALL 28 LAUNCH REGIONS</div>
+      <div class="region-grid" id="regionGrid" aria-live="polite"></div>
+    </div>
 
         
 
@@ -1500,6 +1519,7 @@ div>
       <a class="social-link" href="https://github.com/notcristi14/GTA-VI-Countdown" target="_blank" rel="noopener" title="Source code on GitHub">
         <img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub">
       </a>
+    </div>
 
     <div class="bg-switcher">
       <button class="bg-btn" id="bgCycleBtn">Switch Background</button>
@@ -1643,7 +1663,7 @@ div>
     location.href = '/' + val;
   });
   document.title = 'GTA VI Countdown - ' + currentRegion.name;
-  document.getElementById('subText').textContent = 'GTA VI A SOSIT · ' + currentRegion.name;
+  document.getElementById('subText').textContent = 'Available now! · ' + currentRegion.name;
   const regionGrid = document.getElementById('regionGrid');
   const regionFormatter = new Intl.DateTimeFormat('ro-RO', { timeZone: 'Europe/Bucharest', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
   function renderRegionCards() {
@@ -1653,7 +1673,7 @@ div>
       return '<article class="region-card' + (slug === 'romania' ? ' is-home' : '') + '" data-region="' + slug + '">' +
         '<div class="region-card-name">' + region.name + '</div>' +
         '<div class="region-card-time">Ora României · ' + localTime + '</div>' +
-        '<div class="region-card-status">GTA VI A SOSIT!</div>' +
+        '<div class="region-card-status">Available now!</div>' +
       '</article>';
     }).join('');
   }
@@ -1714,7 +1734,7 @@ div>
     if (diff <= 0) {
       if (!released) {
         released = true;
-        document.getElementById('cd').innerHTML = '<p class="done">GTA VI A SOSIT!</p>';
+        document.getElementById('cd').innerHTML = '<p class="done">Available now!</p>';
         const po = document.getElementById('preorderWrap');
         if (po) po.classList.add('hidden');
         const ov = document.getElementById('preorderOverlay');
