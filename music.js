@@ -2,7 +2,7 @@
   // Official Spotify embeds only. Seeds + auto-discovered playable tracks from
   // Grand Theft Auto VI: The Album via /api/music (refreshes every 30 minutes).
   const FALLBACK_SONGS = [
-    { id: 'album', title: 'Full Album', artist: '34 tracks · Atlantic / Rockstar · Spotify unlock Nov 20', spotify: 'album/5BYKG4MHfySZthe2W6r7n4', album: true },
+    { id: 'album', title: 'Full Album', artist: '34 tracks · Atlantic / Rockstar · available on Spotify', spotify: 'album/5BYKG4MHfySZthe2W6r7n4', album: true },
     { id: 'thats-it', title: "That's It", artist: 'Yung Lean feat. Future & Metro Boomin', spotify: 'track/6dUXpM7mnGr7cSpCUQewCs' },
     { id: 'rhyno', title: 'RHYNO', artist: 'Travis Scott (prod. Guy-Manuel de Homem-Christo)', spotify: 'track/2NliF6CtlWolNA0Jzkw4ba' },
     { id: 'sexy-magic', title: 'Sexy Magic', artist: 'CA7RIEL & Paco Amoroso, PinkPantheress, Fred again.. & Étienne de Crécy', spotify: 'track/5AIwo9vC79ce0A7u3DgB1N' },
