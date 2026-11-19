@@ -144,7 +144,7 @@ If Match is **NO**, the native shell home URL does not match the intended root U
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-19T19:48:26.921Z** · commit `local` · **129/140 passed** · **10 critical failures** · mobile
+Last content update: **2026-11-19T20:01:34.799Z** · commit `a70b981` · **140/140 passed** · mobile
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -162,23 +162,23 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `workflow-doc--github-workflows-sync-backgrounds-yml` | Workflow documented: .github/workflows/sync-backgrounds.yml | PASS | listed in root README Structure |
 | `file-html` | gta-vi-countdown.html exists | PASS | present |
 | `file-app` | app.js Express entry exists | PASS | present |
-| `regions-count` | All 15 region slug+UTC pairs in HTML | FAIL | 6/15 implemented |
+| `regions-count` | All 15 region slug+UTC pairs in HTML | PASS | 15/15 implemented |
 | `region-new-zealand` | Region new-zealand configured | PASS | 2026-11-18T11:00:00Z |
 | `region-australia` | Region australia configured | PASS | 2026-11-18T13:00:00Z |
-| `region-japan-korea` | Region japan-korea configured | FAIL | slugPresent=false targetPresent=true |
-| `region-asia-pacific` | Region asia-pacific configured | FAIL | slugPresent=false targetPresent=true |
-| `region-indonesia-thailand` | Region indonesia-thailand configured | FAIL | slugPresent=false targetPresent=true |
+| `region-japan-korea` | Region japan-korea configured | PASS | 2026-11-18T15:00:00Z |
+| `region-asia-pacific` | Region asia-pacific configured | PASS | 2026-11-18T16:00:00Z |
+| `region-indonesia-thailand` | Region indonesia-thailand configured | PASS | 2026-11-18T17:00:00Z |
 | `region-india` | Region india configured | PASS | 2026-11-18T18:30:00Z |
 | `region-uae` | Region uae configured | PASS | 2026-11-18T20:00:00Z |
-| `region-saudi-turkey` | Region saudi-turkey configured | FAIL | slugPresent=false targetPresent=true |
+| `region-saudi-turkey` | Region saudi-turkey configured | PASS | 2026-11-18T21:00:00Z |
 | `region-eastern-europe` | Region eastern-europe configured | PASS | 2026-11-18T22:00:00Z |
-| `region-europe` | Region europe configured | FAIL | slugPresent=false targetPresent=true |
+| `region-europe` | Region europe configured | PASS | 2026-11-18T23:00:00Z |
 | `region-uk` | Region uk configured | PASS | 2026-11-19T00:00:00Z |
-| `region-south-america` | Region south-america configured | FAIL | slugPresent=false targetPresent=true |
-| `region-bolivia` | Region bolivia configured | FAIL | slugPresent=false targetPresent=false |
-| `region-us-canada` | Region us-canada configured | FAIL | slugPresent=false targetPresent=true |
-| `region-mexico` | Region mexico configured | FAIL | slugPresent=false targetPresent=false |
-| `default-europe` | Default activeSlug is 'europe' | FAIL | not found |
+| `region-south-america` | Region south-america configured | PASS | 2026-11-19T03:00:00Z |
+| `region-bolivia` | Region bolivia configured | PASS | 2026-11-19T04:00:00Z |
+| `region-us-canada` | Region us-canada configured | PASS | 2026-11-19T05:00:00Z |
+| `region-mexico` | Region mexico configured | PASS | 2026-11-19T06:00:00Z |
+| `default-europe` | Default activeSlug is 'europe' | PASS | activeSlug = 'europe' |
 | `region-persist` | Region path + localStorage gtaRegion | PASS | ok |
 | `digit-reels` | requestAnimationFrame countdown | PASS | HTML |
 | `available-now` | Available now UI string | PASS | present |
@@ -259,7 +259,7 @@ Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https:/
 | `release-desktop-v1_0_0-tag` | Release desktop-v1.0.0 points to an existing Git tag | PASS | tag ref resolves to commit 9c5dd99da15efd4f7726a282f7ec39cc2f7394e3 |
 | `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-uploaded` | Release asset GTA-VI-Countdown-Windows-x64.zip is uploaded | PASS | state=uploaded |
 | `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-size` | Release asset GTA-VI-Countdown-Windows-x64.zip has a non-zero size | PASS | 332888 bytes |
-| `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest` | Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest | PASS | sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2 |
+| `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest` | Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest | PASS | sha256:4a322e26f0fa691ea6538209a2ce487af0300eacdb0977a4cd5bfbf77f73fb26 |
 | `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-url` | Release asset GTA-VI-Countdown-Windows-x64.zip has a valid GitHub download URL | PASS | https://github.com/notcristi14/GTA-VI-Countdown/releases/download/desktop-v1.0.0/GTA-VI-Countdown-Windows-x64.zip |
 | `release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-bytes` | Downloaded bytes for GTA-VI-Countdown-Windows-x64.zip match GitHub size and SHA-256 | PASS | downloaded=332888 bytes; API size=332888; digest=MATCH |
 | `release-desktop-v1_0_0-assets` | Release desktop-v1.0.0 contains at least one downloadable asset | PASS | 1 asset(s) |
@@ -298,8 +298,8 @@ _Generated from source checks and `@feature` annotations; add `// @feature id="u
 
 #### Website · countdown and regions
 
-- **FAIL** — All 15 region slug+UTC pairs in HTML (6/15 implemented)
-- **FAIL** — Default activeSlug is 'europe' (not found)
+- **PASS** — All 15 region slug+UTC pairs in HTML (15/15 implemented)
+- **PASS** — Default activeSlug is 'europe' (activeSlug = 'europe')
 - **PASS** — Region path + localStorage gtaRegion (ok)
 - **PASS** — requestAnimationFrame countdown (HTML)
 - **PASS** — Available now UI string (present)
@@ -412,7 +412,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `5ef09d1`
+Status: **complete** · changed files: 1 · analyzed: 1 · confirmed findings: 0 · potential risks: 0 · base `4b942cc`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->

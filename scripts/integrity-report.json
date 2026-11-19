@@ -1,7 +1,7 @@
 {
-  "lastContentUpdateAt": "2026-11-19T19:48:26.921Z",
-  "commit": "local",
-  "baseCommit": "5ef09d1eec70aceb849e16d07712fdf746b3dfe6",
+  "lastContentUpdateAt": "2026-11-19T20:01:34.799Z",
+  "commit": "a70b9810504f27df5b051735c97672160aa55074",
+  "baseCommit": "4b942cc3c17451bbbcdf043d0feb62dbd4c82637",
   "timestampSemantics": "lastContentUpdateAt is written only when non-volatile report/README content changes; successful runs with README_CHANGED=0 intentionally keep the previous value",
   "analysisType": "static-source-plus-dynamic-git-diff-plus-project-structure-plus-github-releases",
   "projectStructure": {
@@ -303,7 +303,7 @@
   },
   "releaseAudit": {
     "repository": "notcristi14/GTA-VI-Countdown",
-    "checkedAt": "2026-11-19T19:54:26.194Z",
+    "checkedAt": "2026-11-19T20:01:36.826Z",
     "status": "success",
     "releaseCount": 3,
     "expectedReleaseCount": 3,
@@ -332,10 +332,10 @@
             "size": 332888,
             "state": "uploaded",
             "contentType": "application/zip",
-            "digest": "sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2",
+            "digest": "sha256:4a322e26f0fa691ea6538209a2ce487af0300eacdb0977a4cd5bfbf77f73fb26",
             "downloadUrl": "https://github.com/notcristi14/GTA-VI-Countdown/releases/download/desktop-v1.0.0/GTA-VI-Countdown-Windows-x64.zip",
             "bytesVerified": true,
-            "actualSha256": "sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2"
+            "actualSha256": "sha256:4a322e26f0fa691ea6538209a2ce487af0300eacdb0977a4cd5bfbf77f73fb26"
           }
         ]
       },
@@ -438,7 +438,7 @@
         "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest",
         "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest",
         "ok": true,
-        "detail": "sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2",
+        "detail": "sha256:4a322e26f0fa691ea6538209a2ce487af0300eacdb0977a4cd5bfbf77f73fb26",
         "critical": true
       },
       {
@@ -670,14 +670,14 @@
   "readmeFileCount": 4,
   "summary": {
     "total": 140,
-    "passed": 129,
-    "failed": 11,
-    "criticalFailed": 10,
+    "passed": 140,
+    "failed": 0,
+    "criticalFailed": 0,
     "documentationFindings": 0
   },
   "detectedFeatures": {
-    "regions15": false,
-    "defaultEurope": false,
+    "regions15": true,
+    "defaultEurope": true,
     "pathPersist": true,
     "digitReels": true,
     "availableNow": true,
@@ -833,23 +833,23 @@
     "japan-korea": {
       "expectedName": "Japan & South Korea",
       "expectedTarget": "2026-11-18T15:00:00Z",
-      "slugPresent": false,
+      "slugPresent": true,
       "targetPresent": true,
-      "implemented": false
+      "implemented": true
     },
     "asia-pacific": {
       "expectedName": "Hong Kong, Taiwan, Singapore, Malaysia",
       "expectedTarget": "2026-11-18T16:00:00Z",
-      "slugPresent": false,
+      "slugPresent": true,
       "targetPresent": true,
-      "implemented": false
+      "implemented": true
     },
     "indonesia-thailand": {
       "expectedName": "Indonesia & Thailand",
       "expectedTarget": "2026-11-18T17:00:00Z",
-      "slugPresent": false,
+      "slugPresent": true,
       "targetPresent": true,
-      "implemented": false
+      "implemented": true
     },
     "india": {
       "expectedName": "India",
@@ -868,9 +868,9 @@
     "saudi-turkey": {
       "expectedName": "Saudi Arabia & Turkey",
       "expectedTarget": "2026-11-18T21:00:00Z",
-      "slugPresent": false,
+      "slugPresent": true,
       "targetPresent": true,
-      "implemented": false
+      "implemented": true
     },
     "eastern-europe": {
       "expectedName": "Eastern Europe / UTC+2 (Greece, Romania, Finland, Israel, South Africa, etc.)",
@@ -882,9 +882,9 @@
     "europe": {
       "expectedName": "Central Europe (CET)",
       "expectedTarget": "2026-11-18T23:00:00Z",
-      "slugPresent": false,
+      "slugPresent": true,
       "targetPresent": true,
-      "implemented": false
+      "implemented": true
     },
     "uk": {
       "expectedName": "United Kingdom, Ireland, Iceland, Portugal",
@@ -896,33 +896,33 @@
     "south-america": {
       "expectedName": "Brazil, Argentina, Chile, Paraguay, Uruguay",
       "expectedTarget": "2026-11-19T03:00:00Z",
-      "slugPresent": false,
+      "slugPresent": true,
       "targetPresent": true,
-      "implemented": false
+      "implemented": true
     },
     "bolivia": {
       "expectedName": "Bolivia",
       "expectedTarget": "2026-11-19T04:00:00Z",
-      "slugPresent": false,
-      "targetPresent": false,
-      "implemented": false
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
     },
     "us-canada": {
       "expectedName": "United States, Canada + Colombia, Ecuador, Panama, Peru",
       "expectedTarget": "2026-11-19T05:00:00Z",
-      "slugPresent": false,
+      "slugPresent": true,
       "targetPresent": true,
-      "implemented": false
+      "implemented": true
     },
     "mexico": {
       "expectedName": "Mexico & Central America",
       "expectedTarget": "2026-11-19T06:00:00Z",
-      "slugPresent": false,
-      "targetPresent": false,
-      "implemented": false
+      "slugPresent": true,
+      "targetPresent": true,
+      "implemented": true
     }
   },
-  "regionsImplemented": 6,
+  "regionsImplemented": 15,
   "backgroundImageCount": 143,
   "mobile": {
     "expectedHome": "https://gta-vi-countdown.onrender.com/",
@@ -957,8 +957,8 @@
   },
   "dynamicAudit": {
     "historyAvailable": true,
-    "baseCommit": "5ef09d1eec70aceb849e16d07712fdf746b3dfe6",
-    "headCommit": "4c1d04bb69367157b6a644f99e3b67ff2bb14d07",
+    "baseCommit": "4b942cc3c17451bbbcdf043d0feb62dbd4c82637",
+    "headCommit": "a70b9810504f27df5b051735c97672160aa55074",
     "changedFiles": 1,
     "analyzedFiles": 1,
     "skippedFiles": [],
@@ -971,7 +971,7 @@
     "confirmedFindings": 0,
     "perFileImpact": [
       {
-        "path": "music.js",
+        "path": "gta-vi-countdown.html",
         "status": "M",
         "oldPath": null,
         "findings": 0,
@@ -982,74 +982,7 @@
     "status": "complete",
     "error": null
   },
-  "failedChecks": [
-    {
-      "id": "regions-count",
-      "claim": "All 15 region slug+UTC pairs in HTML",
-      "detail": "6/15 implemented",
-      "critical": true
-    },
-    {
-      "id": "region-japan-korea",
-      "claim": "Region japan-korea configured",
-      "detail": "slugPresent=false targetPresent=true",
-      "critical": true
-    },
-    {
-      "id": "region-asia-pacific",
-      "claim": "Region asia-pacific configured",
-      "detail": "slugPresent=false targetPresent=true",
-      "critical": true
-    },
-    {
-      "id": "region-indonesia-thailand",
-      "claim": "Region indonesia-thailand configured",
-      "detail": "slugPresent=false targetPresent=true",
-      "critical": true
-    },
-    {
-      "id": "region-saudi-turkey",
-      "claim": "Region saudi-turkey configured",
-      "detail": "slugPresent=false targetPresent=true",
-      "critical": true
-    },
-    {
-      "id": "region-europe",
-      "claim": "Region europe configured",
-      "detail": "slugPresent=false targetPresent=true",
-      "critical": true
-    },
-    {
-      "id": "region-south-america",
-      "claim": "Region south-america configured",
-      "detail": "slugPresent=false targetPresent=true",
-      "critical": true
-    },
-    {
-      "id": "region-bolivia",
-      "claim": "Region bolivia configured",
-      "detail": "slugPresent=false targetPresent=false",
-      "critical": true
-    },
-    {
-      "id": "region-us-canada",
-      "claim": "Region us-canada configured",
-      "detail": "slugPresent=false targetPresent=true",
-      "critical": true
-    },
-    {
-      "id": "region-mexico",
-      "claim": "Region mexico configured",
-      "detail": "slugPresent=false targetPresent=false",
-      "critical": true
-    },
-    {
-      "id": "default-europe",
-      "claim": "Default activeSlug is 'europe'",
-      "detail": "not found",
-      "critical": false
-    }
-  ],
+  "failedChecks": [],
   "checks": [
     {
       "id": "project-structure-inventory",
@@ -1131,8 +1064,8 @@
     {
       "id": "regions-count",
       "claim": "All 15 region slug+UTC pairs in HTML",
-      "ok": false,
-      "detail": "6/15 implemented",
+      "ok": true,
+      "detail": "15/15 implemented",
       "critical": true
     },
     {
@@ -1152,22 +1085,22 @@
     {
       "id": "region-japan-korea",
       "claim": "Region japan-korea configured",
-      "ok": false,
-      "detail": "slugPresent=false targetPresent=true",
+      "ok": true,
+      "detail": "2026-11-18T15:00:00Z",
       "critical": true
     },
     {
       "id": "region-asia-pacific",
       "claim": "Region asia-pacific configured",
-      "ok": false,
-      "detail": "slugPresent=false targetPresent=true",
+      "ok": true,
+      "detail": "2026-11-18T16:00:00Z",
       "critical": true
     },
     {
       "id": "region-indonesia-thailand",
       "claim": "Region indonesia-thailand configured",
-      "ok": false,
-      "detail": "slugPresent=false targetPresent=true",
+      "ok": true,
+      "detail": "2026-11-18T17:00:00Z",
       "critical": true
     },
     {
@@ -1187,8 +1120,8 @@
     {
       "id": "region-saudi-turkey",
       "claim": "Region saudi-turkey configured",
-      "ok": false,
-      "detail": "slugPresent=false targetPresent=true",
+      "ok": true,
+      "detail": "2026-11-18T21:00:00Z",
       "critical": true
     },
     {
@@ -1201,8 +1134,8 @@
     {
       "id": "region-europe",
       "claim": "Region europe configured",
-      "ok": false,
-      "detail": "slugPresent=false targetPresent=true",
+      "ok": true,
+      "detail": "2026-11-18T23:00:00Z",
       "critical": true
     },
     {
@@ -1215,36 +1148,36 @@
     {
       "id": "region-south-america",
       "claim": "Region south-america configured",
-      "ok": false,
-      "detail": "slugPresent=false targetPresent=true",
+      "ok": true,
+      "detail": "2026-11-19T03:00:00Z",
       "critical": true
     },
     {
       "id": "region-bolivia",
       "claim": "Region bolivia configured",
-      "ok": false,
-      "detail": "slugPresent=false targetPresent=false",
+      "ok": true,
+      "detail": "2026-11-19T04:00:00Z",
       "critical": true
     },
     {
       "id": "region-us-canada",
       "claim": "Region us-canada configured",
-      "ok": false,
-      "detail": "slugPresent=false targetPresent=true",
+      "ok": true,
+      "detail": "2026-11-19T05:00:00Z",
       "critical": true
     },
     {
       "id": "region-mexico",
       "claim": "Region mexico configured",
-      "ok": false,
-      "detail": "slugPresent=false targetPresent=false",
+      "ok": true,
+      "detail": "2026-11-19T06:00:00Z",
       "critical": true
     },
     {
       "id": "default-europe",
       "claim": "Default activeSlug is 'europe'",
-      "ok": false,
-      "detail": "not found",
+      "ok": true,
+      "detail": "activeSlug = 'europe'",
       "critical": false
     },
     {
@@ -1865,7 +1798,7 @@
       "id": "release-desktop-v1_0_0-asset-GTA-VI-Countdown-Windows-x64.zip-digest",
       "claim": "Release asset GTA-VI-Countdown-Windows-x64.zip exposes a SHA-256 digest",
       "ok": true,
-      "detail": "sha256:95dd01ef949992484ffb934a1cfda3efc24168990ae073f01456274b115c74a2",
+      "detail": "sha256:4a322e26f0fa691ea6538209a2ce487af0300eacdb0977a4cd5bfbf77f73fb26",
       "critical": true
     },
     {
