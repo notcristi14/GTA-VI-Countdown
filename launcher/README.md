@@ -41,7 +41,7 @@ See the [root README](../README.md) for:
 <!-- AUTO-GENERATED: readme-integrity-check -->
 ## Automated integrity status
 
-Last content update: **2026-11-19T23:02:09.947Z** · commit `c92f56e` · **139/140 passed** · **1 doc findings** · launcher
+Last content update: **2026-11-19T23:02:09.947Z** · commit `fa406eb` · **139/140 passed** · **1 doc findings** · launcher
 
 Expected mobile home URL: `https://gta-vi-countdown.onrender.com/`  
 Android actual: `https://gta-vi-countdown.onrender.com/` · iOS actual: `https://gta-vi-countdown.onrender.com/`
@@ -299,7 +299,7 @@ Release audit: **38/38 checks passed** · status: **success**. Downloadable asse
 
 ### Dynamic change audit
 
-Status: **complete** · changed files: 5 · analyzed: 5 · confirmed findings: 0 · potential risks: 0 · base `fa4393b`
+Status: **complete** · changed files: 5 · analyzed: 5 · confirmed findings: 0 · potential risks: 0 · base `c92f56e`
 
 *Static analysis plus dynamic Git-diff documentation impact audit (`scripts/readme-integrity-check.js` + `scripts/dynamic-doc-audit.js`). Dynamic findings are deterministic extractions — not full prose review. **Last content update** advances only when non-volatile generated content changes. Confirmed high/critical dynamic inconsistencies fail the job; potential risks do not.*
 <!-- END AUTO-GENERATED -->
